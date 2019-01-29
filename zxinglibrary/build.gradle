@@ -1,0 +1,31 @@
+apply plugin: 'com.android.library'
+
+group = 'com.github.yuzhiqiang1993'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '26.0.2'
+
+
+    defaultConfig {
+        minSdkVersion 14
+        //noinspection OldTargetApi
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:design:25.+'
+    compile 'com.android.support:appcompat-v7:25.+'
+}

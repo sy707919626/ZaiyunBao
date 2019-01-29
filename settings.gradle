@@ -1,0 +1,3 @@
+include ':app', ':zxinglibrarys', ':addresspickerlibs'
+project(':zxinglibrarys').projectDir = new File('zxinglibrary')
+project(':addresspickerlibs').projectDir = new File('addresspickerlib')

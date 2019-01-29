@@ -1,0 +1,101 @@
+<resources>
+    <string name="app_name">载运保（测试版）</string>
+    <string name="app_version">1.0.0</string>
+
+    <!--网络相关-->
+    <string name="loading">加载中…</string>
+    <string name="close_string">关闭</string>
+
+    <string name="error_unkown">未知错误</string>
+    <string name="error_http">网络连接错误</string>
+    <string name="error_system">服务器出错</string>
+    <string name="error_account_freeze">账户被冻结，请联系管理员</string>
+    <string name="error_api_no_perission">调用了无权限的API接口</string>
+    <string name="error_login">用户名或者密码错误</string>
+    <string name="error_http_400">bad request</string>
+    <string name="error_http_404">服务器资源找不到</string>
+    <string name="error_http_500">服务器错误</string>
+    <string name="error_socket_timeout">网络超时</string>
+    <string name="error_socket_unreachable">网络不可用</string>
+    <string name="error_malformedJsonException">数据转换失败</string>
+    <string name="error_token">登录失效，请重新登录</string>
+    <string name="common_get_sms">获取验证码</string>
+    <string name="common_input_sms">输入验证码</string>
+    <string name="common_sms_time_count_format">%d秒后可重新获取</string>
+    <string name="common_sms_time_count_format_two">%d秒后可重发</string>
+
+    <string name="settings">设置</string>
+    <string name="help">帮助</string>
+    <string name="string_help_text">当前应用缺少必要权限。\n\n请点击\"设置\"-\"权限\"-打开所需权限。\n\n最后点击两次后退按钮，即可返回。</string>
+    <string name="quit">退出</string>
+
+    <string name="all">全部</string>
+    <string name="renting">求租</string>
+    <string name="myorder">我的订单</string>
+    <string name="shebeiManage">设备管理</string>
+    <string name="Servicezhandian">服务站点</string>
+    <string name="xianzhi">闲置</string>
+    <string name="sublease">转租</string>
+    <string name="retreat">退租</string>
+    <string name="scrapreport">报废报修</string>
+    <string name="statistics">设备统计</string>
+    <string name="lease">租赁</string>
+    <string name="manage">管理</string>
+    <string name="purchase">购买</string>
+    <string name="service">求租</string>
+    <string name="mine">我的</string>
+    <string name="getphonecode">获取验证码</string>
+    <string name="agree">我同意</string>
+    <string name="Location">定位当前</string>
+    <string name="cancel">取消</string>
+    <string name="clear_history">清除记录</string>
+    <string name="scan">扫一扫</string>
+    <string name="usertype">用户类型</string>
+    <string name="shebeitype">设备类型</string>
+    <string name="shebeispec">设备规格</string>
+    <string name="mydata">我的资料</string>
+    <string name="aboutmy">关于我们</string>
+    <string name="helpfeedback">帮助及反馈</string>
+    <string name="balance">可用余额</string>
+    <string name="deposit">我的押金</string>
+    <string name="Mywallet">我的钱包</string>
+    <string name="information">消息</string>
+    <string name="Renttime">租入时间</string>
+    <string name="register">注册</string>
+    <string name="upUserInfo">上传资料</string>
+    <string name="next">下一步</string>
+    <string name="mylease">我要租赁</string>
+    <string name="submission">提交</string>
+    <string name="mymsg">消息列表</string>
+    <string name="updateLoginPaw">登录密码修改</string>
+    <string name="clear_cache">清理缓存</string>
+    <string name="inspect_update">检查更新</string>
+    <string name="phone_numble">手机号码：</string>
+    <string name="jump">跳过</string>
+
+    <string name="headImage">头像</string>
+    <string name="dataName">姓名</string>
+    <string name="phone">手机号码</string>
+
+    <string name="bankcard">银行卡</string>
+    <string name="recharge">充值</string>
+    <string name="putforward">提现</string>
+    <string name="walletDetailed">钱包明细</string>
+    <string name="updatePayPwd">修改支付密码</string>
+    <string name="update_pwd_hint">密码必须是8—16位的数字、字符组合（不能是纯数字）</string>
+
+    <string name="forger_pwd">若您忘记密码无法登录，进入账号密码登录页面，点击【忘记密码】，进入找回密码流程，系统会检测您的当前环境是否安全，若安全则可以直接重置密码；若当前环境不安全，则需要通过验证后方可重置密码。
+    </string>
+
+    <string name="cannot_code">进入短信验证码页面，等待60秒倒计时，点击【重新获取】入口，重新获取，如若还未收到，请联系客服协助解决。
+    </string>
+
+    <string name="untying_phone">目前载运保不支持用户自助操作解绑手机号，如需操作请联系在线客服或人工客服协助解决。
+    </string>
+
+    <string name="update_phone">如果您是未登录状态，您需要先登录载运保，登录成功之后，进入【我的】页面，点击【头像】进入【用户信息】页面，点击【手机号码】进入【更换手机号码】进行操作。
+    </string>
+
+    <string name="other_problem">其他情况。请直接联系客服协助解决问题。
+    </string>
+</resources>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/photo_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/content_photo_bg"
+        android:gravity="center_horizontal"
+        android:minHeight="0dp"
+        android:padding="5dp"
+        android:text="示例"
+        android:textColor="@color/white" />
+
+    <ImageView
+        android:id="@+id/photo_shili_imageview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/photo_zm_bg" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_horizontal"
+        android:text="请按照上面示例图上传，四角对其，出现模糊"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_trhee" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="、反光、太暗、有遮挡，均不通过认证。"
+        android:textColor="@color/text_black"
+        android:textSize="@dimen/text_size_trhee" />
+
+
+    <Button
+        android:id="@+id/photo_paizhao_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/content_photo_button_bg"
+        android:text="拍照"
+        android:textColor="@color/text_black" />
+
+    <Button
+        android:id="@+id/photo_xiangce_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/content_photo_button_bg"
+        android:text="从相册获取"
+        android:textColor="@color/text_black" />
+
+    <Button
+        android:id="@+id/photo_cancal_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/content_photo_button_bg"
+        android:text="取消"
+        android:textColor="@color/text_black" />
+</LinearLayout>

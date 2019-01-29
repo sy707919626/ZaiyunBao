@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="usertype">
+        <item>个人用户</item>
+        <item>企业用户</item>
+    </string-array>
+
+    <string-array name="papertype">
+        <item>身份证</item>
+        <item>军官证</item>
+        <item>驾驶证</item>
+    </string-array>
+
+    <string-array name="companytype">
+        <item>代理商</item>
+        <item>加盟商</item>
+        <item>货主</item>
+    </string-array>
+</resources>

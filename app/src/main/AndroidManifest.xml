@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lulian.Zaiyunbao">
+
+    <permission
+        android:name="com.lulian.Zaiyunbao.permission.JPUSH_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <!-- Required  一些系统要求的权限，如访问网络等-->
+    <uses-permission android:name="com.lulian.Zaiyunbao.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <!-- 这个权限用于访问GPS定位-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <!-- 用于读取手机当前的状态-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
+    <!-- 访问网络，网络定位需要上网-->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- SD卡读取权限，用户写入离线定位数据-->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
+    <!--//读取系统信息，包含系统版本等信息，用作统计-->
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity android:name=".ui.activity.WeclcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 微信支付结果展示Activity -->
+        <activity
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoDisplay" />
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+        <activity
+            android:name="com.alipay.sdk.app.H5AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+
+
+        <activity android:name=".ui.activity.SearchActivity" />
+        <activity android:name=".ui.activity.PermissionsActivity" />
+        <activity android:name=".ui.activity.DressSelectorActivity" />
+        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.Updae_pwd_Activity" />
+        <activity android:name=".ui.activity.UploadDataActivity" />
+        <activity android:name=".ui.activity.ProtocolActivity" />
+        <activity android:name=".ui.activity.SettingActivity" />
+        <activity android:name=".ui.activity.Forget_Password_Activity" />
+        <activity android:name=".ui.activity.Setting_Password_Activity" />
+        <activity android:name=".ui.activity.Register_One_Activity" />
+        <activity android:name=".ui.activity.Register_Tthree_Activity" />
+        <activity android:name=".ui.activity.MessagesListActivity" />
+        <activity android:name=".ui.activity.Update_Phone_One_Activity" />
+        <activity android:name=".ui.activity.Update_Phone_Two_Activity" />
+        <activity android:name=".ui.activity.Update_Phone_Three_Activity" />
+        <activity android:name=".ui.activity.MyDataActivity" />
+        <activity android:name=".ui.activity.HelpFeedbackActivity" />
+        <activity android:name=".ui.activity.DataUserTypeActivity" />
+        <activity android:name=".ui.activity.wallet.MyWalletActivity" />
+        <activity android:name=".ui.activity.ResetPaypwdActivity" />
+        <activity android:name=".ui.activity.Update_Paypwd_Activity" />
+        <activity android:name=".ui.activity.LeaseDetailActivity" />
+        <activity android:name=".ui.activity.LeaseEquipmentDetailActivity" />
+        <activity android:name=".ui.activity.LeaseMyEquipmentActivity" />
+        <activity android:name=".ui.activity.LeasePriceFormActivity" />
+        <activity android:name=".ui.activity.LeaseMyEquipmentSeeActivity" />
+        <activity android:name=".ui.activity.LeaseMyEquipmentAddressActivity" />
+        <activity android:name=".ui.activity.MyOrderActivity" />
+        <activity android:name=".ui.activity.myorder.MyOrderDetailsActivity" />
+        <activity android:name=".ui.activity.leaseorder.LeaseOrderActivity" />
+        <activity android:name=".ui.activity.subleaseorder.SubleaseOrderActivity" />
+        <activity android:name=".ui.activity.SubleaseOrderDetailsActivity" />
+        <activity android:name=".ui.activity.buyorder.BuyOrderActivity" />
+        <activity android:name=".ui.activity.leaseorder.ReceiveLeaseInfoActivity" />
+        <activity android:name=".ui.activity.ReserveRetireDetailsActivity" />
+        <activity android:name=".ui.activity.subleaseorder.SubleaseOrderEntryActivity" />
+        <activity android:name=".ui.activity.subleaseorder.SubleaseOrderAddEntryActivity" />
+        <activity android:name=".ui.activity.subleaseorder.SubleaseDeliveryActivity" />
+        <activity android:name=".ui.activity.leaseorder.LeaseOrderDetailsActivity" />
+        <activity android:name=".ui.activity.service.RetireConfirmActivity" />
+        <activity android:name=".ui.activity.service.RetireCreateActivity" />
+        <activity android:name=".ui.activity.service.RetireServiceSiteActivity" />
+        <activity android:name=".ui.activity.service.RetireServiceSiteSearchActivity" />
+        <activity android:name=".ui.activity.service.RetireServiceLeaseActivity" />
+        <activity android:name=".ui.activity.devicemanage.DeviceManageActivity" />
+        <activity android:name=".ui.activity.devicemanage.DeviceManageDetailsActivity" />
+        <activity android:name=".ui.activity.issueSublease.IssueSubleaseListActivity" />
+        <activity android:name=".ui.activity.issueSublease.IssueSubleaseDetailActivity" />
+        <activity android:name=".ui.activity.issueSublease.ListingIssueActivity" />
+        <activity android:name=".ui.activity.pay.PayActivity" />
+        <activity android:name=".ui.activity.rentback.RentBackActivity" />
+        <activity android:name=".ui.activity.rentback.RentBackEntryActivity" />
+        <activity android:name=".ui.activity.rentback.RentBackAddEntryActivity" />
+        <activity android:name=".ui.activity.BuyDetailActivity" />
+        <activity android:name=".ui.activity.BuyEquipmentDetailActivity" />
+        <activity android:name=".ui.activity.BuyMyEquipmentActivity" />
+        <activity android:name=".ui.activity.BuyPolicyActivity" />
+        <activity android:name=".ui.activity.BuyEquipmentConfirmActivity" />
+        <activity android:name=".ui.activity.buyorder.BuyOrderDetailsActivity" />
+        <activity android:name=".ui.activity.buyorder.BuyOrderInfoActivity" />
+        <activity android:name=".ui.activity.seekrentorder.SeekRentOrderActivity" />
+        <activity android:name=".ui.activity.seekrentorder.SeekRentOrderDetailsActivity" />
+        <activity android:name=".ui.activity.seekrentorder.ReceiveSeekRentInfoActivity" />
+        <activity android:name=".ui.activity.repair.RepairReportActivity" />
+        <activity android:name=".ui.activity.pay.WalletChargeResultActivity" />
+        <activity android:name=".ui.activity.Register_Two_Activity" />
+        <activity android:name=".ui.dialog.PhotoDialog" />
+        <activity android:name=".ui.activity.issueSublease.PointIssueActivity" />
+        <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.Wallet_Detail_ListActivity" />
+        <activity android:name=".ui.activity.wallet.WalletRechargeActivity" />
+        <activity android:name=".ui.activity.pay.WalletChargeFailActivity" />
+        <activity android:name=".ui.activity.HelpActivity" />
+        <activity android:name=".ui.activity.HelpDetailActivity" />
+        <activity android:name=".ui.activity.bank.BankCardActivity" />
+        <activity android:name=".ui.activity.bank.BankAddActivity" />
+        <activity android:name=".ui.activity.bank.BankAddTestActivity" />
+        <activity android:name=".ui.activity.bank.BankDetailActivity" />
+        <activity android:name=".ui.activity.bank.BankDeleteActivity" />
+        <activity android:name=".ui.activity.bank.CashBankMoneyActivity" />
+        <activity android:name=".ui.activity.repair.RepairOrderActivity" />
+        <activity android:name=".ui.activity.repair.RepairOrderDetailActivity" />
+        <activity android:name=".ui.activity.repair.RepairItemDetailActivity" />
+
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"></service>
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="OyG6BR75xmoCPiyg9QUd7BslODC8BPMG"></meta-data>
+    </application>
+</manifest>

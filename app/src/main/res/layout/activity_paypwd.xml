@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingBottom="60dp"
+    android:paddingTop="60dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="请输入支付密码"
+        android:textColor="@color/text_black"
+        android:textSize="14dp" />
+
+
+    <com.lulian.Zaiyunbao.common.widget.PayPsdInputView
+        android:id="@+id/pay_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="20dp"
+        android:focusableInTouchMode="true"
+        android:gravity="center"
+        android:textSize="14dp" />
+
+    <!--<Button-->
+    <!--android:id="@+id/paypwd_btn_commit"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="30dp"-->
+    <!--android:text="确定"-->
+    <!--android:background="@drawable/button_shape"-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:textColor="@color/white"/>-->
+
+</LinearLayout>

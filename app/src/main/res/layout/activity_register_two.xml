@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/comm_title_login_bar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/color_9c" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="输入验证码"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/text_size_two" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="16dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/register_two_hint_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="验证码已发送至  +86  "
+                android:textColor="@color/text_hint_black2"
+                android:textSize="@dimen/text_size_trhee" />
+
+            <TextView
+                android:id="@+id/register_two_hint_phone_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/register_two_hint_text"
+
+                android:textColor="@color/text_hint_black2"
+                android:textSize="@dimen/text_size_trhee" />
+
+        </RelativeLayout>
+
+        <com.lulian.Zaiyunbao.common.widget.VerificationCode
+            android:id="@+id/verification_Code_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="15dp"></com.lulian.Zaiyunbao.common.widget.VerificationCode>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/register_two_getCode"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/button_bg_xuxin"
+            android:text="获取验证码"
+            android:textColor="@color/text_hint_bule"
+            android:textSize="@dimen/login_edit_size" />
+
+        <Button
+            android:id="@+id/register_two_next"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_shixin_shape"
+            android:text="下一步"
+            android:textColor="@color/white"
+            android:textSize="@dimen/login_edit_size" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/register_two_bottom_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="登录表示你已同意"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_size_trhee" />
+
+                <TextView
+                    android:id="@+id/register_two_yonghu_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/register_two_bottom_text"
+                    android:text="载运保用户协议"
+                    android:textColor="@color/text_hint_bule"
+                    android:textSize="@dimen/text_size_trhee" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/details_title_basic_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:padding="40dp">
+
+                <!--充值结果提示图片-->
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/big_fail" />
+
+                <!--充值结果提示文字-->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="支付失败"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_one" />
+
+                    <TextView
+                        android:id="@+id/charge_fail_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="支付失败支付失败支付失败支付失败"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="20dp"
+                    android:text="请选择支付方式"
+                    android:textColor="@color/text_black"
+                    android:textSize="@dimen/text_bt" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+                <RadioGroup
+                    android:id="@+id/charge_fail_payWay_choose"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/charge_fail_alipay_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/alipay"
+                        android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/selector_tb"
+                        android:padding="20dp"
+                        android:text="支付宝支付"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_bt" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@color/color_9c" />
+
+                    <RadioButton
+                        android:id="@+id/charge_fail_weixin_pay"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:button="@null"
+                        android:drawableLeft="@drawable/wechat"
+                        android:drawablePadding="10dp"
+                        android:drawableRight="@drawable/selector_tb"
+                        android:padding="20dp"
+                        android:text="微信支付"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_bt" />
+                </RadioGroup>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/charge_fail_btn"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/button_shape"
+                android:text="继续支付"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="30dp"
+                android:text="已支付成功了？可能由于网络原因延迟未收到结果，请耐心等待，结果将同步个更新到订单状态." />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

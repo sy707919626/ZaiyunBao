@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/detail_bar_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/image_back_detail_bar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:gravity="center"
+            android:onClick="back"
+            android:src="@drawable/bar_back_login" />
+
+        <TextView
+            android:id="@+id/text_detail_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="标题"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/button_size" />
+
+        <TextView
+            android:id="@+id/text_detail_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:drawablePadding="3dp"
+            android:text="帮助"
+            android:textColor="@color/text_hint_black2"
+            android:textSize="@dimen/login_edit_size" />
+    </RelativeLayout>
+
+</RelativeLayout>

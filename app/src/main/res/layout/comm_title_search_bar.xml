@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_gradient"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/title_search_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="15dp"
+        android:minHeight="?attr/actionBarSize">
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:layout_marginLeft="10dp"
+            android:drawableRight="@drawable/icon_address"
+            android:ellipsize="end"
+            android:ems="4"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="麓谷"
+            android:textColor="@color/white"
+            android:textSize="@dimen/login_edit_size" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="60dp"
+            android:background="@drawable/content_search_bg">
+
+            <TextView
+                android:id="@+id/bar_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:drawableLeft="@drawable/icon_edit_search"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="35dp"
+                android:paddingRight="30dp"
+                android:singleLine="true"
+                android:text="请输入关键字"
+                android:textColor="@color/text_info"
+                android:textSize="@dimen/text_size_trhee" />
+
+            <ImageView
+                android:id="@+id/bar_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"
+                android:padding="5dp"
+                android:src="@drawable/icon_edit_del"
+                android:visibility="invisible" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_qr_code"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="right"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:src="@drawable/icon_scan_normal" />
+    </android.support.v7.widget.Toolbar>
+</LinearLayout>
