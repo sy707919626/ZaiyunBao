@@ -160,7 +160,7 @@
         <activity android:name=".ui.activity.repair.RepairOrderActivity" />
         <activity android:name=".ui.activity.repair.RepairOrderDetailActivity" />
         <activity android:name=".ui.activity.repair.RepairItemDetailActivity" />
-
+		<activity android:name="" />
 
         <service
             android:name="com.baidu.location.f"
