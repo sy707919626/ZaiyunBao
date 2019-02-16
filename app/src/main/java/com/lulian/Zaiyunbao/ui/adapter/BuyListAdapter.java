@@ -97,13 +97,12 @@ public class BuyListAdapter extends RecyclerView.Adapter<BuyListAdapter.BuyViewH
                 intentMy.putExtra("WarmLong", mBuyList.getWarmLong());
                 intentMy.putExtra("SpecifiedLoad", mBuyList.getSpecifiedLoad());
                 intentMy.putExtra("TypeName", mBuyList.getTypeName());
-                intentMy.putExtra("Picture", mBuyList.getPicture());
+//                intentMy.putExtra("Picture", mBuyList.getPicture());
                 intentMy.putExtra("TypeId", mBuyList.getTypeId());
                 intentMy.putExtra("SupplierContactName", mBuyList.getManager());//出售方名称
                 intentMy.putExtra("SupplierContactPhone", mBuyList.getTouch()); //出售方电话
                 intentMy.putExtra("Id", mBuyList.getId());//设备ID
                 intentMy.putExtra("StorehouseId", mBuyList.getStorehouseId());//仓库ID
-
                 mContext.startActivity(intentMy);
             }
         });

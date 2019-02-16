@@ -180,7 +180,7 @@ public class LeaseEquipmentDetailActivity extends BaseActivity {
                 intentMy.putExtra("WarmLong", leaseEquipmentDetailBean.getWarmLong());
                 intentMy.putExtra("SpecifiedLoad", leaseEquipmentDetailBean.getSpecifiedLoad());
                 intentMy.putExtra("TypeName", leaseEquipmentDetailBean.getTypeName());
-                intentMy.putExtra("Picture", leaseEquipmentDetailBean.getPicture());
+//                intentMy.putExtra("Picture", leaseEquipmentDetailBean.getPicture());
                 intentMy.putExtra("TypeId", leaseEquipmentDetailBean.getTypeId()); //类型Id
                 intentMy.putExtra("UserType", leaseEquipmentDetailBean.getUserType());
                 intentMy.putExtra("CreateId", leaseEquipmentDetailBean.getCreateId());

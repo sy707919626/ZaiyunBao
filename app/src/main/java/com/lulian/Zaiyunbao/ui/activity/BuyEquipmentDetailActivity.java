@@ -163,7 +163,7 @@ public class BuyEquipmentDetailActivity extends BaseActivity {
                 intentMy.putExtra("SpecifiedLoad", buyDetailBean.getSpecifiedLoad());
                 intentMy.putExtra("TypeName", buyDetailBean.getTypeName());
                 intentMy.putExtra("TypeId", buyDetailBean.getTypeId());
-                intentMy.putExtra("Picture", buyDetailBean.getPicture());
+//                intentMy.putExtra("Picture", buyDetailBean.getPicture());
                 intentMy.putExtra("TypeId", buyDetailBean.getTypeId());
                 intentMy.putExtra("SupplierContactName", buyDetailBean.getSupplierContactName());//出售方名称
                 intentMy.putExtra("SupplierContactPhone", buyDetailBean.getSupplierContactPhone());//出售方电话

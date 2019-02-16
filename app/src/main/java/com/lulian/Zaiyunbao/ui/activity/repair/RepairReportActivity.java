@@ -253,35 +253,38 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
                 break;
 
             case R.id.device_upload_btn:
-                //上传
-                JSONObject obj = new JSONObject();
-                obj.put("Count", deteilListBeanList.size());
-                obj.put("UserId", GlobalParams.sUserId);
-                obj.put("deteilList", deteilListBeanList);
-                obj.put("MemberID", MemberID);
-                obj.put("StorehouseId", StorehouseId);
-                obj.put("Name", GlobalParams.sUserName);
-                obj.put("ETypeId", ETypeId);
-                obj.put("ETypeName", ETypeName);
-                obj.put("EquipmentId", EquipmentId);
-                obj.put("Remark", deviceEditRemark.getText().toString().trim());
+                 if (deviceEntryCount.getText().toString().equals("0") ){
+                    RxToast.warning("请先添加设备");
+                 } else {
+                    //上传
+                    JSONObject obj = new JSONObject();
+                    obj.put("Count", deteilListBeanList.size());
+                    obj.put("UserId", GlobalParams.sUserId);
+                    obj.put("deteilList", deteilListBeanList);
+                    obj.put("MemberID", MemberID);
+                    obj.put("StorehouseId", StorehouseId);
+                    obj.put("Name", GlobalParams.sUserName);
+                    obj.put("ETypeId", ETypeId);
+                    obj.put("ETypeName", ETypeName);
+                    obj.put("EquipmentId", EquipmentId);
+                    obj.put("Remark", deviceEditRemark.getText().toString().trim());
 
-                String messages = obj.toString();
-                RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
-                        messages);
+                    String messages = obj.toString();
+                    RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
+                            messages);
 
-                mApi.AddObsoleteForm(GlobalParams.sToken, body)
-                        .compose(RxHttpResponseCompat.<String>compatResult())
-                        .subscribe(new ErrorHandlerSubscriber<String>() {
+                    mApi.AddObsoleteForm(GlobalParams.sToken, body)
+                            .compose(RxHttpResponseCompat.<String>compatResult())
+                            .subscribe(new ErrorHandlerSubscriber<String>() {
 
-                            @Override
-                            public void onNext(String s) {
-                                RxToast.success("上传成功");
-                                deteilListBeanList.clear();
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
-
+                                @Override
+                                public void onNext(String s) {
+                                    RxToast.success("上传成功");
+                                    deteilListBeanList.clear();
+                                    mAdapter.notifyDataSetChanged();
+                                }
+                            });
+                }
                 break;
 
         }

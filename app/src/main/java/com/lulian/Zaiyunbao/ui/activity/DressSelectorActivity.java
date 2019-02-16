@@ -10,11 +10,13 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.addressBean;
 import com.lulian.Zaiyunbao.R;
-import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.ywp.addresspickerlib.AddressPickerView;
 
 import butterknife.BindView;
+
+import static com.lulian.Zaiyunbao.ui.base.BaiduMapBase.mLocationClient;
 
 /**
  * Created by Administrator on 2018/9/15.
@@ -51,6 +53,7 @@ public class DressSelectorActivity extends BaseActivity implements View.OnClickL
                 .navigationBarDarkIcon(true, 0.5f)
                 .init();
 
+        currentLocation.setText(GlobalParams.district);
         current_address = getIntent().getStringExtra("currentlocation");
 
         currentLocation.setText(current_address);
@@ -83,7 +86,8 @@ public class DressSelectorActivity extends BaseActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.again_Location:
                 //定位
-                RxToast.showToast("定位");
+                mLocationClient.start();
+                currentLocation.setText(GlobalParams.district);
                 break;
         }
     }

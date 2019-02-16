@@ -134,7 +134,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     private double WarmLong;
     private double SpecifiedLoad;
     private String TypeName;
-    private String Picture;
+//    private String Picture;
     private String Id; //设备ID
     private int UserType; //发布人类型a
     private String CreateId; //创建人
@@ -226,7 +226,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
         WarmLong = getIntent().getDoubleExtra("WarmLong", 0);
         SpecifiedLoad = getIntent().getDoubleExtra("SpecifiedLoad", 0);
         TypeName = getIntent().getStringExtra("TypeName");
-        Picture = getIntent().getStringExtra("Picture");
+//        Picture = getIntent().getStringExtra("Picture");
         Id = getIntent().getStringExtra("Id");
         UserType = getIntent().getIntExtra("UserType", 0);
         CreateId = getIntent().getStringExtra("CreateId");
@@ -461,7 +461,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
                     Intent intent = new Intent(this, LeaseMyEquipmentAddressActivity.class);
                     intent.putExtra("MyEquipmentName", leaseMyEquipmentName.getText().toString().trim());
-                    intent.putExtra("MyEquipmentImage", Picture);
+//                    intent.putExtra("MyEquipmentImage", Picture);
 
                     if (TypeName.equals("托盘")) {
                         load = "静载" + StaticLoad + "T；动载" + CarryingLoad + "T；架载" + OnLoad + "T";

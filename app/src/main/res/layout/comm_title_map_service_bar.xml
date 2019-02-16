@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/comm_map_service_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/image_back_map_bar"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:onClick="back"
+            android:src="@drawable/bar_back_login" />
+
+        <TextView
+            android:id="@+id/map_service_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/image_back_map_bar"
+            android:layout_centerVertical="true"
+            android:layout_gravity="left"
+            android:layout_marginLeft="5dp"
+            android:drawableLeft="@drawable/icon_address"
+            android:ellipsize="end"
+            android:ems="5"
+            android:gravity="left"
+            android:lines="1"
+            android:text="麓谷企业广场"
+            android:textColor="@color/text_hint_black2"
+            android:textSize="@dimen/login_edit_size" />
+
+        <TextView
+            android:id="@+id/map_detail_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="标题"
+            android:textColor="@color/text_black"
+            android:textSize="@dimen/button_size" />
+
+        <TextView
+            android:id="@+id/map_service_ditu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:drawableLeft="@drawable/ditu"
+            android:gravity="center"
+            android:text=" 地图"
+            android:textColor="@color/text_hint_black2"
+            android:textSize="@dimen/login_edit_size" />
+    </RelativeLayout>
+
+</RelativeLayout>

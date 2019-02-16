@@ -7,7 +7,8 @@ package com.lulian.Zaiyunbao.di.component;
  */
 
 public class Constants {
-    public static final String BASE_URL = "http://192.168.1.242:8086";
+//    public static final String BASE_URL = "http://192.168.1.242:8086";
+    public static final String BASE_URL = "http://pay.llxx168.com";
 
     /**
      * 微信sdk的appId

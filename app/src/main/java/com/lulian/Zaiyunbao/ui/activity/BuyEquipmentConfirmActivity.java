@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lulian.Zaiyunbao.Bean.BuyDetailBean;
+import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.event.BuyEvent;
@@ -89,6 +91,7 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
     private String SupplierContactName; //出售方名称
     private String SupplierContactPhone;//出售方电话
 
+    private BuyDetailBean buyDetailBean;
     @Override
     protected int setLayoutId() {
         return R.layout.buy_equipment_confirm;
@@ -118,19 +121,30 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
         WarmLong = getIntent().getDoubleExtra("WarmLong", 0);
         SpecifiedLoad = getIntent().getDoubleExtra("SpecifiedLoad", 0);
         TypeName = getIntent().getStringExtra("TypeName");
-        Picture = getIntent().getStringExtra("Picture");
+//        Picture = getIntent().getStringExtra("Picture");
         Id = getIntent().getStringExtra("Id");
         SupplierContactName = getIntent().getStringExtra("SupplierContactName");
         SupplierContactPhone = getIntent().getStringExtra("SupplierContactPhone");
 
-        initView();
+        getData();
     }
 
-
+    //单纯获取图片
+    private void getData() {
+        mApi.EquipmentBuyItem(GlobalParams.sToken, Id)
+                .compose(RxHttpResponseCompat.<String>compatResult())
+                .subscribe(new ErrorHandlerSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        buyDetailBean = MyApplication.get().getAppComponent().getGson().fromJson(s, BuyDetailBean.class);
+                        initView();
+                    }
+                });
+    }
     private void initView() {
         try {
             byte[] bitmapArray;
-            bitmapArray = Base64.decode(Picture, Base64.DEFAULT);
+            bitmapArray = Base64.decode(buyDetailBean.getPicture(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
                     bitmapArray.length);
             buyDetailsImgPhoto.setImageBitmap(bitmap);

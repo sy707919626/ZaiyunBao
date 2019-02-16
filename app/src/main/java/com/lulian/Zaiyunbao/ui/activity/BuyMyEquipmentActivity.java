@@ -17,9 +17,14 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
+import com.lulian.Zaiyunbao.Bean.BuyDetailBean;
+import com.lulian.Zaiyunbao.Bean.BuyListBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
+import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
+import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
@@ -109,6 +114,7 @@ public class BuyMyEquipmentActivity extends BaseActivity {
     private String StorehouseId; //仓库ID
 
     private Handler mHandler;
+    private BuyDetailBean buyDetailBean;
 
     @Override
     protected int setLayoutId() {
@@ -143,6 +149,7 @@ public class BuyMyEquipmentActivity extends BaseActivity {
             }
         };
 
+
         EquipmentName = getIntent().getStringExtra("EquipmentName");
         Norm = getIntent().getStringExtra("Norm");
         Price = getIntent().getFloatExtra("Price", 0);
@@ -154,16 +161,29 @@ public class BuyMyEquipmentActivity extends BaseActivity {
         WarmLong = getIntent().getDoubleExtra("WarmLong", 0);
         SpecifiedLoad = getIntent().getDoubleExtra("SpecifiedLoad", 0);
         TypeName = getIntent().getStringExtra("TypeName");
-        Picture = getIntent().getStringExtra("Picture");
+//        Picture = getIntent().getStringExtra("Picture");
         Id = getIntent().getStringExtra("Id");
         SupplierContactName = getIntent().getStringExtra("SupplierContactName");
         SupplierContactPhone = getIntent().getStringExtra("SupplierContactPhone");
         TypeId = getIntent().getStringExtra("TypeId");
         StorehouseId = getIntent().getStringExtra("StorehouseId");
 
-        initView();
+
+       getData();
     }
 
+    //单纯获取图片
+    private void getData() {
+        mApi.EquipmentBuyItem(GlobalParams.sToken, Id)
+                .compose(RxHttpResponseCompat.<String>compatResult())
+                .subscribe(new ErrorHandlerSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        buyDetailBean = MyApplication.get().getAppComponent().getGson().fromJson(s, BuyDetailBean.class);
+                        initView();
+                    }
+                });
+    }
 
     private void initView() {
 
@@ -191,7 +211,7 @@ public class BuyMyEquipmentActivity extends BaseActivity {
 
         try {
             byte[] bitmapArray;
-            bitmapArray = Base64.decode(Picture, Base64.DEFAULT);
+            bitmapArray = Base64.decode(buyDetailBean.getPicture(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
                     bitmapArray.length);
             buyImageviewPhoto.setImageBitmap(bitmap);
@@ -250,12 +270,13 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                     intent.putExtra("WarmLong", WarmLong);
                     intent.putExtra("SpecifiedLoad", SpecifiedLoad);
                     intent.putExtra("TypeName", TypeName);
-                    intent.putExtra("Picture", Picture);
+//                    intent.putExtra("Picture", Picture);
                     intent.putExtra("TypeId", TypeId);
                     intent.putExtra("SupplierContactName", SupplierContactName);//出售方名称
                     intent.putExtra("SupplierContactPhone", SupplierContactPhone);//出售方电话
                     intent.putExtra("Id", Id);//设备ID
                     intent.putExtra("StorehouseId", StorehouseId);//仓库ID
+
                     intent.putExtra("address", myAddressQuxian.getText().toString().trim() + buyAddressXiangxi.getText().toString().trim());//地址
                     intent.putExtra("payModel", buyMyPayModleSpinner.getText().toString().trim());//支付方式
                     intent.putExtra("lianxiren", buyMyLianxiren.getText().toString().trim());//联系人
@@ -316,12 +337,5 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                 }
             }
         });
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

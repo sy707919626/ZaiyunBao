@@ -76,7 +76,7 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
         holder.leaseShebeiName.setText(mEquipmentList.getEquipmentName());
         holder.leaseShebeiSpec.setText(mEquipmentList.getNorm());
         if (mEquipmentList.getTypeName().equals("保温箱")) {
-            holder.leaseShebeiLoad.setText("容积" + String.valueOf(mEquipmentList.getVolume()) + "升T；保温时长"
+            holder.leaseShebeiLoad.setText("容积" + String.valueOf(mEquipmentList.getVolume()) + "升；保温时长"
                     + String.valueOf(mEquipmentList.getWarmLong()) + "小时");
         } else {
             holder.leaseShebeiLoad.setText("静载" + String.valueOf(mEquipmentList.getStaticLoad()) + "T；动载"
@@ -109,7 +109,7 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
                 intentMy.putExtra("WarmLong", mEquipmentList.getWarmLong());
                 intentMy.putExtra("SpecifiedLoad", mEquipmentList.getSpecifiedLoad());
                 intentMy.putExtra("TypeName", mEquipmentList.getTypeName());
-                intentMy.putExtra("Picture", mEquipmentList.getPicture());
+//                intentMy.putExtra("Picture", mEquipmentList.getPicture());
                 intentMy.putExtra("TypeId", mEquipmentList.getTypeId());
                 intentMy.putExtra("UserType", mEquipmentList.getUserType());
                 intentMy.putExtra("CreateId", mEquipmentList.getCreateId());

@@ -20,6 +20,7 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.di.component.DaggerAppComponent;
 import com.lulian.Zaiyunbao.di.module.AppModule;
 import com.lulian.Zaiyunbao.di.module.HttpModule;
+import com.lulian.Zaiyunbao.ui.base.BaiduMapBase;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshHeaderCreater;
@@ -78,6 +79,7 @@ public class MyApplication extends Application {
         return mAppComponent;
     }
 
+    public static BaiduMapBase mBaiduMap = null;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -95,6 +97,9 @@ public class MyApplication extends Application {
         //自4.3.0起，百度地图SDK所有接口均支持百度坐标和国测局坐标，用此方法设置您使用的坐标类型.
         //包括BD09LL和GCJ02两种坐标，默认是BD09LL坐标。
         SDKInitializer.setCoordType(CoordType.BD09LL);
+
+        mBaiduMap = new BaiduMapBase(this);
+        mBaiduMap.startLocate();
     }
 
 
@@ -201,7 +206,7 @@ public class MyApplication extends Application {
                 */
                 GlideCacheUtil.getInstance().clearImageMemoryCache(this);
 
-                break;
+            break;
             case ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE:
             case ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW:
             case ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL:
@@ -230,5 +235,6 @@ public class MyApplication extends Application {
         //内存低的时候，清理Glide的缓存
         GlideCacheUtil.getInstance().clearImageMemoryCache(this);
     }
+
 
 }

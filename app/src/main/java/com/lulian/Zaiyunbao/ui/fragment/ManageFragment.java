@@ -13,6 +13,7 @@ import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.ui.activity.App_Statistic_Activity;
 import com.lulian.Zaiyunbao.ui.activity.MyOrderActivity;
 import com.lulian.Zaiyunbao.ui.activity.PermissionsActivity;
 import com.lulian.Zaiyunbao.ui.activity.devicemanage.DeviceManageActivity;
@@ -98,7 +99,8 @@ public class ManageFragment extends BaseLazyFragment {
                 break;
 
             case R.id.tv_shebeiTJ:
-                RxToast.showToast("设备统计");
+                //统计
+                getContext().startActivity(new Intent(getContext(), App_Statistic_Activity.class));
                 break;
 
             case R.id.tv_service:

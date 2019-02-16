@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lulian.Zaiyunbao.Bean.EquipmentDetailBean;
+import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.event.LeaseEvent;
@@ -26,6 +28,9 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -94,6 +99,7 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
     Button leaseSure;
 
     private String Id = "";
+    private List<EquipmentDetailBean> equipmentDetailBean = new ArrayList<>();
 
     public static AlertDialog.Builder getConfirmDialog(Context context, String message, DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -130,7 +136,21 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
         Id = getIntent().getStringExtra("Id"); //设备ID
         textDetailContent.setText("确认订单");
         textDetailRight.setVisibility(View.GONE);
-        initView();
+        getData();
+    }
+
+    //获取图片
+    private void getData() {
+        mApi.equipmentDetails1(GlobalParams.sToken, Id, getIntent().getStringExtra("OperatorId"),
+                getIntent().getStringExtra("UID"))
+                .compose(RxHttpResponseCompat.<String>compatResult())
+                .subscribe(new ErrorHandlerSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        equipmentDetailBean = JSONObject.parseArray(s, EquipmentDetailBean.class);
+                        initView();
+                    }
+                });
     }
 
     private void initView() {
@@ -140,7 +160,7 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
 
         try {
             byte[] bitmapArray;
-            bitmapArray = Base64.decode(getIntent().getStringExtra("MyEquipmentImage"), Base64.DEFAULT);
+            bitmapArray = Base64.decode(equipmentDetailBean.get(0).getPicture(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
                     bitmapArray.length);
             leaseDetailsImgPhoto.setImageBitmap(bitmap);

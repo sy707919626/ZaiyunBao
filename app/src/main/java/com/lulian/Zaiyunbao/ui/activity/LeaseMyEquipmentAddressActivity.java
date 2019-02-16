@@ -25,6 +25,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.AreaBean;
 import com.lulian.Zaiyunbao.Bean.DicItemBean;
+import com.lulian.Zaiyunbao.Bean.EquipmentDetailBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
@@ -166,7 +167,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
         MyDepositPrice = getIntent().getStringExtra("MyDepositPrice");
         MyDeposit = getIntent().getStringExtra("MyDeposit"); //押金
         Load = getIntent().getStringExtra("myLoad");
-        MyEquipmentImage = getIntent().getStringExtra("MyEquipmentImage");
+//        MyEquipmentImage = getIntent().getStringExtra("MyEquipmentImage");
         Id = getIntent().getStringExtra("Id");
         UserType = getIntent().getIntExtra("UserType", 0);
         CreateId = getIntent().getStringExtra("CreateId");
@@ -209,7 +210,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
-                        Log.e("aaaaaaaaa :", s);
+
 
                         if (s.equals("[]")) {
                             RxToast.warning("当前供应商资料不全，请选择送货上门方式");
@@ -302,7 +303,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                 } else {
                     Intent intent = new Intent(this, LeaseMyEquipmentSeeActivity.class);
                     intent.putExtra("MyEquipmentName", MyEquipmentName);
-                    intent.putExtra("MyEquipmentImage", MyEquipmentImage);
+//                    intent.putExtra("MyEquipmentImage", MyEquipmentImage);
                     intent.putExtra("myLoad", Load);
                     intent.putExtra("MyNorm", MyNorm);
                     intent.putExtra("MyModle", MyModle);
@@ -413,12 +414,5 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
     private String getTime(Date date) {//可根据需要自行截取数据显示
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         return format.format(date);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

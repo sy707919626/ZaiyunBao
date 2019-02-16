@@ -1,22 +1,24 @@
 package com.lulian.Zaiyunbao.ui.activity.service;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.RetireServiceSiteBean;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
-import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -25,6 +27,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -35,14 +38,16 @@ import okhttp3.RequestBody;
 
 public class RetireServiceSiteActivity extends BaseActivity {
 
-    @BindView(R.id.tv_service_address)
-    TextView tvServiceAddress;
-    @BindView(R.id.text_service_content)
-    TextView textServiceContent;
-    @BindView(R.id.iv_service_ditu)
-    TextView ivServiceDitu;
-    @BindView(R.id.title_searvice_toolbar)
-    Toolbar titleSearviceToolbar;
+    @BindView(R.id.image_back_map_bar)
+    ImageView imageBackMapBar;
+    @BindView(R.id.map_service_address)
+    TextView mapServiceAddress;
+    @BindView(R.id.map_detail_content)
+    TextView mapDetailContent;
+    @BindView(R.id.map_service_ditu)
+    TextView mapServiceDitu;
+    @BindView(R.id.comm_map_service_layout)
+    RelativeLayout commMapServiceLayout;
     @BindView(R.id.retire_bar_search)
     TextView retireBarSearch;
     @BindView(R.id.retire_bar_empty)
@@ -66,8 +71,17 @@ public class RetireServiceSiteActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        textServiceContent.setText("服务站点");
+        ImmersionBar.with(this)
+                .titleBar(R.id.comm_map_service_layout)
+                .titleBarMarginTop(R.id.comm_map_service_layout)
+                .navigationBarColorInt(Color.WHITE)
+                .statusBarDarkFont(true, 0.5f)
+                .navigationBarDarkIcon(true, 0.5f)
+                .init();
 
+
+        mapDetailContent.setText("服务站点");
+        mapServiceAddress.setText(GlobalParams.district);
         retireRecyclerview.setItemAnimator(new DefaultItemAnimator());
         retireRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new RetireServiceSiteAdapter(this, mRetireServiceSiteList);
@@ -102,17 +116,18 @@ public class RetireServiceSiteActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_service_address, R.id.iv_service_ditu, R.id.retire_bar_search})
+    @OnClick({R.id.map_service_address, R.id.map_service_ditu, R.id.retire_bar_search})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_service_address:
+            case R.id.map_service_address:
                 //选择定位
-                changeAddress(tvServiceAddress.getText().toString().trim());
+                changeAddress(mapServiceAddress.getText().toString().trim());
                 break;
 
-            case R.id.iv_service_ditu:
+            case R.id.map_service_ditu:
                 //地图
-                RxToast.warning("地图");
+
+                startActivity(new Intent(this, RetireServiceMapActivity.class));
                 break;
 
             case R.id.retire_bar_search:
@@ -130,7 +145,7 @@ public class RetireServiceSiteActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ADDRESS_LOCATION && resultCode == 11) { //选择地点返回值
             if (data != null) {
-                tvServiceAddress.setText(data.getStringExtra("addressSelect"));
+                mapServiceAddress.setText(data.getStringExtra("addressSelect"));
             }
         }
     }

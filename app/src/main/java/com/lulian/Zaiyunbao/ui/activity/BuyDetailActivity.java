@@ -108,7 +108,7 @@ public class BuyDetailActivity extends BaseActivity {
         }
 
         buyDetailsShebeiPrice.setText(String.valueOf(buyListBean.getPriceNow()) + "元");
-        buyDetailsShebeiNum.setText(String.valueOf(buyListBean.getQuantity()) + "个");
+        buyDetailsShebeiNum.setText(String.valueOf(buyListBean.getQuantity()));
 
         buyDetailsServiceSite.setText(buyListBean.getStoreName());
         buyDetailsContacts.setText(buyListBean.getManager());
@@ -140,7 +140,7 @@ public class BuyDetailActivity extends BaseActivity {
                 intentMy.putExtra("WarmLong", buyListBean.getWarmLong());
                 intentMy.putExtra("SpecifiedLoad", buyListBean.getSpecifiedLoad());
                 intentMy.putExtra("TypeName", buyListBean.getTypeName());
-                intentMy.putExtra("Picture", buyListBean.getPicture());
+//                intentMy.putExtra("Picture", buyListBean.getPicture());
                 intentMy.putExtra("TypeId", buyListBean.getTypeId());
                 intentMy.putExtra("SupplierContactName", buyListBean.getManager());//出售方名称
                 intentMy.putExtra("SupplierContactPhone", buyListBean.getTouch());//出售方电话

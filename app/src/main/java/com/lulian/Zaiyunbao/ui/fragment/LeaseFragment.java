@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.EquipmentListBean;
+import com.lulian.Zaiyunbao.Bean.EquipmentTypeBean;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -148,7 +149,6 @@ public class LeaseFragment extends BaseLazyFragment {
                 popup.setCallback(new SelectPopupWindow.Callback() {
                     @Override
                     public void onCallback(String title) {
-
                         zulinUserType.setText(title);
                         getData();
                     }
@@ -169,7 +169,7 @@ public class LeaseFragment extends BaseLazyFragment {
             public void onClick(View v) {
                 List<String> shebeiTypeList = new ArrayList<>();
                 shebeiTypeList.add("设备类型");
-                shebeiTypeList.addAll(GlobalParams.userTypeList);
+                shebeiTypeList.addAll(GlobalParams.SBTypeList);
 
                 SelectPopupWindow popup2 = new SelectPopupWindow(getContext(), shebeiTypeList, zulinShebeiType.getText().toString());
                 popup2.showAsDropDown(titleBar);
@@ -237,19 +237,9 @@ public class LeaseFragment extends BaseLazyFragment {
         } else {
             page++;
         }
-//
-        JSONObject TypeId = new JSONObject();//设备类型Id
-//        TypeId.put("name", "equipment.TypeId");
-//        TypeId.put("type", "=");
-//        TypeId.put("value", typeId);
-//
-//
-        JSONObject useTypeId = new JSONObject(); //用户类型
-//        useTypeId.put("name", "len(UID)");
-//        useTypeId.put("type", ">");
-//        useTypeId.put("value", Uidlen);
-//        JSONObject[] filters = {TypeId, useTypeId};
 
+        JSONObject TypeId = new JSONObject();//设备类型Id
+        JSONObject useTypeId = new JSONObject(); //用户类型
 
         JSONObject obj = new JSONObject();
         obj.put("Page", page);
@@ -267,14 +257,19 @@ public class LeaseFragment extends BaseLazyFragment {
             useTypeId.put("name", "len(UID)");
             useTypeId.put("type", "!>");
             useTypeId.put("value", 0);
-
             list.add(useTypeId);
         }
 
         if (!zulinShebeiType.getText().toString().trim().equals("设备类型")) {
             TypeId.put("name", "equipment.TypeId");
             TypeId.put("type", "=");
-            TypeId.put("value", "0E0A2C6C-9D91-46DA-8EB0-D5E2EF31C924");
+
+            for (EquipmentTypeBean equipmentTypeBean: GlobalParams.sEquipmentTypeBean){
+                if (equipmentTypeBean.getTypeName().equals(zulinShebeiType.getText().toString().trim())){
+                    TypeId.put("value", equipmentTypeBean.getId());
+                }
+            }
+
             list.add(TypeId);
         }
 

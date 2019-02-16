@@ -8,14 +8,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
-/**
- * @Description：
- * @author：Bux on 2018/1/10 11:05
- * @email: 471025316@qq.com
- */
-
 public interface ApiService {
-
     //登录用户
     @POST("/api/AppUser/Login")
     Observable<String> login(@Header("Authorization") String authorization,
@@ -352,6 +345,11 @@ public interface ApiService {
     @POST("/api/AppMy/MyTradeFlowList")
     Observable<String> MyTradeFlowList(@Header("authorization") String authorization,
                                        @Body RequestBody infoBody);
+
+    //统计
+    @POST("/api/AppManage/StatisticsEquipmentInfo")
+    Observable<String> StatisticsEquipmentInfo(@Header("authorization") String authorization,
+                                               @Query("UserId") String UserId);
 }
 
 

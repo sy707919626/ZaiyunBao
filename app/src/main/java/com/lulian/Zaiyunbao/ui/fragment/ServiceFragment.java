@@ -67,7 +67,6 @@ import static com.lulian.Zaiyunbao.ui.base.BaseActivity.isFastClick;
 
 public class ServiceFragment extends BaseFragment {
 
-
     @BindView(R.id.tv_service_address)
     TextView tvServiceAddress;
     @BindView(R.id.text_service_content)
@@ -152,7 +151,7 @@ public class ServiceFragment extends BaseFragment {
     Button seekRentSure;
     @BindView(R.id.service_dialog_bg)
     ImageView serviceDialogBg;
-    Unbinder unbinder;
+
     private int Datasums;//租赁天数
     private int leaseModle;//租赁模式
     private boolean isListNull = false;
@@ -818,19 +817,5 @@ public class ServiceFragment extends BaseFragment {
         }
 
         return 0;
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
     }
 }

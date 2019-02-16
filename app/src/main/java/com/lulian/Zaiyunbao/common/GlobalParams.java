@@ -20,10 +20,13 @@ public class GlobalParams {
 
 
     public static String district; //区县
+    public static double latitude; //纬度
+    public static double longitude; //经度
 
-    public static List<EquipmentTypeBean> sEquipmentTypeList;
+    public static List<EquipmentTypeBean> sEquipmentTypeBean;
     public static List<DicItemBean> sDicItemBean;
 
+    public static List<String> SBTypeList; //设备类型
     public static List<String> userTypeList; //用户类型
     public static List<String> FHTypeList; //发货类型
     public static List<String> JSTypeList; //结算类型
@@ -34,8 +37,24 @@ public class GlobalParams {
     public static String[] shebeiTypeList = {"保温箱"};
     public static String[] shebeiSpecList = {"尺寸1"};
 
+    public static void setSBTypeList(List<String> SBTypeList) {
+        GlobalParams.SBTypeList = SBTypeList;
+    }
+
+    public static void setsEquipmentTypeBean(List<EquipmentTypeBean> sEquipmentTypeBean) {
+        GlobalParams.sEquipmentTypeBean = sEquipmentTypeBean;
+    }
+
     public static void setIsPayPwd(boolean isPayPwd) {
         GlobalParams.isPayPwd = isPayPwd;
+    }
+
+    public static void setLatitude(double latitude) {
+        GlobalParams.latitude = latitude;
+    }
+
+    public static void setLongitude(double longitude) {
+        GlobalParams.longitude = longitude;
     }
 
     public static void setDistrict(String district) {
@@ -64,10 +83,6 @@ public class GlobalParams {
 
     public static void setsDicItemBean(List<DicItemBean> sDicItemBean) {
         GlobalParams.sDicItemBean = sDicItemBean;
-    }
-
-    public static void setEquipmentTypeList(List<EquipmentTypeBean> equipmentTypeList) {
-        sEquipmentTypeList = equipmentTypeList;
     }
 
     public static void setToken(String token) {

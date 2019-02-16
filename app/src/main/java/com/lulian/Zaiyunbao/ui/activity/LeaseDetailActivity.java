@@ -176,7 +176,7 @@ public class LeaseDetailActivity extends BaseActivity {
                 intentMy.putExtra("WarmLong", equipmentDetailBean.get(0).getWarmLong());
                 intentMy.putExtra("SpecifiedLoad", equipmentDetailBean.get(0).getSpecifiedLoad());
                 intentMy.putExtra("TypeName", equipmentDetailBean.get(0).getTypeName());
-                intentMy.putExtra("Picture", equipmentDetailBean.get(0).getPicture());
+//                intentMy.putExtra("Picture", equipmentDetailBean.get(0).getPicture());
                 intentMy.putExtra("TypeId", equipmentDetailBean.get(0).getTypeId());
                 intentMy.putExtra("UserType", equipmentDetailBean.get(0).getUserType());
                 intentMy.putExtra("CreateId", equipmentDetailBean.get(0).getCreateId());
@@ -186,6 +186,7 @@ public class LeaseDetailActivity extends BaseActivity {
                 intentMy.putExtra("StorehouseId", getIntent().getStringExtra("StorehouseId")); //仓库ID
                 intentMy.putExtra("Deposit", equipmentDetailBean.get(0).getDeposit());//押金
                 intentMy.putExtra("UID", equipmentDetailBean.get(0).getUID());//使用者ID
+
                 startActivity(intentMy);
                 break;
 

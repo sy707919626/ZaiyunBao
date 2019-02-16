@@ -891,8 +891,7 @@
     <!-- 这里的FrameLayout用于承载对话框的背景 -->
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/service_dialog_bg"

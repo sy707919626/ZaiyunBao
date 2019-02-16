@@ -188,23 +188,21 @@ public class PointIssueActivity extends BaseActivity {
         pointSHMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleBlur(issueDialogBg, mHandler);
+            handleBlur(issueDialogBg, mHandler);
+            String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
+            BaseDialog(PointIssueActivity.this, issueDialogBg, list,
+                    pointSHMode.getText().toString(), "送货方式", mHandler, new OnItemClickListener() {
+                        @Override
+                        public void onItemClickListener(int position, List<SaleEntity> data) {
+                            pointSHMode.setText(data.get(position).getTitle());
 
-                String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
-
-                BaseDialog(PointIssueActivity.this, issueDialogBg, list,
-                        pointSHMode.getText().toString(), "送货方式", mHandler, new OnItemClickListener() {
-                            @Override
-                            public void onItemClickListener(int position, List<SaleEntity> data) {
-                                pointSHMode.setText(data.get(position).getTitle());
-
-                                if (data.get(position).getTitle().equals("送货上门")) {
-                                    pointAddressAreaText.setText("送货地址：");
-                                } else if (data.get(position).getTitle().equals("用户自提")) {
-                                    pointAddressAreaText.setText("提货地址：");
-                                }
+                            if (data.get(position).getTitle().equals("送货上门")) {
+                                pointAddressAreaText.setText("送货地址：");
+                            } else if (data.get(position).getTitle().equals("用户自提")) {
+                                pointAddressAreaText.setText("提货地址：");
                             }
-                        });
+                        }
+                    });
             }
         });
 
@@ -255,7 +253,6 @@ public class PointIssueActivity extends BaseActivity {
         pointIssueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (pointIssuePhone.getText().toString().trim().equals("")) {
                     RxToast.warning("请输入手机号码");
                 } else if (pointSum.getText().toString().trim().equals("")) {
@@ -389,7 +386,6 @@ public class PointIssueActivity extends BaseActivity {
                 });
 
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

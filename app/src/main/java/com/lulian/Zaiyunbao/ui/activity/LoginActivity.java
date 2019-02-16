@@ -193,7 +193,6 @@ public class LoginActivity extends BaseActivity {
 
             case R.id.login_text_help:
                 //帮助
-                RxToast.warning("点击了？");
                 startActivity(new Intent(this, HelpActivity.class));
                 break;
 

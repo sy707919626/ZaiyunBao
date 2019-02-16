@@ -1,8 +1,13 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -12,6 +17,8 @@ import android.widget.Toast;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.jg.ExampleUtil;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.ui.fragment.BuyFragment;
 import com.lulian.Zaiyunbao.ui.fragment.LeaseFragment;
@@ -20,6 +27,7 @@ import com.lulian.Zaiyunbao.ui.fragment.MeFragment;
 import com.lulian.Zaiyunbao.ui.fragment.ServiceFragment;
 
 import butterknife.BindView;
+import cn.jpush.android.api.JPushInterface;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
     public static final int INDEX_HOME = 0;
@@ -59,6 +67,13 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
      */
     private long mExitTime;
 
+    public static boolean isForeground = false;
+
+    private MessageReceiver mMessageReceiver;
+    public static final String MESSAGE_RECEIVED_ACTION = "com.lulian.Zaiyunbao.MESSAGE_RECEIVED_ACTION";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_MESSAGE = "message";
+    public static final String KEY_EXTRAS = "extras";
     @Override
     protected int setLayoutId() {
         return R.layout.activity_main;
@@ -68,6 +83,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     protected void init() {
         ImmersionBar.with(this).init();
         initView();
+
+        registerMessageReceiver();
+        JPushInterface.init(getApplicationContext());
     }
 
     private void initView() {
@@ -191,4 +209,55 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return super.onKeyDown(keyCode, event);
     }
 
+
+    public void registerMessageReceiver() {
+        mMessageReceiver = new MessageReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
+        filter.addAction(MESSAGE_RECEIVED_ACTION);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, filter);
+    }
+
+    public class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            try {
+                if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
+                    String messge = intent.getStringExtra(KEY_MESSAGE);
+                    String extras = intent.getStringExtra(KEY_EXTRAS);
+                    StringBuilder showMsg = new StringBuilder();
+                    showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
+                    if (!ExampleUtil.isEmpty(extras)) {
+                        showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
+                    }
+                    setCostomMsg(showMsg.toString());
+                }
+            } catch (Exception e){
+            }
+        }
+    }
+
+    private void setCostomMsg(String msg){
+        RxToast.showToast(msg);
+    }
+
+    @Override
+    protected void onResume() {
+        isForeground = true;
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        isForeground = false;
+        super.onPause();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+        super.onDestroy();
+    }
 }
