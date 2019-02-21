@@ -262,7 +262,7 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                     intent.putExtra("EquipmentName", EquipmentName);
                     intent.putExtra("Norm", Norm);
                     intent.putExtra("Price", Price);
-                    intent.putExtra("Quantity", Quantity);
+                    intent.putExtra("Quantity", Integer.valueOf(buyMySum.getText().toString().trim()));
                     intent.putExtra("StaticLoad", StaticLoad);
                     intent.putExtra("CarryingLoad", CarryingLoad);
                     intent.putExtra("OnLoad", OnLoad);

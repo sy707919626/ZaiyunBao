@@ -139,6 +139,7 @@ public class LeaseFragment extends BaseLazyFragment {
                 userTypeList.add("用户类型");
                 userTypeList.add("用户");
                 userTypeList.add("供应商");
+                userTypeList.add("我的");
 
                 SelectPopupWindow popup = new SelectPopupWindow(getContext(), userTypeList, zulinUserType.getText().toString());
                 popup.showAsDropDown(titleBar);
@@ -205,7 +206,7 @@ public class LeaseFragment extends BaseLazyFragment {
 
         fragmentRecyclerview.setItemAnimator(new DefaultItemAnimator());
         fragmentRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new EquipmentListAdapter(getContext(), mEquipmentList);
+        mAdapter = new EquipmentListAdapter(getContext(), mEquipmentList, mApi);
         fragmentRecyclerview.setAdapter(mAdapter);
 
 
@@ -257,6 +258,11 @@ public class LeaseFragment extends BaseLazyFragment {
             useTypeId.put("name", "len(UID)");
             useTypeId.put("type", "!>");
             useTypeId.put("value", 0);
+            list.add(useTypeId);
+        } else if (zulinUserType.getText().toString().trim().equals("我的")) {
+            useTypeId.put("name", "UID");
+            useTypeId.put("type", "=");
+            useTypeId.put("value", GlobalParams.sUserId);
             list.add(useTypeId);
         }
 

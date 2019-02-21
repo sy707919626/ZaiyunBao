@@ -353,7 +353,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="20dp"
                             android:gravity="center_vertical"
-                            android:text="元/天/片"
+                            android:text="元/个/片"
                             android:textColor="@color/text_black"
                             android:textSize="14dp" />
                     </RelativeLayout>
@@ -890,6 +890,7 @@
 
     <!-- 这里的FrameLayout用于承载对话框的背景 -->
     <FrameLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

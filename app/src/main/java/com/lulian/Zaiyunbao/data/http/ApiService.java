@@ -350,6 +350,11 @@ public interface ApiService {
     @POST("/api/AppManage/StatisticsEquipmentInfo")
     Observable<String> StatisticsEquipmentInfo(@Header("authorization") String authorization,
                                                @Query("UserId") String UserId);
+
+    //统计
+    @POST("/api/AppZulin/ChangeGroundingQuantity")
+    Observable<String> ChangeGroundingQuantity(@Header("authorization") String authorization,
+                                               @Query("UserId") String UserId, @Query("EDicId") String EDicId, @Query("Count") int Count);
 }
 
 

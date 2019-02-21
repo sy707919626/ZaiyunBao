@@ -15,6 +15,15 @@ public class EquipmentListForTypeBean implements Serializable {
 
     private String Id;
     private String EquipmentName;
+    private int Deposit;
+
+    public int getDeposit() {
+        return Deposit;
+    }
+
+    public void setDeposit(int deposit) {
+        Deposit = deposit;
+    }
 
     public String getId() {
         return Id;

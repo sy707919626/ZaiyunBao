@@ -174,7 +174,6 @@ public class LeaseOrderFragment extends BaseLazyFragment {
 
         if (isAutoRefresh) {
             smartRefreshLayout.autoRefresh();
-
             Constants.setIsAutoRefresh(false);
         }
     }

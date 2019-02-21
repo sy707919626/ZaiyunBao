@@ -37,6 +37,7 @@ import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.event.PayEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.DataCleanManager;
@@ -46,6 +47,8 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.ui.dialog.PhotoDialog;
 import com.lulian.Zaiyunbao.ui.photoview.PhotoDisplayDialog;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.List;
@@ -467,6 +470,8 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
                                     @Override
                                     public void onNext(String s) {
                                         RxToast.success("企业资料完善成功");
+                                        GlobalParams.setuserName(companyNameEditName.getText().toString().trim());
+
                                         if (ActivityType == 1) {
                                             startActivity(new Intent(UploadDataActivity.this, MainActivity.class));
                                             stepfinishAll();
@@ -525,15 +530,20 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
                                     @Override
                                     public void onNext(String s) {
                                         RxToast.success("个人资料完善成功");
+                                        GlobalParams.setuserName(paperTypeEditUsername.getText().toString().trim());
+
                                         if (ActivityType == 1) {
                                             startActivity(new Intent(UploadDataActivity.this, MainActivity.class));
                                             stepfinishAll();
 
                                         } else if (ActivityType == 2) {
                                             finish();
+
                                         } else if (ActivityType == 3) {
                                             finish();
                                         }
+
+
                                     }
                                 });
                     }

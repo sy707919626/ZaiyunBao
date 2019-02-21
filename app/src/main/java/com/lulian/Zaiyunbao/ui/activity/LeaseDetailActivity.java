@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -16,14 +17,19 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.EquipmentDetailBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.event.LeaseEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -64,6 +70,8 @@ public class LeaseDetailActivity extends BaseActivity {
     TextView leaseDetailsPhone;
     @BindView(R.id.my_leaseDetails_btn)
     Button myLeaseDetailsBtn;
+    @BindView(R.id.my_leaseDetails_btn_cannot)
+    Button myLeaseDetailsBtnCannot;
 
     private String ShebeiId;
     private String OperatorId;
@@ -77,6 +85,7 @@ public class LeaseDetailActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        stepActivities.add(this);
         ImmersionBar.with(this)
                 .titleBar(R.id.detail_bar_title)
                 .titleBarMarginTop(R.id.detail_bar_title)
@@ -94,11 +103,14 @@ public class LeaseDetailActivity extends BaseActivity {
         if (UID != null) {
             if (UID.equals(GlobalParams.sUserId)) {
                 myLeaseDetailsBtn.setVisibility(View.GONE);
+                myLeaseDetailsBtnCannot.setVisibility(View.VISIBLE);
             } else {
                 myLeaseDetailsBtn.setVisibility(View.VISIBLE);
+                myLeaseDetailsBtnCannot.setVisibility(View.GONE);
             }
         } else {
             myLeaseDetailsBtn.setVisibility(View.VISIBLE);
+            myLeaseDetailsBtnCannot.setVisibility(View.GONE);
         }
 
         getData();
@@ -150,7 +162,7 @@ public class LeaseDetailActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.leaseDetails_read_details, R.id.my_leaseDetails_btn})
+    @OnClick({R.id.leaseDetails_read_details, R.id.my_leaseDetails_btn, R.id.my_leaseDetails_btn_cannot})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.leaseDetails_read_details:
@@ -190,8 +202,24 @@ public class LeaseDetailActivity extends BaseActivity {
                 startActivity(intentMy);
                 break;
 
+            case R.id.my_leaseDetails_btn_cannot:
+                //撤销上架
+                mApi.ChangeGroundingQuantity(GlobalParams.sToken, GlobalParams.sUserId,
+                        equipmentDetailBean.get(0).getId(),0)
+                        .compose(RxHttpResponseCompat.<String>compatResult())
+                        .subscribe(new ErrorHandlerSubscriber<String>() {
+                            @Override
+                            public void onNext(String s) {
+                                RxToast.success("撤销上架成功");
+                                EventBus.getDefault().post(new LeaseEvent());
+                                stepfinishAll();
+                            }
+                        });
+                break;
+
             default:
                 break;
         }
     }
+
 }

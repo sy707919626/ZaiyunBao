@@ -63,7 +63,7 @@ public class WalletDetail implements Serializable {
         private String Id;
         private int CashOrPay;
         private String TradSum;
-        private int Monetary;
+        private float Monetary;
         private String TradTime;
 
         public String getTradTime() {
@@ -98,11 +98,11 @@ public class WalletDetail implements Serializable {
             this.TradSum = TradSum;
         }
 
-        public int getMonetary() {
+        public float getMonetary() {
             return Monetary;
         }
 
-        public void setMonetary(int Monetary) {
+        public void setMonetary(float Monetary) {
             this.Monetary = Monetary;
         }
     }

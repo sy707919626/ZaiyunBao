@@ -15,9 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lulian.Zaiyunbao.Bean.EquipmentListBean;
+import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.event.LeaseEvent;
+import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
+import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.data.http.ApiService;
 import com.lulian.Zaiyunbao.ui.activity.LeaseMyEquipmentActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -34,10 +42,17 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
 
     private Context mContext;
     private ArrayList<EquipmentListBean.RowsBean> mEquipmentListBean;
+    private ApiService mApi;
 
     public EquipmentListAdapter(Context context, ArrayList<EquipmentListBean.RowsBean> equipmentListBean) {
         this.mContext = context;
         this.mEquipmentListBean = equipmentListBean;
+    }
+
+    public EquipmentListAdapter(Context context, ArrayList<EquipmentListBean.RowsBean> equipmentListBean, ApiService Api) {
+        this.mContext = context;
+        this.mEquipmentListBean = equipmentListBean;
+        this.mApi = Api;
     }
 
     @Override
@@ -56,11 +71,14 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
             //使用者ID等于当前用户ID  不能进行租赁订单发布
             if (mEquipmentList.getUID().equals(GlobalParams.sUserId)) {
                 holder.leaseBtn.setVisibility(View.GONE);
+                holder.leaseBtnCannot.setVisibility(View.VISIBLE);
             } else {
                 holder.leaseBtn.setVisibility(View.VISIBLE);
+                holder.leaseBtnCannot.setVisibility(View.GONE);
             }
         } else {
             holder.leaseBtn.setVisibility(View.VISIBLE);
+            holder.leaseBtnCannot.setVisibility(View.GONE);
         }
 
         try {
@@ -122,6 +140,24 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
                 mContext.startActivity(intentMy);
             }
         });
+
+        holder.leaseBtnCannot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mApi.ChangeGroundingQuantity(GlobalParams.sToken, GlobalParams.sUserId,
+                        mEquipmentList.getId(),0)
+                        .compose(RxHttpResponseCompat.<String>compatResult())
+                        .subscribe(new ErrorHandlerSubscriber<String>() {
+                            @Override
+                            public void onNext(String s) {
+                                RxToast.success("撤销上架成功");
+                                EventBus.getDefault().post(new LeaseEvent());
+                            }
+                        });
+
+            }
+        });
+
     }
 
     @Override
@@ -156,6 +192,8 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
         TextView leaseDistance;
         @BindView(R.id.lease_btn)
         Button leaseBtn;
+        @BindView(R.id.lease_btn_cannot)
+        Button leaseBtnCannot;
 
         public EquipmentViewHolder(View itemView) {
             super(itemView);

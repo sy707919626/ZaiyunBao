@@ -196,5 +196,19 @@
             android:textColor="@color/text_hint_bule"
             android:textSize="@dimen/text_size_trhee" />
 
+        <Button
+            android:visibility="gone"
+            android:id="@+id/lease_btn_cannot"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/button_bg_xuxin"
+            android:text="撤销上架"
+            android:textColor="@color/text_hint_bule"
+            android:textSize="@dimen/text_size_trhee" />
+
     </RelativeLayout>
 </LinearLayout>

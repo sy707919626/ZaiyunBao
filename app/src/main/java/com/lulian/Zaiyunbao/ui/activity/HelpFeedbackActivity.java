@@ -1,6 +1,7 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -15,11 +16,13 @@ import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -42,8 +45,10 @@ public class HelpFeedbackActivity extends BaseActivity {
     TextView helpFeebackTextSum;
     @BindView(R.id.rl_comment_content)
     RelativeLayout rlCommentContent;
+    @BindView(R.id.update_feedback_phone_text)
+    TextView updateFeedbackPhoneText;
     @BindView(R.id.update_feedback_phone)
-    TextView updateFeedbackPhone;
+    ClearEditText updateFeedbackPhone;
     @BindView(R.id.btn_Submission)
     Button btnSubmission;
 
@@ -80,23 +85,6 @@ public class HelpFeedbackActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 helpFeebackTextSum.setText((maxNum - editable.length()) + "");
-            }
-        });
-
-        updateFeedbackPhone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                updateFeedbackPhone.setTextSize(R.dimen.text_size_trhee);
             }
         });
     }

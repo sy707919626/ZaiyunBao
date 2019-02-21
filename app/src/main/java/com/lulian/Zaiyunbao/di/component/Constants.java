@@ -21,6 +21,18 @@ public class Constants {
 
     public static boolean isAutoRefresh = false;
 
+    public static float meBalance;
+
+    public static float meDeposit;
+
+    public static void setMeBalance(float meBalance) {
+        Constants.meBalance = meBalance;
+    }
+
+    public static void setMeDeposit(float meDeposit) {
+        Constants.meDeposit = meDeposit;
+    }
+
     public static void setIsAutoRefresh(boolean isAutoRefresh) {
         Constants.isAutoRefresh = isAutoRefresh;
     }

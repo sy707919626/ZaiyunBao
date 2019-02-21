@@ -423,7 +423,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:gravity="center_vertical"
-                        android:text="单价"
+                        android:text="租金单价"
                         android:textColor="@color/text_black"
                         android:textSize="@dimen/text_size_trhee" />
 

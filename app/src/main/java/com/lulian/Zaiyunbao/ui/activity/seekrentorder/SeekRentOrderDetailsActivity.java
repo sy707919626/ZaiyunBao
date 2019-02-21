@@ -251,7 +251,7 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
             myOrderSubmissionLayout.setVisibility(View.GONE);
             myOrderBtnLayout.setVisibility(View.GONE);
 
-            leaseInfoLinearLayout.setVisibility(View.GONE);
+//            leaseInfoLinearLayout.setVisibility(View.GONE);
             leaseStatusText.setText("未接单");
 
 //        } else if (myOrderDetailsBean.getStatus() == 1) {

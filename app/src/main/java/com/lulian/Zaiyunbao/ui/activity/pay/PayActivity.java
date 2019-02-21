@@ -23,6 +23,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.alipay.AliPayManager;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.event.PayEvent;
 import com.lulian.Zaiyunbao.common.exception.BaseException;
 import com.lulian.Zaiyunbao.common.exception.RxErrorHandler;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
@@ -33,6 +34,8 @@ import com.lulian.Zaiyunbao.ui.activity.Update_Paypwd_Activity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.wxapi.WxPayManager;
 import com.lulian.Zaiyunbao.wxapi.WxPrePayInfo;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Date;
 import java.util.Map;
@@ -198,9 +201,9 @@ public class PayActivity extends BaseActivity implements PayDialog.PayInterface 
                     @Override
                     public void onNext(String s) {
                         Constants.setIsAutoRefresh(true);
-
                         RxToast.success("支付成功");
                         payDialog.cancel();
+                        EventBus.getDefault().post(new PayEvent());
                         finish();
                     }
 

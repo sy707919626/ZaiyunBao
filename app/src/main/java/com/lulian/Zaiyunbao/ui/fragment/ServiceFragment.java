@@ -156,6 +156,7 @@ public class ServiceFragment extends BaseFragment {
     private int leaseModle;//租赁模式
     private boolean isListNull = false;
     private String EtypeId = "";
+    private int mDeposit;
     private TimePickerView pvTime;
     private List<EquipmentListForTypeBean> EquipmentList = new ArrayList<>();
     //设备名称
@@ -477,6 +478,7 @@ public class ServiceFragment extends BaseFragment {
                     for (int i = 0; i < EquipmentList.size(); i++) {
                         if (EquipmentList.get(i).getEquipmentName().equals(seekRentShebeiName.getText().toString().trim())) {
                             EtypeId = EquipmentList.get(i).getId();
+                            mDeposit = EquipmentList.get(i).getDeposit();
                         }
                     }
 
@@ -509,8 +511,8 @@ public class ServiceFragment extends BaseFragment {
                                         seekRentDepositPrice.setEnabled(false);
                                         seekRentMyPrice.setEnabled(false);
 
-                                        seekRentDepositPrice.setText(list.get(0).getDeposit() / Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
-                                        seekRentDeposit.setText(list.get(0).getDeposit() + "");
+                                        seekRentDepositPrice.setText(mDeposit  + "");
+                                        seekRentDeposit.setText(mDeposit * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
                                         seekRentMianzu.setText(list.get(0).getFreeDays() + "");
 
                                     } else {
@@ -526,24 +528,22 @@ public class ServiceFragment extends BaseFragment {
 //                                            seekRentMyRent.setText("");
 //
 //                                        } else
-                                        if (seekRentDepositPrice.getText().toString().trim().equals("") ||
-                                                Integer.valueOf(seekRentDepositPrice.getText().toString().trim()) <= 0) {
-                                            RxToast.warning("请输入押金单价");
-
-                                        } else {
-
+//                                        if (seekRentDepositPrice.getText().toString().trim().equals("") ||
+//                                                Integer.valueOf(seekRentDepositPrice.getText().toString().trim()) == 0) {
+//                                            RxToast.warning("请输入押金单价");
+//                                        } else {
 //                                            seekRentMyRent.setText(Float.valueOf(seekRentMyPrice.getText().toString().trim())
 //                                                    * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) * Datasums + "");
 
                                             seekRentMyPrice.setText("0");
                                             seekRentMyRent.setText("0");
 
-                                            seekRentDeposit.setText(Integer.valueOf(seekRentDepositPrice.getText().toString().trim()) *
+                                            seekRentDeposit.setText(mDeposit *
                                                     Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
 
                                             seekRentMianzu.setText("0");
                                         }
-                                    }
+//                                    }
                                 }
                             });
                 }
@@ -558,19 +558,26 @@ public class ServiceFragment extends BaseFragment {
             RxToast.warning("请选择起租时间");
         } else if (seekRentEndTime.getText().toString().trim().equals("")) {
             RxToast.warning("请选择退租时间");
+        } else if(seekRentModleSpinner.getText().toString().trim().equals("")){
+            RxToast.warning("请选择租赁模式");
+        } else if(seekRentJiesuanModel.getText().toString().trim().equals("")){
+            RxToast.warning("请选择结算模式");
+        } else if(seekRentQuhuoModel.getText().toString().trim().equals("")){
+            RxToast.warning("请选择取货方式");
         } else if (seekRentShebeiSum.getText().toString().trim().equals("")) {
             RxToast.warning("请输入求租数量");
         } else if (seekRentMyRent.getText().toString().trim().equals("")) {
             RxToast.warning("请先计算费用后，再进行发布求租订单");
         } else if (seekRentLianxiPhone.getText().toString().trim().equals("")) {
             RxToast.warning("请输入联系电话");
-
         } else if (!ProjectUtil.isMobileNO(seekRentLianxiPhone.getText().toString().trim())) {
             RxToast.warning("请输入正确的手机号码");
-
         } else if (seekRentLianxiren.getText().toString().trim().equals("")) {
             RxToast.warning("请输入联系人");
-
+        } else if (seekRentAddressQuxian.getText().toString().trim().equals("")){
+            RxToast.warning("请选择区县");
+        } else if (seekRentAddressXiangxi.getText().toString().trim().equals("")){
+            RxToast.warning("请填写详细的地址");
         } else {
             for (int i = 0; i < EquipmentList.size(); i++) {
                 if (EquipmentList.get(i).getEquipmentName().equals(seekRentShebeiName.getText().toString().trim())) {
@@ -647,15 +654,15 @@ public class ServiceFragment extends BaseFragment {
             obj.put("Recommend", ""); //推荐人
             obj.put("RecommendPhone", ""); //推荐人电话
 
-            obj.put("Release", ""); //发布人
-            obj.put("ReleasePhone", ""); //发布人电话
+            obj.put("Release", seekRentLianxiren.getText().toString().trim()); //发布人
+            obj.put("ReleasePhone",seekRentLianxiPhone.getText().toString().trim()); //发布人电话
             obj.put("StoreName", ""); //仓库名
             obj.put("StoreId", ""); //仓库Id
             obj.put("ReceiveUserId", ""); //供应商ID
 
-            obj.put("Price", Float.valueOf("0")); //单价
+            obj.put("Price", Float.valueOf(seekRentMyPrice.getText().toString().trim())); //单价
             obj.put("Deposit", Integer.valueOf(seekRentDeposit.getText().toString().trim())); //押金
-            obj.put("RentAmount", Float.valueOf("0")); //总金额
+            obj.put("RentAmount", Float.valueOf(seekRentMyRent.getText().toString().trim())); //总金额
             obj.put("FreeDates", Integer.valueOf(seekRentMianzu.getText().toString().trim())); //免租期
 
             String lease = obj.toString();

@@ -103,6 +103,7 @@ public class BuyFragment extends BaseLazyFragment {
                 Intent intent = new Intent(getContext(), BuyDetailActivity.class);
                 intent.putExtra("buyDetail", buyListBean);
                 startActivity(intent);
+                hashCode();
             }
         });
     }

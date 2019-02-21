@@ -20,6 +20,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 import butterknife.BindView;
 import okhttp3.MediaType;
@@ -149,6 +152,7 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
                         }
 
                         mOrderListBean.addAll(myOrderLisetBean.getRows());
+                        sort();
 
                         if (mAdapter != null) {
                             mAdapter.notifyDataSetChanged();
@@ -178,4 +182,20 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
         }
     }
 
+
+    private void sort() {
+        //根据下单时间降序排列
+        Collections.sort(mOrderListBean, new Comparator<MyOrderLisetBean.RowsBean>() {
+            @Override
+            public int compare(MyOrderLisetBean.RowsBean lhs, MyOrderLisetBean.RowsBean rhs) {
+                Date date1 = stringToDate(lhs.getOrderCreateTime());
+                Date date2 = stringToDate(rhs.getOrderCreateTime());
+                // 对日期字段进行升序，如果欲降序可采用after方法
+                if (date1.before(date2)) {
+                    return 1;
+                }
+                return -1;
+            }
+        });
+    }
 }

@@ -344,6 +344,21 @@
                 android:text="@string/mylease"
                 android:textColor="@color/white"
                 android:textSize="14dp" />
+
+            <Button
+                android:visibility="gone"
+                android:id="@+id/my_leaseDetails_btn_cannot"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="80dp"
+                android:background="@drawable/button_shape"
+                android:text="撤销上架"
+                android:textColor="@color/white"
+                android:textSize="14dp" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

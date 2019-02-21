@@ -436,44 +436,49 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        equipmentInfoBean = JSONObject.parseObject(s, EquipmentInfoBean.class);
-                        deteilListBean.setETypeId(equipmentInfoBean.getEquipmentId());
-                        deteilListBean.setECode(ECodeNo);
-                        deteilListBean.setETypeName(equipmentInfoBean.getEquipmentName());
+                            equipmentInfoBean = JSONObject.parseObject(s, EquipmentInfoBean.class);
+                            deteilListBean.setETypeId(equipmentInfoBean.getEquipmentId());
+                            deteilListBean.setECode(ECodeNo);
+                            deteilListBean.setETypeName(equipmentInfoBean.getEquipmentName());
 
-                        deteilListBean.setRepairType(repair);
-                        deteilListBean.setImgs(Images);
+                            deteilListBean.setRepairType(repair);
+                            deteilListBean.setImgs(Images);
 
-                        deteilListBeanList.add(deteilListBean);
+                            deteilListBeanList.add(deteilListBean);
 
-                        if (!isFirst) {
-                            StorehouseId = equipmentInfoBean.getStorehouseId();
-                            MemberID = equipmentInfoBean.getMemberID();
-                            ETypeId = equipmentInfoBean.getTypeId();
-                            ETypeName = equipmentInfoBean.getTypeName();
-                            EquipmentId = equipmentInfoBean.getEquipmentId();
-                        }
+                            if (!isFirst) {
+                                StorehouseId = equipmentInfoBean.getStorehouseId();
+                                MemberID = equipmentInfoBean.getMemberID();
+                                ETypeId = equipmentInfoBean.getTypeId();
+                                ETypeName = equipmentInfoBean.getTypeName();
+                                EquipmentId = equipmentInfoBean.getEquipmentId();
+                            }
 
-                        isFirst = true;
+                            isFirst = true;
 
-                        if (mAdapter != null) {
-                            mAdapter.notifyDataSetChanged();
-                        }
-                        deviceEntryRecycler.setAdapter(mAdapter);
+                            if (mAdapter != null) {
+                                mAdapter.notifyDataSetChanged();
+                            }
+                            deviceEntryRecycler.setAdapter(mAdapter);
 
-                        //清空设备信息
-                        clearDeviceNo.setText("");
-                        deviceEditRemark.setText("");
+                            //清空设备信息
+                            clearDeviceNo.setText("");
+                            deviceEditRemark.setText("");
 
-                        deviceEntryCount.setText(deteilListBeanList.size() + "");
+                            deviceEntryCount.setText(deteilListBeanList.size() + "");
 
-                        Image1 = "";
-                        Image2 = "";
-                        Image3 = "";
-                        deviceUploadImage1.setVisibility(View.GONE);
-                        deviceUploadImage2.setVisibility(View.GONE);
-                        deviceUploadImage3.setVisibility(View.GONE);
-                        clearDeviceNo.setFocusable(true);
+                            Image1 = "";
+                            Image2 = "";
+                            Image3 = "";
+                            deviceUploadImage1.setVisibility(View.GONE);
+                            deviceUploadImage2.setVisibility(View.GONE);
+                            deviceUploadImage3.setVisibility(View.GONE);
+                            clearDeviceNo.setFocusable(true);
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        RxToast.warning("请输入正确的设备编号");
                     }
                 });
     }

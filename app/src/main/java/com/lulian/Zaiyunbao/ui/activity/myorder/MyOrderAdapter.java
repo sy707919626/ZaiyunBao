@@ -451,6 +451,18 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
                             }
                         }
 
+                        //求租单状态1  也是支付
+                        if (mOrderListBean.get(getAdapterPosition()).getFormType() == 1){
+                            //支付押金
+                            Intent intent = new Intent(mContext, PayActivity.class);
+                            intent.putExtra("orderId", mOrderListBean.get(getAdapterPosition()).getOrdersId());
+                            intent.putExtra("UserId", GlobalParams.sUserId);
+                            intent.putExtra("money", mOrderListBean.get(getAdapterPosition()).getOrderDeposit());
+                            intent.putExtra("OrderType", 1); //1租赁单2购买单
+
+                            mContext.startActivity(intent);
+                        }
+
                     } else if (status == 2) {
                         //支付押金
                         Intent intent = new Intent(mContext, PayActivity.class);

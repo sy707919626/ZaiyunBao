@@ -14,10 +14,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.event.PayEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.CircleImageView;
 import com.lulian.Zaiyunbao.common.widget.item_view;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.AboutActivity;
 import com.lulian.Zaiyunbao.ui.activity.DataUserTypeActivity;
 import com.lulian.Zaiyunbao.ui.activity.HelpFeedbackActivity;
@@ -26,6 +28,10 @@ import com.lulian.Zaiyunbao.ui.activity.MyDataActivity;
 import com.lulian.Zaiyunbao.ui.activity.SettingActivity;
 import com.lulian.Zaiyunbao.ui.activity.wallet.MyWalletActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -68,7 +74,6 @@ public class MeFragment extends BaseFragment {
     @BindView(R.id.item_view_install)
     item_view itemViewInstall;
     Unbinder unbinder;
-
     @Override
     protected int setLayoutId() {
         return R.layout.fragment_me;
@@ -81,8 +86,10 @@ public class MeFragment extends BaseFragment {
                 .navigationBarColor(R.color.white)
                 .fullScreen(false)
                 .init();
-        getData();
 
+        EventBus.getDefault().register(this);
+
+        getData();
         //消息数目提示
         QBadgeView qbadge = new QBadgeView(getActivity());
         qbadge.setBadgeTextSize(12, true);
@@ -90,6 +97,7 @@ public class MeFragment extends BaseFragment {
 
         userName.setText(GlobalParams.sUserName);
         userPhone.setText(GlobalParams.sUserPhone);
+
     }
 
     @OnClick({R.id.mydata_relative,
@@ -133,7 +141,6 @@ public class MeFragment extends BaseFragment {
                 Intent intent2 = new Intent(getContext(), SettingActivity.class);
                 getActivity().startActivity(intent2);
                 break;
-
         }
     }
 
@@ -151,4 +158,22 @@ public class MeFragment extends BaseFragment {
                 });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PayEvent event) {
+        getData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        userName.setText(GlobalParams.sUserName);
+        userPhone.setText(GlobalParams.sUserPhone);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //解注册
+        EventBus.getDefault().unregister(getActivity());
+    }
 }

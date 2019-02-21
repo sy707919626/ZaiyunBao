@@ -69,7 +69,6 @@ public class ManageFragment extends BaseLazyFragment {
 
         getData();
         textManageContent.setText("管理");
-
     }
 
     @Override
