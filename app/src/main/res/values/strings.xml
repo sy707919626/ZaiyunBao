@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">载运保（测试版）</string>
+    <string name="app_name">载运保</string>
     <string name="app_version">1.0.0</string>
 
     <!--网络相关-->
@@ -82,7 +82,7 @@
     <string name="putforward">提现</string>
     <string name="walletDetailed">钱包明细</string>
     <string name="updatePayPwd">修改支付密码</string>
-    <string name="update_pwd_hint">密码必须是8—16位的数字、字符组合（不能是纯数字）</string>
+    <string name="update_pwd_hint">密码必须是8—16位的数字、字符组合</string>
 
     <string name="forger_pwd">若您忘记密码无法登录，进入账号密码登录页面，点击【忘记密码】，进入找回密码流程，系统会检测您的当前环境是否安全，若安全则可以直接重置密码；若当前环境不安全，则需要通过验证后方可重置密码。
     </string>

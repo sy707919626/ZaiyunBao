@@ -73,12 +73,15 @@ public class DeviceManageAdapter extends RecyclerView.Adapter<DeviceManageAdapte
         holder.deviceManageSpec.setText(mDeviceManage.getNorm());
         holder.deviceManageName.setText(mDeviceManage.getEquipmentName());
 
-        //使用状态：6=闲置 3=占用
+        //使用状态：6=闲置 3=占用  报修 = 4 报废 = 5
         if (mDeviceManage.getUseStatus() == 6) {
             state = "闲置";
-
-        } else if (mDeviceManage.getUseStatus() == 3) {
+        } else  if (mDeviceManage.getUseStatus() == 3) {
             state = "占用";
+        } else if (mDeviceManage.getUseStatus() == 4) {
+            state = "报修";
+        } else if (mDeviceManage.getUseStatus() == 5) {
+            state = "报废";
         }
 
         holder.deviceManageState.setText(state);

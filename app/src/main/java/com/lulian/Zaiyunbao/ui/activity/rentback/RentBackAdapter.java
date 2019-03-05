@@ -69,7 +69,7 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
             state = "未接单";
             holder.rentBackBtn.setVisibility(View.GONE);
 
-        } else if (mOrderList.getStatus() == 1) {
+        } else if (mOrderList.getStatus() == 1 || mOrderList.getStatus() == 2) {
             state = "待发货";
             stateBtn = "确认发货";
             holder.rentBackBtn.setVisibility(View.VISIBLE);
@@ -158,7 +158,7 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
                 @Override
                 public void onClick(View view) {
                     int status = mOrderListBean.get(getAdapterPosition()).getStatus();
-                    if (status == 1) {
+                    if (status == 1 || status == 2) {
                         //发货
                         Intent intent = new Intent(mContext, RentBackEntryActivity.class);
                         intent.putExtra("EquipmentName", mOrderListBean.get(getAdapterPosition()).getEquipmentName());

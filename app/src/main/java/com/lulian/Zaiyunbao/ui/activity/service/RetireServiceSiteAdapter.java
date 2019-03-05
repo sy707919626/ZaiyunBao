@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireServiceSiteAdapter.ServiceSiteViewHolder> {
 
     private Context mContext;
-    private RetireServiceSiteAdapter.OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
 
     private ArrayList<RetireServiceSiteBean.RowsBean> mRetireServiceSiteBean;
 
@@ -48,7 +48,10 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
         final RetireServiceSiteBean.RowsBean mRetireServiceSite = mRetireServiceSiteBean.get(position);
         holder.retireServiceSiteName.setText(mRetireServiceSite.getName());
         holder.retireServiceSiteAddress.setText(mRetireServiceSite.getArea());
-        holder.retireServiceSiteJuli.setText(mRetireServiceSite.getTouch() + "KM");
+        holder.retireServiceSiteUserName.setText(mRetireServiceSite.getManager());
+        holder.retireServiceSitePhone.setText(mRetireServiceSite.getTouch());
+
+//        holder.retireServiceSiteJuli.setText(mRetireServiceSite.getTouch() + "KM");
         Glide.with(mContext).load(Constants.BASE_URL + mRetireServiceSite.getUrl()).into(holder.retireServiceSiteImgPhoto);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +67,7 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
         return mRetireServiceSiteBean == null ? 0 : mRetireServiceSiteBean.size();
     }
 
-    public void setOnItemClickListener(RetireServiceSiteAdapter.OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.mOnItemClickListener = onItemClickListener;
     }
 
@@ -79,8 +82,10 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
         TextView retireServiceSiteName;
         @BindView(R.id.retire_service_site_address)
         TextView retireServiceSiteAddress;
-        @BindView(R.id.retire_service_site_juli)
-        TextView retireServiceSiteJuli;
+        @BindView(R.id.retire_service_site_user_name)
+        TextView retireServiceSiteUserName;
+        @BindView(R.id.retire_service_site_phone)
+        TextView retireServiceSitePhone;
         @BindView(R.id.retire_service_site_liji_btn)
         Button retireServiceSiteLijiBtn;
         @BindView(R.id.retire_service_site_back_btn)

@@ -57,7 +57,7 @@ public class DeviceManageActivity extends BaseActivity {
         PagerAdapter adapter = new DeviceManageViewPagerAdapter(this.getSupportFragmentManager());
         viewDeviceManagePager.setAdapter(adapter);
         tabDeviceManageLayout.setupWithViewPager(viewDeviceManagePager);
-        tabDeviceManageLayout.setTabMode(TabLayout.MODE_FIXED);
+        tabDeviceManageLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         imageDetailRight.setOnClickListener(new View.OnClickListener() {
             @Override

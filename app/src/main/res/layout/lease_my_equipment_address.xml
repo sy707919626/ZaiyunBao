@@ -104,62 +104,37 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/lease_my_address_area_text"
+                        android:id="@+id/lease_my_address_name_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:gravity="center"
-                        android:text="收货地点"
+                        android:text="取货地点"
                         android:textColor="@color/text_black"
                         android:textSize="14dp" />
 
-                    <TextView
-                        android:id="@+id/lease_my_address_area"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_toRightOf="@id/lease_my_address_area_text"
-                        android:background="@null"
-                        android:drawablePadding="10dp"
-                        android:gravity="right"
-                        android:hint="请选择收货区县地址"
-                        android:inputType="text"
-                        android:singleLine="false"
-                        android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/text_size_trhee" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="horizontal">
-
                     <com.lulian.Zaiyunbao.common.widget.ClearEditText
                         android:id="@+id/lease_my_address_name"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="80dp"
+                        android:singleLine="false"
+                        android:gravity="right"
                         android:background="@null"
                         android:drawablePadding="10dp"
-                        android:gravity="right"
-                        android:hint="请输入收货详细地址"
+                        android:hint="请输入收/提货详细地址"
                         android:inputType="text"
-                        android:singleLine="false"
                         android:textColor="@color/text_color_black"
                         android:textSize="@dimen/text_size_trhee" />
                 </RelativeLayout>
@@ -351,6 +326,7 @@
     </ScrollView>
 
     <FrameLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

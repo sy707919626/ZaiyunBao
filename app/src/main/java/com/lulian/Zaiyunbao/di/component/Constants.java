@@ -1,14 +1,8 @@
 package com.lulian.Zaiyunbao.di.component;
 
-/**
- * @description：
- * @author：bux on 2018/3/22 16:12
- * @email: 471025316@qq.com
- */
-
 public class Constants {
-//    public static final String BASE_URL = "http://192.168.1.242:8086";
-    public static final String BASE_URL = "http://pay.llxx168.com";
+    public static final String BASE_URL = "http://192.168.1.242:8086"; //测试环境
+//    public static final String BASE_URL = "http://api.zaiyunbao.com"; //正式环境
 
     /**
      * 微信sdk的appId

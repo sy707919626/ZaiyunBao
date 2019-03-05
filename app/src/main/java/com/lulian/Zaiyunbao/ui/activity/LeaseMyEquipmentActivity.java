@@ -248,7 +248,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                     public void onNext(String s) {
                         List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
                         if (list.size() > 0) {
-                            DecimalFormat decimalFormat = new DecimalFormat(".00");
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
 
                             float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
                             MianZuQi = list.get(0).getFreeDays();

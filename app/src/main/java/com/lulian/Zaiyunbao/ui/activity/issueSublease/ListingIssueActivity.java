@@ -1,9 +1,9 @@
 package com.lulian.Zaiyunbao.ui.activity.issueSublease;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
@@ -61,9 +62,7 @@ public class ListingIssueActivity extends BaseActivity {
     @BindView(R.id.address_linearLayout)
     TextView addressLinearLayout;
     @BindView(R.id.address_textview)
-    TextView addressTextview;
-    @BindView(R.id.listing_issue_location)
-    RelativeLayout listingIssueLocation;
+    ClearEditText addressTextview;
     @BindView(R.id.liearLayout_sum)
     TextView liearLayoutSum;
     @BindView(R.id.listing_issue_count)
@@ -78,8 +77,15 @@ public class ListingIssueActivity extends BaseActivity {
     TextView listingIssueYajin;
     @BindView(R.id.listing_issue_btn)
     Button listingIssueBtn;
-
     private IssueListBean issueListBean;
+
+    public IssueListBean getIssueListBean() {
+        return issueListBean;
+    }
+
+    public void setIssueListBean(IssueListBean issueListBean) {
+        this.issueListBean = issueListBean;
+    }
 
     @Override
     protected int setLayoutId() {
@@ -104,7 +110,9 @@ public class ListingIssueActivity extends BaseActivity {
         listingIssueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listingIssueCount.getText().toString().trim().equals("")) {
+                if (addressTextview.getText().toString().trim().equals("")){
+                    RxToast.warning("请输入设备所在地");
+                } else if (listingIssueCount.getText().toString().trim().equals("")) {
                     RxToast.warning("请输入转租数量");
                 } else if (Integer.valueOf(listingIssueCount.getText().toString().trim()) > issueListBean.getQuantity()) {
                     RxToast.warning("转租数量不能超过设备闲置库存数量");
@@ -117,24 +125,17 @@ public class ListingIssueActivity extends BaseActivity {
 
             }
         });
-
-        listingIssueLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeAddress("");
-            }
-        });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ADDRESS_LOCATION && resultCode == 11) { //选择地点返回值
-            if (data != null) {
-                addressTextview.setText(data.getStringExtra("addressAll"));
-            }
-        }
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == ADDRESS_LOCATION && resultCode == 11) { //选择地点返回值
+//            if (data != null) {
+//                addressTextview.setText(data.getStringExtra("addressAll"));
+//            }
+//        }
+//    }
 
     private void initView() {
         getDeposit();
@@ -172,7 +173,8 @@ public class ListingIssueActivity extends BaseActivity {
 
     private void uploadData() {
         mApi.PublishAttornRent(GlobalParams.sToken, GlobalParams.sUserId, issueListBean.getId(),
-                issueListBean.getQuantity(), Integer.valueOf(listingIssueCount.getText().toString().trim()))
+                issueListBean.getQuantity(),
+                Integer.valueOf(listingIssueCount.getText().toString().trim()), addressTextview.getText().toString().trim())
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
@@ -203,5 +205,4 @@ public class ListingIssueActivity extends BaseActivity {
             }
         });
     }
-
 }

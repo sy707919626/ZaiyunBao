@@ -39,7 +39,7 @@ public class LeaseOrderViewPagerAdapter extends FragmentPagerAdapter {
 //        mFragment.add(new FragmentInfo("待发货", SeekRentOrderWaitFHFragment.class));
         mFragment.add(new FragmentInfo("待收货", new LeaseOrderFragment("5")));
         mFragment.add(new FragmentInfo("已收货", new LeaseOrderFragment("6")));
-        mFragment.add(new FragmentInfo("已完成 ", new LeaseOrderFragment("9")));
+        mFragment.add(new FragmentInfo("已退租 ", new LeaseOrderFragment("8")));
     }
 
     @Override

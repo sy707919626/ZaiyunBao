@@ -139,6 +139,15 @@ public class MyOrderLisetBean implements Serializable {
         private float OrderDeposit; //押金
         private float TrafficFee; //运费
         private float Price; //租赁单价
+        private String ReceiveUserId; //租出方ID
+
+        public String getReceiveUserId() {
+            return ReceiveUserId;
+        }
+
+        public void setReceiveUserId(String receiveUserId) {
+            ReceiveUserId = receiveUserId;
+        }
 
         public float getPrice() {
             return Price;

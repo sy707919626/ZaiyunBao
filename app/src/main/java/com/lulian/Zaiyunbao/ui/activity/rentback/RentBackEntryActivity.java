@@ -190,9 +190,6 @@ public class RentBackEntryActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.sublease_entry_RFID:
-                orderList.add("000000000000");
-                orderList.add("654654222254");
-
                 if (orderList.size() > Count) {
                     RxToast.warning("录入设备数量不能大于可退租数量");
                 } else {

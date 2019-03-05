@@ -231,6 +231,9 @@
                 <category android:name="com.lulian.Zaiyunbao" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.activity.wallet.CashRechargeActivity" />
+        <activity android:name=".ui.activity.UserAgreementActivity" />
+        <activity android:name=".ui.activity.wallet.CashRechargeResultActivity" />
 
         <!-- Required SDK 核心功能-->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->

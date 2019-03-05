@@ -11,17 +11,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
-import com.lulian.Zaiyunbao.common.event.BankEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-
-import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -101,7 +99,7 @@ public class BankDeleteActivity extends BaseActivity {
                     bankDetelePhoneText.setText(bankDeteleTestPhone.getText().toString().trim());
 
                     //处理获取手机验证码网络请求
-                    mApi.sendVerifySms(GlobalParams.sToken, GlobalParams.sUserPhone, "5")
+                    mApi.sendVerifySms(GlobalParams.sToken, GlobalParams.sUserPhone, "4")
                             .compose(RxHttpResponseCompat.<String>compatResult())
                             .subscribe(new ErrorHandlerSubscriber<String>() {
                                 @Override
@@ -126,7 +124,7 @@ public class BankDeleteActivity extends BaseActivity {
                 //完成
                 if (bankDeteleTestCode.getVerification().equals("")) {
                     RxToast.warning("请输入验证码");
-                } else if (!bankDeteleTestCode.getVerification().equals(Code)) {
+                } else if (!MD5Utils.getPwd(bankDeteleTestCode.getVerification()).equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");
                 } else {
                     //成功
@@ -137,7 +135,6 @@ public class BankDeleteActivity extends BaseActivity {
                                 @Override
                                 public void onNext(String s) {
                                     RxToast.warning("解绑成功");
-                                    EventBus.getDefault().post(new BankEvent());
                                     stepfinishAll();
                                 }
                             });

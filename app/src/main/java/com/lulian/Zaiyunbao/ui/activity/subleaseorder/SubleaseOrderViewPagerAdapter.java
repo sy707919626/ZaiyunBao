@@ -32,7 +32,7 @@ public class SubleaseOrderViewPagerAdapter extends FragmentPagerAdapter {
         mFragment.add(new FragmentInfo("待发货", new SubleaseOrderFragment("3")));
         mFragment.add(new FragmentInfo("待收货", new SubleaseOrderFragment("5")));
         mFragment.add(new FragmentInfo("已收货", new SubleaseOrderFragment("6")));
-        mFragment.add(new FragmentInfo("已完成 ", new SubleaseOrderFragment("9")));
+        mFragment.add(new FragmentInfo("已退租 ", new SubleaseOrderFragment("8")));
     }
 
     @Override

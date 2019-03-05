@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.BankBean;
 import com.lulian.Zaiyunbao.Bean.BankInfo;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
@@ -26,10 +27,17 @@ import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -74,6 +82,8 @@ public class CashBankMoneyActivity extends BaseActivity {
     private String mBalance; //余额
     private String ApplyAccount; // 账户名称
 
+    private float money = 0f;
+    final DecimalFormat decimalFormat = new DecimalFormat("0.00");
     @Override
     protected int setLayoutId() {
         return R.layout.activity_cash_money;
@@ -113,20 +123,17 @@ public class CashBankMoneyActivity extends BaseActivity {
         cashMoneySum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(cashMoneySum.getText().toString().trim())
-                        && !TextUtils.isEmpty(cashMoneyBankSelect.getText().toString().trim())) {
+                        &&!TextUtils.isEmpty(cashMoneyBankSelect.getText().toString().trim())) {
                     cashMoneyBtnCommit.setEnabled(true);
-                    cashMoneyServerText.setText(Integer.valueOf(cashMoneySum.getText().toString()) * 0.006 + "");
                 } else {
                     cashMoneyBtnCommit.setEnabled(false);
                 }
@@ -147,16 +154,14 @@ public class CashBankMoneyActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!TextUtils.isEmpty(cashMoneySum.getText().toString().trim())
-                        && !TextUtils.isEmpty(cashMoneyBankSelect.getText().toString().trim())) {
+                        &&!TextUtils.isEmpty(cashMoneyBankSelect.getText().toString().trim())) {
                     cashMoneyBtnCommit.setEnabled(true);
-
-                    cashMoneyServerText.setText(Integer.valueOf(cashMoneySum.getText().toString()) * 0.006 + "");
                 } else {
                     cashMoneyBtnCommit.setEnabled(false);
                 }
             }
         });
-
+        setupSearchView();
 
         cashMoneyBankSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,15 +190,14 @@ public class CashBankMoneyActivity extends BaseActivity {
         cashMoneyBtnCommit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (Float.valueOf(mBalance) < Float.valueOf(cashMoneySum.getText().toString().trim())) {
+                if (Float.valueOf(mBalance) < Float.valueOf(cashMoneySum.getText().toString().trim()) + money) {
                     RxToast.warning("余额不足");
                 } else {
                     //成功
                     JSONObject obj = new JSONObject();
                     obj.put("Number", AccountNo);
                     obj.put("ApplyAccount", ApplyAccount);
-                    obj.put("Balance", cashMoneySum.getText().toString().trim());
+                    obj.put("Balance", cashMoneySum.getText().toString().trim() + money);
                     obj.put("UserId", GlobalParams.sUserId);
 
                     String lease = obj.toString();
@@ -225,8 +229,8 @@ public class CashBankMoneyActivity extends BaseActivity {
                     public void onNext(String s) {
                         JSONObject jsonObject = JSONObject.parseObject(s);
                         mBalance = jsonObject.getString("Balance");
-                        cashMoneyBalance.setText(jsonObject.getString("Balance") + "元");
-                        cashMoneyBalanceText.setText(jsonObject.getString("Balance") + "元");
+                        cashMoneyBalance.setText(jsonObject.getString("Balance") + "");
+                        cashMoneyBalanceText.setText(jsonObject.getString("Balance") + "");
 
                         ApplyAccount = jsonObject.getString("AccountNo");//账户名称
                     }
@@ -240,23 +244,50 @@ public class CashBankMoneyActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         mBankCardList.addAll(JSONObject.parseArray(s, BankBean.class));
+                        if (mBankCardList.size() <= 0){
+                            RxToast.warning("请先添加银行卡，再进行提现");
 
-                        for (BankBean bankBean : mBankCardList) {
+                        } else {
+                            for (BankBean bankBean : mBankCardList) {
 
-                            //建设银行.龙卡通（1022）
-                            String AuccountNo = bankBean.getAccountNo().substring(bankBean.getAccountNo().length() - 4, bankBean.getAccountNo().length());
-                            String BankInfo = bankBean.getAccountBank() + " (" + AuccountNo + ") ";
+                                //建设银行.龙卡通（1022）
+                                String AuccountNo = bankBean.getAccountNo().substring(bankBean.getAccountNo().length() - 4, bankBean.getAccountNo().length());
+                                String BankInfo = bankBean.getAccountBank() + " (" + AuccountNo + ") ";
 
-                            BankInfo bankInfo = new BankInfo();
-                            bankInfo.setId(bankBean.getId());
-                            bankInfo.setAccountNo(bankBean.getAccountNo());
-                            bankInfo.setBank(BankInfo);
+                                BankInfo bankInfo = new BankInfo();
+                                bankInfo.setId(bankBean.getId());
+                                bankInfo.setAccountNo(bankBean.getAccountNo());
+                                bankInfo.setBank(BankInfo);
 
-                            banks.add(BankInfo);
-                            mBankInfoList.add(bankInfo);
+                                banks.add(BankInfo);
+                                mBankInfoList.add(bankInfo);
+                            }
                         }
                     }
 
                 });
+    }
+
+    private void setupSearchView() {
+        RxTextView.textChanges(cashMoneySum)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.toString().trim().length() > 0;
+                    }
+                }).subscribe(new Consumer<CharSequence>() {
+            @Override
+            public void accept(@NonNull CharSequence charSequence) throws Exception {
+                if (charSequence.length() > 0) {
+                    cashMoneyServerText.setText(decimalFormat.format(Float.valueOf(cashMoneySum.getText().toString()) * 0.001)+ "");
+                    money = Float.valueOf(cashMoneyServerText.getText().toString().trim());
+                } else {
+                    cashMoneyServerText.setText("0.00");
+                }
+            }
+        });
     }
 }

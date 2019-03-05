@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.lulian.Zaiyunbao.di.component.Constants.isAutoRefresh;
 
@@ -68,8 +70,6 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
     TextView myOrderShebeiNum;
     @BindView(R.id.my_order_take_time)
     TextView myOrderTakeTime;
-    @BindView(R.id.my_order_company)
-    TextView myOrderCompany;
     @BindView(R.id.my_order_contacts)
     TextView myOrderContacts;
     @BindView(R.id.my_order_phone)
@@ -114,7 +114,6 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
     Button myOrderSure;
     @BindView(R.id.my_order_btn_layout)
     LinearLayout myOrderBtnLayout;
-
     private String OrdersId = "";
     private String OrderNo = "";
     private String Id = ""; //设备ID
@@ -175,7 +174,6 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
         myOrderShebeiNum.setText(myOrderDetailsBean.getCount() + "");
 
         myOrderTakeTime.setText(myOrderDetailsBean.getTargetDeliveryTime());//取托时间
-        myOrderCompany.setText(myOrderDetailsBean.getOrgName()); //企业名称
 //        myOrderContacts.setText(myOrderDetailsBean.getReceiveName());//企业联系人
 //        myOrderPhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//企业联系电话
 
@@ -455,5 +453,12 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
         if (isAutoRefresh) {
             getData();
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -509,13 +510,20 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
                         RxToast.warning("请上传身份证反面照");
                     } else {
 
+
                         //上传接口
                         //个人传入参数UserClass,UserId, Name, Sex, IdCard, IdFrontUrl, IdBackUrl
                         JSONObject obj = new JSONObject();
                         obj.put("UserClass", userType);
                         obj.put("UserId", GlobalParams.sUserId);
                         obj.put("Name", paperTypeEditUsername.getText().toString().trim());
-                        obj.put("Sex", sex);
+
+                        if (usersexEditName.getText().toString().trim().equals("男")) {
+                            obj.put("Sex", 1);
+                        } else {
+                            obj.put("Sex", 0);
+                        }
+
                         obj.put("IdCard", paperEditIdcard.getText().toString().trim());
                         obj.put("IdFrontUrl", IdFrontUrl);
                         obj.put("IdBackUrl", IdBackUrl);
@@ -709,7 +717,7 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
 
                             paperImgUploadIdcardImage.setVisibility(View.VISIBLE);
                             paperImgUploadIdcard.setVisibility(View.GONE);
-
+                            paperTypeEditName.setText("身份证");
                             paperImgUploadIdcardBackImage.setVisibility(View.VISIBLE);
                             paperImgUploadIdcardBack.setVisibility(View.GONE);
 
@@ -721,6 +729,11 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
                         } else {
                             registerBtn.setText("完善资料");
                         }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+//                        super.onError(t);
                     }
                 });
     }

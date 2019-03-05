@@ -119,7 +119,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/register_two_bottom_text"
-                    android:text="载运保用户协议"
+                    android:text="载运保用户服务协议"
                     android:textColor="@color/text_hint_bule"
                     android:textSize="@dimen/text_size_trhee" />
             </RelativeLayout>

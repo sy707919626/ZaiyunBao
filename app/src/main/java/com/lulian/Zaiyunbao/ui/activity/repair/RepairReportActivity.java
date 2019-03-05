@@ -388,7 +388,7 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
         builder.setType(MultipartBody.FORM);
         MultipartBody multipartBody = builder.build();
 
-        mApi.UploadFile(GlobalParams.sToken, multipartBody)
+        mApi.UploadFile(GlobalParams.sToken, multipartBody, "Bussiness_RepairFormDetail")
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override

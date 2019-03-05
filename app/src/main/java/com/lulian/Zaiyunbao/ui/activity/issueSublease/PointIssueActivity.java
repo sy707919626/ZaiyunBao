@@ -313,18 +313,18 @@ public class PointIssueActivity extends BaseActivity {
 
 
                     String lease = obj.toString();
-                    RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
+                    final RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                             lease);
 
                     if (!isFastClick()) {
-                        mApi.equipmentRentSubmit(GlobalParams.sToken, body)
+                        mApi.PublishAttornRent(GlobalParams.sToken, GlobalParams.sUserId, issueListBean.getId(),
+                                issueListBean.getQuantity(), Integer.valueOf(pointSum.getText().toString().trim()),
+                                pointAddressArea.getText().toString() + pointAddressName.getText().toString())
                                 .compose(RxHttpResponseCompat.<String>compatResult())
                                 .subscribe(new ErrorHandlerSubscriber<String>() {
                                     @Override
                                     public void onNext(String s) {
-                                        PublishAttornRent();
-                                        RxToast.success("租赁订单发布成功");
-                                        finish();
+                                        EquipmentRentSubmit(body);
                                     }
                                 });
                     }
@@ -333,14 +333,15 @@ public class PointIssueActivity extends BaseActivity {
         });
     }
 
-    private void PublishAttornRent() {
-        mApi.PublishAttornRent(GlobalParams.sToken, GlobalParams.sUserId, issueListBean.getId(),
-                issueListBean.getQuantity(), Integer.valueOf(pointSum.getText().toString().trim()))
+    //发布租赁
+    private void EquipmentRentSubmit(RequestBody body){
+        mApi.equipmentRentSubmit(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-
+                        RxToast.success("点对点转租成功");
+                        finish();
                     }
                 });
     }

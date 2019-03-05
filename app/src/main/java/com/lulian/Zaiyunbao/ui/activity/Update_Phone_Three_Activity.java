@@ -17,6 +17,7 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
@@ -141,7 +142,7 @@ public class Update_Phone_Three_Activity extends BaseActivity {
         switch (view.getId()) {
             case R.id.updatePhone_two_commit: //下一步
                 final String Phone = updatePhoneThreeEditName.getText().toString().trim();
-                String cCode = updatePhoneThreeEditCode.getVerification().trim();
+                String cCode = MD5Utils.getPwd(updatePhoneThreeEditCode.getVerification().trim());
 
                 if (Phone.equals("")) {
                     RxToast.warning("请输入手机号码");

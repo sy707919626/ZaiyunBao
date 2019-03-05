@@ -14,6 +14,7 @@ import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.VerificationCode;
@@ -103,7 +104,7 @@ public class Update_Paypwd_Activity extends BaseActivity {
         switch (view.getId()) {
             case R.id.update_paypwd_commit: //下一步
                 final String Phone = updatePaypwdEditName.getText().toString().trim();
-                String cCode = updatePaypwdEditCode.getVerification().toString();
+                String cCode = MD5Utils.getPwd(updatePaypwdEditCode.getVerification().toString());
 
                 if (Phone.equals("")) {
                     RxToast.warning("请输入手机号码");

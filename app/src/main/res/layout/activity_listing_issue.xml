@@ -145,7 +145,6 @@
         android:orientation="vertical">
 
         <RelativeLayout
-            android:id="@+id/listing_issue_location"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="20dp"
@@ -163,14 +162,29 @@
                 android:textColor="@color/text_black"
                 android:textSize="14dp" />
 
-            <TextView
+            <!--<TextView-->
+                <!--android:id="@+id/address_textview"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:layout_toRightOf="@id/address_linearLayout"-->
+                <!--android:drawableRight="@drawable/next"-->
+                <!--android:gravity="right"-->
+                <!--android:textColor="@color/text_color_black"-->
+                <!--android:textColorHint="@color/color_99"-->
+                <!--android:textSize="@dimen/text_size_trhee" />-->
+
+            <com.lulian.Zaiyunbao.common.widget.ClearEditText
                 android:id="@+id/address_textview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_toRightOf="@id/address_linearLayout"
-                android:drawableRight="@drawable/next"
+                android:background="@null"
+                android:drawablePadding="10dp"
                 android:gravity="right"
+                android:hint="请输入设备所在地"
+                android:inputType="text"
                 android:textColor="@color/text_color_black"
                 android:textColorHint="@color/color_99"
                 android:textSize="@dimen/text_size_trhee" />

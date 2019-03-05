@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -15,8 +16,10 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lulian.Zaiyunbao.Bean.AreaBean;
 import com.lulian.Zaiyunbao.Bean.DicItemBean;
 import com.lulian.Zaiyunbao.Bean.MyOrderDetailsBean;
+import com.lulian.Zaiyunbao.Bean.PersonalInfoBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
@@ -33,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.functions.Consumer;
 
 import static com.lulian.Zaiyunbao.di.component.Constants.isAutoRefresh;
 
@@ -50,8 +55,12 @@ public class MyOrderDetailsActivity extends BaseActivity {
     TextView textDetailRight;
     @BindView(R.id.detail_bar_title)
     RelativeLayout detailBarTitle;
+    @BindView(R.id.order_text)
+    TextView orderText;
     @BindView(R.id.my_order_no)
     TextView myOrderNo;
+    @BindView(R.id.lease_status_text)
+    TextView leaseStatusText;
     @BindView(R.id.my_order_img_photo)
     ImageView myOrderImgPhoto;
     @BindView(R.id.my_order_shebei_name)
@@ -64,12 +73,8 @@ public class MyOrderDetailsActivity extends BaseActivity {
     TextView myOrderShebeiNumText;
     @BindView(R.id.my_order_shebei_num)
     TextView myOrderShebeiNum;
-    @BindView(R.id.lease_status_text)
-    TextView leaseStatusText;
     @BindView(R.id.my_order_take_time)
     TextView myOrderTakeTime;
-    @BindView(R.id.my_order_company)
-    TextView myOrderCompany;
     @BindView(R.id.my_order_contacts)
     TextView myOrderContacts;
     @BindView(R.id.my_order_phone)
@@ -106,14 +111,26 @@ public class MyOrderDetailsActivity extends BaseActivity {
     TextView shouhuoDizhiText;
     @BindView(R.id.my_order_address)
     TextView myOrderAddress;
+    @BindView(R.id.my_order_lianxi_phone_text)
+    TextView myOrderLianxiPhoneText;
     @BindView(R.id.my_order_lianxi_phone)
     TextView myOrderLianxiPhone;
+    @BindView(R.id.songhuoren_text)
+    TextView songhuorenText;
+    @BindView(R.id.my_order_songhuo)
+    TextView myOrderSonghuo;
+    @BindView(R.id.songhuoren_relayout)
+    RelativeLayout songhuorenRelayout;
+    @BindView(R.id.songhuo_lianxi_phone_text)
+    TextView songhuoLianxiPhoneText;
+    @BindView(R.id.songhuo_lianxi_phone)
+    TextView songhuoLianxiPhone;
+    @BindView(R.id.songhuoren_lianxi_relayout)
+    RelativeLayout songhuorenLianxiRelayout;
     @BindView(R.id.lease_service_recommend)
     TextView leaseServiceRecommend;
     @BindView(R.id.my_order_submission_btn)
     Button myOrderSubmissionBtn;
-    @BindView(R.id.order_text)
-    TextView orderText;
     @BindView(R.id.my_order_submission_layout)
     LinearLayout myOrderSubmissionLayout;
     @BindView(R.id.my_order_cancel)
@@ -130,6 +147,18 @@ public class MyOrderDetailsActivity extends BaseActivity {
     private List<MyOrderDetailsBean> myOrderDetailsList = new ArrayList<>();
     private MyOrderDetailsBean myOrderDetailsBean;
 
+    private String Area = ""; //地区
+    private String Name = ""; //站点名
+    private String ZZName = ""; //转租地址
+    private String ZZContactName = ""; //转租联系人
+    private String ZZContactPhone = ""; //转租联系电话
+    private String ContactName = ""; //联系人
+    private String ContactPhone = ""; //联系电话
+    private List<AreaBean> areaBean = new ArrayList<>();
+    private List<PersonalInfoBean> personalInfoBean = new ArrayList<>();
+
+    private String ReceiveUserId;//租出方id
+    private String StoreId;//仓库id
     @Override
     protected int setLayoutId() {
         return R.layout.order_my_details;
@@ -151,8 +180,50 @@ public class MyOrderDetailsActivity extends BaseActivity {
         OrderNo = getIntent().getStringExtra("OrderNo");
         Id = getIntent().getStringExtra("Id");
         IsRendIn = getIntent().getIntExtra("IsRendIn", 0);
-
+        ReceiveUserId = getIntent().getStringExtra("ReceiveUserId");
+        StoreId = getIntent().getStringExtra("StoreId");
         getData();
+    }
+
+    private void getDataInfo() {
+        //根据仓库Id获取仓库与所属加盟商信息
+        if (myOrderDetailsBean.getFormType() != 3) {
+            mApi.getStorehouseInfo(GlobalParams.sToken, StoreId)
+                    .compose(RxHttpResponseCompat.<String>compatResult())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+                            if (s.equals("[]")) {
+                                RxToast.warning("当前供应商资料不全");
+                            } else {
+                                areaBean = JSONObject.parseArray(s, AreaBean.class);
+                                Area = areaBean.get(0).getArea();
+                                Name = areaBean.get(0).getName();
+                                ContactName = areaBean.get(0).getContactName();
+                                ContactPhone = areaBean.get(0).getContactPhone();
+                            }
+                            initView();
+                        }
+                    });
+        } else {
+            mApi.GetPersonalInfo(GlobalParams.sToken, ReceiveUserId)
+                    .compose(RxHttpResponseCompat.<String>compatResult())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+
+                            if (s.equals("[]")) {
+                                RxToast.warning("当前个人资料不全");
+                            } else {
+                                personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
+                                ZZName = personalInfoBean.get(0).getContactAdress();
+                                ZZContactName = personalInfoBean.get(0).getName();
+                                ZZContactPhone = personalInfoBean.get(0).getPhone();
+                            }
+                            initView();
+                        }
+                    });
+        }
     }
 
     private void getData() {
@@ -163,7 +234,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
                     public void onNext(String s) {
                         myOrderDetailsList = JSONObject.parseArray(s, MyOrderDetailsBean.class);
                         myOrderDetailsBean = myOrderDetailsList.get(0);
-                        initView();
+                        getDataInfo();
                     }
                 });
     }
@@ -185,10 +256,9 @@ public class MyOrderDetailsActivity extends BaseActivity {
         myOrderShebeiNum.setText(myOrderDetailsBean.getCount() + "");
 
         myOrderTakeTime.setText(myOrderDetailsBean.getTargetDeliveryTime());//取托时间
-        myOrderCompany.setText(myOrderDetailsBean.getOrgName()); //企业名称
-        myOrderContacts.setText(myOrderDetailsBean.getReceiveName());//企业联系人
+        myOrderContacts.setText(myOrderDetailsBean.getContactName());//企业联系人
         myOrderUnpaidDeposit.setText(myOrderDetailsBean.getOrderDeposit() + "元");//押金
-        myOrderPhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//企业联系电话
+        myOrderPhone.setText(myOrderDetailsBean.getContactPhone());//企业联系电话
 
         myOrderZulinSum.setText(myOrderDetailsBean.getCount() + "个");//租赁数量
         myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元/天/片");
@@ -229,25 +299,49 @@ public class MyOrderDetailsActivity extends BaseActivity {
         }
 
         if (myOrderTransferWay.getText().toString().trim().equals("送货上门")) {//送货方式
-            fuwuZhandian.setVisibility(View.VISIBLE);
+            songhuorenRelayout.setVisibility(View.VISIBLE);
+            songhuorenLianxiRelayout.setVisibility(View.VISIBLE);
+
             shouhuorenText.setText("收货人");
             shouhuoDizhiText.setText("收货地址");
+            myOrderLianxiPhoneText.setText("收货人联系电话");
 
-            myOrderServiceSite.setText(myOrderDetailsBean.getStoreName());
+            if (myOrderDetailsBean.getFormType() == 3) { //转租单
+                fuwuZhandian.setVisibility(View.GONE);
+                myOrderServiceSite.setText("");//服务站点
+                myOrderSonghuo.setText(ZZContactName);//联系人
+                songhuoLianxiPhone.setText(ZZContactPhone);//联系电话
+
+            } else {
+                fuwuZhandian.setVisibility(View.VISIBLE);
+                myOrderServiceSite.setText(Name);//服务站点
+
+                myOrderSonghuo.setText(ContactName);//联系人
+                songhuoLianxiPhone.setText(ContactPhone);//联系电话
+            }
+
             myOrderConsignee.setText(myOrderDetailsBean.getContactName());//收货人
             myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//收货地址
-
             myOrderLianxiPhone.setText(myOrderDetailsBean.getContactPhone());//联系电话
 
         } else if (myOrderTransferWay.getText().toString().trim().equals("用户自提")) {
-
+            songhuorenRelayout.setVisibility(View.GONE);
+            songhuorenLianxiRelayout.setVisibility(View.GONE);
             fuwuZhandian.setVisibility(View.GONE);
-            shouhuorenText.setText("联系人");
-            shouhuoDizhiText.setText("提货地址");
 
-            myOrderConsignee.setText(myOrderDetailsBean.getOrgName());//联系人
-            myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
-            myOrderLianxiPhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//联系电话
+            shouhuorenText.setText("取货联系人");
+            shouhuoDizhiText.setText("提货地址");
+            myOrderLianxiPhoneText.setText("取货联系电话");
+
+            if (myOrderDetailsBean.getFormType() == 3) { //转租单
+                myOrderConsignee.setText(ZZContactName);//联系人
+                myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
+                myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
+            } else {
+                myOrderConsignee.setText(ContactName);//联系人
+                myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
+                myOrderLianxiPhone.setText(ContactPhone);//联系电话
+            }
         }
 
         leaseServiceRecommend.setText(myOrderDetailsBean.getRecommend());//推荐人
@@ -379,7 +473,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
             } else if (myOrderDetailsBean.getStatus() == 2 || myOrderDetailsBean.getStatus() == 1) {
                 myOrderSubmissionLayout.setVisibility(View.GONE);
                 myOrderBtnLayout.setVisibility(View.VISIBLE);
-                leaseStatusText.setText("待确认");
+                leaseStatusText.setText("待支付");
                 myOrderCancel.setText("撤销订单");
                 myOrderSure.setText("支付押金");
 

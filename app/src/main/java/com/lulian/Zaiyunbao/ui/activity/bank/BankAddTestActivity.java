@@ -6,24 +6,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
-import com.lulian.Zaiyunbao.common.event.BankEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.BankCode;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-
-import org.greenrobot.eventbus.EventBus;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 import okhttp3.MediaType;
@@ -34,7 +30,6 @@ import okhttp3.RequestBody;
  */
 
 public class BankAddTestActivity extends BaseActivity {
-
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
     @BindView(R.id.text_detail_content)
@@ -63,7 +58,6 @@ public class BankAddTestActivity extends BaseActivity {
     Button bankAddTestGetCode;
     @BindView(R.id.bank_add_test_commit)
     Button bankAddTestCommit;
-
     private String BankCardNo;
     private String AccountName;
     private String Code = "";
@@ -92,10 +86,10 @@ public class BankAddTestActivity extends BaseActivity {
         textDetailContent.setText("绑定银行卡");
         textDetailRight.setVisibility(View.GONE);
         bankAddTestName.setText(BankCode.getDetailNameOfBank(BankCardNo).toString());
-
+        bankAddTestPhone.setText(GlobalParams.sUserPhone);
     }
 
-    @OnClick({R.id.bank_add_test_getCode, R.id.bank_add_test_commit})
+    @OnClick({R.id.bank_add_test_commit, R.id.bank_add_test_getCode})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bank_add_test_getCode:
@@ -103,11 +97,10 @@ public class BankAddTestActivity extends BaseActivity {
                 if (bankAddTestPhone.getText().toString().trim().equals("")) {
                     RxToast.warning("请输入手机号码");
                 } else if (ProjectUtil.isMobileNO(bankAddTestPhone.getText().toString().trim())) {
-
                     updateHintPhoneText.setText(bankAddTestPhone.getText().toString().trim());
 
                     //处理获取手机验证码网络请求
-                    mApi.sendVerifySms(GlobalParams.sToken, GlobalParams.sUserPhone, "5")
+                    mApi.sendVerifySms(GlobalParams.sToken, GlobalParams.sUserPhone, "4")
                             .compose(RxHttpResponseCompat.<String>compatResult())
                             .subscribe(new ErrorHandlerSubscriber<String>() {
                                 @Override
@@ -132,13 +125,14 @@ public class BankAddTestActivity extends BaseActivity {
                 //完成
                 if (bankAddTestCode.getVerification().equals("")) {
                     RxToast.warning("请输入验证码");
-                } else if (!bankAddTestCode.getVerification().equals(Code)) {
+                } else if (!MD5Utils.getPwd(bankAddTestCode.getVerification()).equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");
+
                 } else {
                     //成功
                     JSONObject obj = new JSONObject();
                     obj.put("AccountNo", BankCardNo);
-                    obj.put("Phone", bankAddTestPhone.getText().toString().trim());
+                    obj.put("Phone", GlobalParams.sUserPhone);
                     obj.put("AccountName", AccountName);
                     obj.put("AccountBank", bankAddTestName.getText().toString().trim());
                     obj.put("UserId", GlobalParams.sUserId);
@@ -153,7 +147,6 @@ public class BankAddTestActivity extends BaseActivity {
                                 @Override
                                 public void onNext(String s) {
                                     RxToast.success("银行卡绑定成功");
-                                    EventBus.getDefault().post(new BankEvent());
                                     stepfinishAll();
                                 }
                             });
@@ -163,5 +156,4 @@ public class BankAddTestActivity extends BaseActivity {
                 break;
         }
     }
-
 }

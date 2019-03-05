@@ -15,6 +15,7 @@ import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
@@ -74,7 +75,7 @@ public class Register_Two_Activity extends BaseActivity {
         textLoginContent.setVisibility(View.GONE);
         agreeLogin.setVisibility(View.GONE);
 
-        Code = getIntent().getStringExtra("Code");
+//        Code = getIntent().getStringExtra("Code");
         Invitation_Code = getIntent().getStringExtra("invitation_Code");
         tempMobile = getIntent().getStringExtra("register_phone");
 
@@ -107,7 +108,7 @@ public class Register_Two_Activity extends BaseActivity {
                 if (verificationCodeRegister.getVerification().equals("")) {
                     RxToast.warning("验证码不能为空");
 
-                } else if (!Code.equals(verificationCodeRegister.getVerification())) {
+                } else if (!Code.equals(MD5Utils.getPwd(verificationCodeRegister.getVerification()))) {
                     RxToast.warning("验证码输入错误，请重新填写");
 
                 } else {
@@ -121,6 +122,7 @@ public class Register_Two_Activity extends BaseActivity {
 
             case R.id.register_two_yonghu_text:
                 //用户协议
+                startActivity(new Intent(this, UserAgreementActivity.class));
                 break;
         }
     }

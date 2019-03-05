@@ -208,8 +208,8 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
         reserveRetireStatusText.setText("已收货");
         reserveRetireShebeiName.setText(myOrderDetailsBean.getEquipmentName());
         reserveRetireShebeiSpec.setText(myOrderDetailsBean.getNorm());
-        reserveRetireShebeiPrice.setText(myOrderDetailsBean.getPrice() + "元/天");
-        reserveRetireShebeiNum.setText(myOrderDetailsBean.getCount() + "个");
+        reserveRetireShebeiPrice.setText(myOrderDetailsBean.getPrice()+"");
+        reserveRetireShebeiNum.setText(myOrderDetailsBean.getCount() + "");
 
         reserveRetireCompany.setText(myOrderDetailsBean.getOrgName()); //企业名称
         reserveRetireContacts.setText(myOrderDetailsBean.getReceiveName());//企业联系人
@@ -251,6 +251,8 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
             case R.id.reserve_retire_submission_btn:
                 if (reserveRetireData.getText().toString().trim().equals("")) {
                     RxToast.warning("请选择退租时间");
+                }  else if (reserveRetireMode.getText().toString().trim().equals("")){
+                    RxToast.warning("请选择退租方式");
                 } else {
                     //我要退租
                     if (myOrderDetailsBean.getStatus() == 6) {

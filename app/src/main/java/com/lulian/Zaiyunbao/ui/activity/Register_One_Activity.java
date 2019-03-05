@@ -117,31 +117,30 @@ public class Register_One_Activity extends BaseActivity {
                             .subscribe(new ErrorHandlerSubscriber<String>() {
                                 @Override
                                 public void onNext(String s) {
-                                    //处理获取手机验证码网络请求
-                                    mApi.sendVerifySms(GlobalParams.sToken, registerOneEditName.getText().toString().trim(), "1")
-                                            .compose(RxHttpResponseCompat.<String>compatResult())
-                                            .subscribe(new ErrorHandlerSubscriber<String>() {
-                                                @Override
-                                                public void onNext(String s) {
-                                                    JSONObject jsonObject = JSONObject.parseObject(s);
-
+//                                    //处理获取手机验证码网络请求
+//                                    mApi.sendVerifySms(GlobalParams.sToken, registerOneEditName.getText().toString().trim(), "1")
+//                                            .compose(RxHttpResponseCompat.<String>compatResult())
+//                                            .subscribe(new ErrorHandlerSubscriber<String>() {
+//                                                @Override
+//                                                public void onNext(String s) {
+//                                                    JSONObject jsonObject = JSONObject.parseObject(s);
 //                                                    Intent intent = new Intent(Register_One_Activity.this,
 //                                                            Register_Two_Activity.class);
 //
-//                                                    intent.putExtra("register_phone", tempMobile);
+//                                                    intent.putExtra("register_phone", registerOneEditName.getText().toString().trim());
 //                                                    intent.putExtra("invitation_Code", invitationCodeRegister.getInvitation()); //邀请码
 //                                                    intent.putExtra("Code", jsonObject.getString("VerifyCode"));
 //                                                    startActivity(intent);
 //                                                    finish();
-                                                }
-                                            });
+//                                                }
+//                                            });
 
                                     Intent intent = new Intent(Register_One_Activity.this,
                                             Register_Two_Activity.class);
 
                                     intent.putExtra("register_phone", registerOneEditName.getText().toString().trim());
                                     intent.putExtra("invitation_Code", invitationCodeRegister.getInvitation()); //邀请码
-                                    intent.putExtra("Code", "123456");
+//                                    intent.putExtra("Code", "123456");
                                     startActivity(intent);
                                 }
 

@@ -2,12 +2,14 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,8 +22,10 @@ import com.lulian.Zaiyunbao.ui.activity.rentback.RentBackActivity;
 import com.lulian.Zaiyunbao.ui.activity.seekrentorder.SeekRentOrderActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -29,7 +33,6 @@ import butterknife.OnClick;
  */
 
 public class MyOrderActivity extends BaseActivity {
-
 
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
@@ -53,6 +56,8 @@ public class MyOrderActivity extends BaseActivity {
     TabLayout tabLayout;
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+    @BindView(R.id.order_view)
+    LinearLayout orderView;
 
     @Override
     protected int setLayoutId() {
@@ -77,12 +82,15 @@ public class MyOrderActivity extends BaseActivity {
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 
+
+
     @OnClick({R.id.rbtn_zulin, R.id.rbtn_zhuanzu, R.id.rbtn_qiuzu, R.id.rbtn_goumai, R.id.rbtn_tuizu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.rbtn_zulin:
                 //租赁
                 startActivity(new Intent(MyOrderActivity.this, LeaseOrderActivity.class));
+
                 break;
             case R.id.rbtn_zhuanzu:
                 //转租
@@ -104,5 +112,12 @@ public class MyOrderActivity extends BaseActivity {
                 startActivity(new Intent(MyOrderActivity.this, RentBackActivity.class));
                 break;
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -28,6 +28,7 @@ import com.lulian.Zaiyunbao.ui.activity.MyDataActivity;
 import com.lulian.Zaiyunbao.ui.activity.SettingActivity;
 import com.lulian.Zaiyunbao.ui.activity.wallet.MyWalletActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseFragment;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -147,6 +148,7 @@ public class MeFragment extends BaseFragment {
     private void getData() {
         mApi.myMoneyInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

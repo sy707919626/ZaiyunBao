@@ -39,8 +39,8 @@ public class OrderViewPagerAdapter extends FragmentPagerAdapter {
         mFragment.add(new FragmentInfo("待发货", new OrderFragment("3")));
         mFragment.add(new FragmentInfo("待收货", new OrderFragment("5")));
         mFragment.add(new FragmentInfo("已收货 ", new OrderFragment("6")));
-        mFragment.add(new FragmentInfo("已撤单 ", new OrderFragment("10")));
-        mFragment.add(new FragmentInfo("已完成 ", new OrderFragment("9")));
+        mFragment.add(new FragmentInfo("已撤销 ", new OrderFragment("10")));
+        mFragment.add(new FragmentInfo("已退租 ", new OrderFragment("8")));
     }
 
     @Override

@@ -17,6 +17,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseLazyFragment;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -129,6 +130,7 @@ public class BuyOrderFragment extends BaseLazyFragment {
 
         mApi.MyEquipmentBuyOrderList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

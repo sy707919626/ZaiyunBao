@@ -97,15 +97,26 @@ public class DeviceManageDetailsActivity extends BaseActivity {
     private void initView() {
         deviceDetailsNo.setText(deviceDetailsBean.getECode());
 
-        //使用状态：6=闲置 3=载物
+        //使用状态：6=闲置 3=占用  报修 = 4 报废 = 5
         if (deviceDetailsBean.getUseStatus() == 6) {
             deviceDetailsState.setText("闲置");
+            deviceDetailsUpdateState.setVisibility(View.VISIBLE);
             deviceDetailsUpdateState.setText("占用");
 
         } else if (deviceDetailsBean.getUseStatus() == 3) {
             deviceDetailsState.setText("占用");
+            deviceDetailsUpdateState.setVisibility(View.VISIBLE);
             deviceDetailsUpdateState.setText("闲置");
+
+        } else if (deviceDetailsBean.getUseStatus() == 4) {
+            deviceDetailsState.setText("报修");
+            deviceDetailsUpdateState.setVisibility(View.GONE);
+
+        } else if (deviceDetailsBean.getUseStatus() == 5) {
+            deviceDetailsState.setText("报废");
+            deviceDetailsUpdateState.setVisibility(View.GONE);
         }
+
 
         try {
             byte[] bitmapArray;

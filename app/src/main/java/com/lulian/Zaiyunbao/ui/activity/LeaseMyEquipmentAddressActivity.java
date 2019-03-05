@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
@@ -25,7 +25,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.AreaBean;
 import com.lulian.Zaiyunbao.Bean.DicItemBean;
-import com.lulian.Zaiyunbao.Bean.EquipmentDetailBean;
+import com.lulian.Zaiyunbao.Bean.PersonalInfoBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
@@ -36,6 +36,7 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,10 +67,8 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
     TextView leaseMyDeliveryTimeText;
     @BindView(R.id.lease_my_DeliveryTime)
     TextView leaseMyDeliveryTime;
-    @BindView(R.id.lease_my_address_area_text)
-    TextView leaseMyAddressAreaText;
-    @BindView(R.id.lease_my_address_area)
-    TextView leaseMyAddressArea;
+    @BindView(R.id.lease_my_address_name_text)
+    TextView leaseMyAddressNameText;
     @BindView(R.id.lease_my_address_name)
     ClearEditText leaseMyAddressName;
     @BindView(R.id.lease_my_name_text)
@@ -116,11 +115,16 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
 
     private String Area = ""; //地区
     private String Name = ""; //站点名
+    private String ZZName = ""; //转租地址
+    private String ZZContactName = ""; //转租联系人
+    private String ZZContactPhone = ""; //转租联系电话
     private String ContactName = ""; //联系人
     private String ContactPhone = ""; //联系电话
     private String OperatorId;
     private String UID;
-    private AreaBean areaBean;
+    private List<AreaBean> areaBean = new ArrayList<>();
+    private List<PersonalInfoBean> personalInfoBean = new ArrayList<>();
+
 
     private Handler mHandler;
 
@@ -179,7 +183,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
 
         textDetailContent.setText("我要租赁");
         textDetailRight.setVisibility(View.GONE);
-        initView();
+//        initView();
         getData();
     }
 
@@ -204,27 +208,43 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
 //                        initView();
 //                    }
 //                });
-
-        mApi.getStorehouseInfo(GlobalParams.sToken, StorehouseId)
-                .compose(RxHttpResponseCompat.<String>compatResult())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-
-
-                        if (s.equals("[]")) {
-                            RxToast.warning("当前供应商资料不全，请选择送货上门方式");
-                        } else {
-                            areaBean = MyApplication.get().getAppComponent().getGson().fromJson(s, AreaBean.class);
-
-                            Area = areaBean.getArea();
-                            Name = areaBean.getName();
-                            ContactName = areaBean.getContactName();
-                            ContactPhone = areaBean.getContactPhone();
+        if (UID.isEmpty()||UID == null) {
+            mApi.getStorehouseInfo(GlobalParams.sToken, StorehouseId)
+                    .compose(RxHttpResponseCompat.<String>compatResult())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+                            if (s.equals("[]")) {
+//                                RxToast.warning("当前供应商资料不全，请选择送货上门方式");
+                            } else {
+                                areaBean = JSONObject.parseArray(s, AreaBean.class);
+                                Area = areaBean.get(0).getArea();
+                                Name = areaBean.get(0).getName();
+                                ContactName = areaBean.get(0).getContactName();
+                                ContactPhone = areaBean.get(0).getContactPhone();
+                            }
+                            initView();
                         }
-                        initView();
-                    }
-                });
+                    });
+        } else {
+            mApi.GetPersonalInfo(GlobalParams.sToken, UID)
+                    .compose(RxHttpResponseCompat.<String>compatResult())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+
+                            if (s.equals("[]")) {
+//                                RxToast.warning("当前个人资料不全，请选择送货上门方式");
+                            } else {
+                                personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
+                                ZZName = personalInfoBean.get(0).getContactAdress();
+                                ZZContactName = personalInfoBean.get(0).getName();
+                                ZZContactPhone = personalInfoBean.get(0).getPhone();
+                            }
+                            initView();
+                        }
+                    });
+        }
     }
 
     private void initView() {
@@ -243,46 +263,36 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
 
                                 if (data.get(position).getTitle().equals("送货上门")) {
                                     leaseMyDeliveryTimeText.setText("到货时间：");
-                                    leaseMyAddressAreaText.setText("收货地址：");
-                                    leaseMyAddressArea.setText("");
+                                    leaseMyAddressNameText.setText("收货地址：");
                                     leaseMyAddressName.setText("");
-                                    leaseMyName.setText("");
-                                    leaseMyPhone.setText("");
+                                    leaseMyName.setText(GlobalParams.sUserName);
+                                    leaseMyPhone.setText(GlobalParams.sUserPhone);
+
+
                                 } else {
                                     leaseMyDeliveryTimeText.setText("提货时间：");
-                                    leaseMyAddressAreaText.setText("提货地点：");
+                                    leaseMyAddressNameText.setText("提货地点：");
 
-                                    if (!Area.equals("") || !Name.equals("")) {
-                                        leaseMyAddressArea.setText(Area);
-                                        leaseMyAddressName.setText(Name);
+                                    if (UID.equals("")) {
+                                        if (!Area.equals("") || !Name.equals("")) {
+                                            leaseMyAddressName.setText(Area + Name);
+
+                                            leaseMyName.setText(ContactName);
+                                            leaseMyPhone.setText(ContactPhone);
+                                        }
+                                    } else {
+                                        leaseMyAddressName.setText(ZZName);
+                                        leaseMyName.setText(ZZContactName);
+                                        leaseMyPhone.setText(ZZContactPhone);
                                     }
-                                    leaseMyName.setText(ContactName);
-                                    leaseMyPhone.setText(ContactPhone);
                                 }
                             }
                         });
             }
         });
 
-
-        leaseMyAddressArea.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeAddress(leaseMyAddressArea.getText().toString().trim());
-            }
-        });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // 拒绝时, 关闭页面, 缺少主要权限, 无法运行
-        if (requestCode == ADDRESS_LOCATION && resultCode == 11) { //选择地点返回值
-            if (data != null) {
-                leaseMyAddressArea.setText(data.getStringExtra("addressAll"));
-            }
-        }
-    }
 
     @OnClick({R.id.lease_my_DeliveryTime, R.id.lease_equipment_my_btn})
     public void onViewClicked(View view) {
@@ -294,8 +304,8 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
             case R.id.lease_equipment_my_btn:
                 if (leaseMyDeliveryTime.getText().toString().trim().equals("")) {
                     RxToast.warning("请选择提货时间");
-                } else if (leaseMyAddressArea.getText().toString().trim().equals("") || leaseMyAddressName.getText().toString().trim().equals("")) {
-                    RxToast.warning("请输入收货地址");
+                } else if (leaseMyAddressName.getText().toString().trim().equals("")) {
+                    RxToast.warning("请输入送/提货地址");
                 } else if (leaseMyName.getText().toString().trim().equals("")) {
                     RxToast.warning("请输入联系人");
                 } else if (leaseMyPhone.getText().toString().trim().equals("")) {
@@ -341,8 +351,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                     intent.putExtra("leaseMyDeliveryTime", leaseMyDeliveryTime.getText().toString().trim());
 
 
-                    intent.putExtra("leaseMyAddress", leaseMyAddressArea.getText().toString().trim()
-                            + leaseMyAddressName.getText().toString().trim());
+                    intent.putExtra("leaseMyAddress", leaseMyAddressName.getText().toString().trim());
 
                     intent.putExtra("leaseMyName", leaseMyName.getText().toString().trim());
                     intent.putExtra("leaseMyPhone", leaseMyPhone.getText().toString().trim());
@@ -358,6 +367,16 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                     intent.putExtra("OperatorId", OperatorId);//供应商ID
                     intent.putExtra("UID", UID);//使用者ID
 
+                    intent.putExtra("ZDContactName", OperatorId);//供应商ID
+                    intent.putExtra("ZDContactPhone", UID);//使用者ID
+
+                    if (UID.isEmpty() || UID == null) {
+                        intent.putExtra("Release", ContactName);//发布人
+                        intent.putExtra("ReleasePhone", ContactPhone);//发布电话
+                    } else {
+                        intent.putExtra("Release", ZZContactName);//发布人
+                        intent.putExtra("ReleasePhone", ZZContactPhone);//发布电话
+                    }
                     intent.putExtra("TypeId", getIntent().getStringExtra("TypeId"));
                     intent.putExtra("TypeName", getIntent().getStringExtra("TypeName"));
                     intent.putExtra("DiscountAmount", getIntent().getStringExtra("DiscountAmount"));//折扣金额

@@ -22,6 +22,8 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,7 @@ public class IssueSubleaseListActivity extends BaseActivity {
     public void getData() {
         mApi.CanRentEquipmentListForUser(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

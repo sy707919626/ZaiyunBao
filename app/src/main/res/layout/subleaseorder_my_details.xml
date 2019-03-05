@@ -412,39 +412,7 @@
                     android:layout_marginTop="5dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:gravity="center_vertical"
-                        android:text="企业名称"
-                        android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_size_trhee" />
-
-                    <TextView
-                        android:id="@+id/sublease_order_orgName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"
-                        android:gravity="center_vertical"
-                        android:text="XXXXX公司"
-                        android:textColor="@color/text_color_black"
-                        android:textSize="@dimen/text_size_trhee" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp">
-
-                    <TextView
+                        android:id="@+id/sublease_order_name_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
@@ -465,6 +433,37 @@
                         android:textSize="@dimen/text_size_trhee" />
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/sublease_order_phone_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="联系电话"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/sublease_order_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
@@ -490,7 +489,7 @@
                     <TextView
                         android:id="@+id/sublease_order_address"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="10dp"
@@ -498,6 +497,73 @@
                         android:layout_toRightOf="@id/sublease_order_address_text"
                         android:gravity="right"
                         android:singleLine="false"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+                <RelativeLayout
+                    android:id="@+id/sublease_sh_order_name_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/sublease_SH_order_name_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="送货联系人"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/sublease_SH_order_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+                <RelativeLayout
+                    android:id="@+id/sublease_SH_order_phone_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/sublease_SH_order_phone_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="送货人联系电话"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/sublease_SH_order_phone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
                         android:textColor="@color/text_color_black"
                         android:textSize="@dimen/text_size_trhee" />
                 </RelativeLayout>

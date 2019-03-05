@@ -18,6 +18,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseLazyFragment;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +73,8 @@ public class LeaseOrderFragment extends BaseLazyFragment {
                 intent.putExtra("OrderNo", orderListBean.get(position).getOrderNo());
                 intent.putExtra("OrdersId", orderListBean.get(position).getOrdersId());
                 intent.putExtra("Id", orderListBean.get(position).getId()); //设备ID
+                intent.putExtra("ReceiveUserId", orderListBean.get(position).getReceiveUserId()); //租出方ID
+                intent.putExtra("StoreId", orderListBean.get(position).getStoreId()); //租出方ID
 
                 getContext().startActivity(intent);
             }
@@ -138,6 +141,7 @@ public class LeaseOrderFragment extends BaseLazyFragment {
 
         mApi.myEquipmentRentOrderList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

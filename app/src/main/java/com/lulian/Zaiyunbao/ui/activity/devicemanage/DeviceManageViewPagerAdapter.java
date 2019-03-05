@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DeviceManageViewPagerAdapter extends FragmentPagerAdapter {
 
-    private List<DeviceFragmentInfo> mFragment = new ArrayList<>(3);
+    private List<DeviceFragmentInfo> mFragment = new ArrayList<>(5);
 
     public DeviceManageViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -28,8 +28,8 @@ public class DeviceManageViewPagerAdapter extends FragmentPagerAdapter {
         mFragment.add(new DeviceFragmentInfo("全部", DeviceManageAllFragment.class));
         mFragment.add(new DeviceFragmentInfo("闲置", DeviceManageXZFragment.class));
         mFragment.add(new DeviceFragmentInfo("占用", DeviceManageZYFragment.class));
-//        mFragment.add(new FragmentInfo("报修", DeviceManageBXFragment.class));
-//        mFragment.add(new FragmentInfo("报废", DeviceManageBXFragment.class));
+        mFragment.add(new DeviceFragmentInfo("报修", DeviceManageBXFragment.class));
+        mFragment.add(new DeviceFragmentInfo("报废", DeviceManageBFFragment.class));
     }
 
     @Override

@@ -16,14 +16,9 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.BankBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
-import com.lulian.Zaiyunbao.common.event.BankEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,8 +65,7 @@ public class BankCardActivity extends BaseActivity {
         textDetailContent.setText("我的银行卡");
         textDetailRight.setVisibility(View.GONE);
 
-        messageRecyclerview.setItemAnimator(new DefaultItemAnimator());
-        messageRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
         getData();
     }
 
@@ -89,6 +83,9 @@ public class BankCardActivity extends BaseActivity {
     }
 
     public void getData() {
+        messageRecyclerview.setItemAnimator(new DefaultItemAnimator());
+        messageRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+
         mApi.MyBankBindList(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
@@ -96,7 +93,10 @@ public class BankCardActivity extends BaseActivity {
                     public void onNext(String s) {
                         mBankCardList.clear();
                         mBankCardList.addAll(JSONObject.parseArray(s, BankBean.class));
+
                         mAdapter = new BankListAdapter(BankCardActivity.this, mBankCardList);
+
+                        mAdapter.notifyDataSetChanged();
                         messageRecyclerview.setAdapter(mAdapter);
 
                         mAdapter.setOnItemClickListener(new BankListAdapter.OnItemClickListener() {
@@ -117,14 +117,9 @@ public class BankCardActivity extends BaseActivity {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(BankEvent event) {
-        getData(); //触发自动刷新
-    }
-
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
+    protected void onResume() {
+        super.onResume();
+        getData(); //触发自动刷新
     }
 }

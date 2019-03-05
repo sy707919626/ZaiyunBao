@@ -2,6 +2,7 @@ package com.lulian.Zaiyunbao.ui.activity.wallet;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +35,7 @@ import java.util.Date;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -69,6 +71,8 @@ public class WalletRechargeActivity extends BaseActivity {
     RadioGroup invoiceChoose;
     @BindView(R.id.recharge_next_btn)
     Button rechargeNextBtn;
+    @BindView(R.id.recharge_xianxia_pay)
+    RadioButton rechargeXianxiaPay;
 
     private int payWay = 0;
     private int invoice = 0;
@@ -104,7 +108,10 @@ public class WalletRechargeActivity extends BaseActivity {
                 } else if (rechargeWeixinPay.getId() == checkedId) {
                     payWay = 2;
 
+                } else if (rechargeXianxiaPay.getId() == checkedId){
+                    payWay = 3;
                 }
+
             }
         });
 
@@ -145,10 +152,23 @@ public class WalletRechargeActivity extends BaseActivity {
                         } else {
                             requestWxPrePay();
                         }
+                    } else if (payWay == 3){
+                        if (invoice == 0){
+                            RxToast.warning("请选择是否需要开发票");
+                        } else {
+                            moneyPay();
+                        }
                     }
                 }
             }
         });
+    }
+
+    //线下充值
+    private void moneyPay(){
+        Intent intent = new Intent(WalletRechargeActivity.this, CashRechargeActivity.class);
+        intent.putExtra("cashMoney", Float.valueOf(rechargeMoneyText.getText().toString().trim()));
+        startActivity(intent);
     }
 
     //获取支付账号

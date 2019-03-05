@@ -6,19 +6,20 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.EquipmentDetailBean;
-import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.event.LeaseEvent;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -97,6 +99,16 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
     Button leaseCancel;
     @BindView(R.id.lease_Sure)
     Button leaseSure;
+    @BindView(R.id.lease_Collect_Address_text)
+    TextView leaseCollectAddressText;
+    @BindView(R.id.lease_Consignee_text)
+    TextView leaseConsigneeText;
+    @BindView(R.id.lease_Consignee_layout)
+    LinearLayout leaseConsigneeLayout;
+    @BindView(R.id.lease_Contacts_text)
+    TextView leaseContactsText;
+    @BindView(R.id.lease_contact_phone_text)
+    TextView leaseContactPhoneText;
 
     private String Id = "";
     private List<EquipmentDetailBean> equipmentDetailBean = new ArrayList<>();
@@ -167,7 +179,10 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
         } catch (Exception e) {
         }
 
+
         leaseRentModles.setText(getIntent().getStringExtra("MyBalanceMode"));
+
+
         leaseSum.setText(String.valueOf(getIntent().getIntExtra("leaseSum", 0)) + "片"); //租赁数量
         leasePriceDJ.setText(getIntent().getStringExtra("MyPValue") + "元/天/片"); //单价
         leaseTerm.setText(String.valueOf(getIntent().getIntExtra("Datasums", 0)) + "天"); //租期
@@ -179,12 +194,28 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
         leaseDiscount.setText(getIntent().getStringExtra("DiscountAmount") + "元"); //折扣减去
         leaseDeliveryModle.setText(getIntent().getStringExtra("deliveryModes")); //
         leaseDeliveryTime.setText(getIntent().getStringExtra("leaseMyDeliveryTime"));
-        leaseConsignee.setText(getIntent().getStringExtra("leaseMyName"));
+//        leaseConsignee.setText(getIntent().getStringExtra("leaseMyName"));
+        leaseConsignee.setText(GlobalParams.sUserName);
         leaseCollectAddress.setText(getIntent().getStringExtra("leaseMyAddress"));
         leaseContacts.setText(getIntent().getStringExtra("leaseMyName"));
         leaseContactPhone.setText(getIntent().getStringExtra("leaseMyPhone"));
         leaseRecommend.setText(getIntent().getStringExtra("leaseMyPhoneNumble")
                 + getIntent().getStringExtra("leaseMyRefereeName"));
+
+        if (leaseDeliveryModle.getText().toString().equals("送货上门")) {
+            leaseConsigneeLayout.setVisibility(View.GONE);
+            leaseCollectAddressText.setText("送货地址：");
+            leaseContactsText.setText("收货人：");
+            leaseContactPhoneText.setText("收货人联系电话：");
+
+        } else if (leaseDeliveryModle.getText().toString().equals("用户自提")) {
+            leaseConsigneeLayout.setVisibility(View.VISIBLE);
+            leaseCollectAddressText.setText("提货地址：");
+            leaseConsigneeText.setText("提货人：");
+            leaseContactsText.setText("取货联系人：");
+            leaseContactPhoneText.setText("取货联系电话：");
+
+        }
 
     }
 
@@ -244,8 +275,22 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
 
                 if (getIntent().getStringExtra("deliveryModes").equals("送货上门")) {
                     obj.put("TransferWay", 1);
-                } else if (getIntent().getStringExtra("deliveryModes").equals("租户自提")) {
+
+                    obj.put("ContactName", getIntent().getStringExtra("leaseMyName")); //租入方名字
+                    obj.put("ContactPhone", getIntent().getStringExtra("leaseMyPhone"));//租入方电话
+
+                    obj.put("Release", getIntent().getStringExtra("Release")); //发布人
+                    obj.put("ReleasePhone", getIntent().getStringExtra("ReleasePhone")); //发布人电话
+
+                } else if (getIntent().getStringExtra("deliveryModes").equals("用户自提")) {
                     obj.put("TransferWay", 2);
+
+                    obj.put("ContactName", GlobalParams.sUserName); //租入方名字
+                    obj.put("ContactPhone", GlobalParams.sUserPhone);//租入方电话
+
+                    obj.put("Release", getIntent().getStringExtra("leaseMyName")); //发布人
+                    obj.put("ReleasePhone", getIntent().getStringExtra("leaseMyPhone")); //发布人电话
+
                 } else {
                     obj.put("TransferWay", 3);
                 }
@@ -265,14 +310,14 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
 //                obj.put("AlianceLink", "");
 //                obj.put("AlianceLinkPhone", "");
                 obj.put("Deposit", Float.valueOf(getIntent().getStringExtra("MyDeposit"))); //押金
-                obj.put("ContactName", getIntent().getStringExtra("leaseMyName")); //租入方名字
-                obj.put("ContactPhone", getIntent().getStringExtra("leaseMyPhone"));//租入方电话
 
-                obj.put("Recommend", getIntent().getStringExtra("leaseMyRefereeName")); //推荐人
+
+                obj.put("Recommend",  getIntent().getStringExtra("leaseMyPhoneNumble") +
+                        getIntent().getStringExtra("leaseMyRefereeName")); //推荐人
                 obj.put("RecommendPhone", getIntent().getStringExtra("leaseMyPhoneNumble")); //推荐人电话
 
-                obj.put("Release", ""); //发布人
-                obj.put("ReleasePhone", ""); //发布人电话
+//                obj.put("Release", ""); //发布人
+//                obj.put("ReleasePhone", ""); //发布人电话
                 obj.put("StoreName", getIntent().getStringExtra("StoreName")); //仓库名
                 obj.put("StoreId", getIntent().getStringExtra("StoreId")); //仓库Id\
 
@@ -302,7 +347,6 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                                 }
                             });
                 }
-
                 break;
             default:
                 break;

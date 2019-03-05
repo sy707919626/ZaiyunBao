@@ -18,6 +18,7 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
@@ -165,7 +166,7 @@ public class Updae_pwd_Activity extends BaseActivity {
                     RxToast.warning("请输入手机号");
                 } else if (forgetpwdEditCode.getVerification().trim().equals("")) {
                     RxToast.warning("请输入验证码");
-                } else if (forgetpwdEditCode.getVerification().trim().equals(Code)) {
+                } else if (MD5Utils.getPwd(forgetpwdEditCode.getVerification().trim()).equals(Code)) {
 
                     Intent intent = new Intent(Updae_pwd_Activity.this, Setting_Password_Activity.class);
                     intent.putExtra("forget_phone", forgetpwdEditName.getText().toString().trim());

@@ -198,6 +198,7 @@ public class LoginActivity extends BaseActivity {
 
             case R.id.login_bottom_yonghu_text:
                 //用户协议
+                startActivity(new Intent(this, UserAgreementActivity.class));
                 break;
 
             case R.id.login_bottom_text:

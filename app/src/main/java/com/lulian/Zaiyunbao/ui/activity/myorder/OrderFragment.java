@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
@@ -18,6 +20,10 @@ import com.lulian.Zaiyunbao.ui.base.BaseLazyFragment;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.RxLifecycle;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
+import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,12 +83,15 @@ public class OrderFragment extends BaseLazyFragment {
                 intent.putExtra("OrdersId", orderListBean.get(position).getOrdersId());
                 intent.putExtra("Id", orderListBean.get(position).getId()); //设备ID
                 intent.putExtra("IsRendIn", orderListBean.get(position).getIsRendIn()); //租入方
-
+                intent.putExtra("ReceiveUserId", orderListBean.get(position).getReceiveUserId()); //租出方ID
+                intent.putExtra("StoreId", orderListBean.get(position).getStoreId()); //仓库ID
                 getContext().startActivity(intent);
             }
         });
 
 
+
+//        getData();
         smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
@@ -132,9 +141,9 @@ public class OrderFragment extends BaseLazyFragment {
         RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                 messages);
 
-
         mApi.myEquipmentRentOrderList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -192,4 +201,5 @@ public class OrderFragment extends BaseLazyFragment {
             Constants.setIsAutoRefresh(false);
         }
     }
+
 }

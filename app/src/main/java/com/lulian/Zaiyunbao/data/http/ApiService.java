@@ -137,6 +137,10 @@ public interface ApiService {
     @POST("/api/AppZulin/GetStorehouseInfo")
     Observable<String> getStorehouseInfo(@Header("Authorization") String authorization, @Query("StorehouseId") String StorehouseId);
 
+    //根据UID 获取个人用户地址
+    @POST("/api/AppZulin/GetPersonalInfo")
+    Observable<String> GetPersonalInfo(@Header("Authorization") String authorization, @Query("UserId") String UserId);
+
     //////////////////////////////////////////订单//////////////////////////////////////////////////////////////////////
     //租赁订单列表
     @POST("/api/AppMy/MyEquipmentRentOrderList")
@@ -208,7 +212,7 @@ public interface ApiService {
     //发布转租(挂牌转租)
     @POST("/api/AppZulin/PublishAttornRent")
     Observable<String> PublishAttornRent(@Header("Authorization") String authorization, @Query("UserId") String UserId, @Query("EDicId") String EDicId,
-                                         @Query("CanCount") int CanCount, @Query("Count") int Count);
+                                         @Query("CanCount") int CanCount, @Query("Count") int Count, @Query("Address") String Address);
 
     //转租单发货
     @POST("/api/AppMy/SendGood_Rent")
@@ -266,8 +270,11 @@ public interface ApiService {
 
     //文件图片上传
     @POST("/api/AppCommand/UploadFile")
-    Observable<String> UploadFile(@Header("authorization") String authorization, @Body MultipartBody fileBody);
+    Observable<String> UploadFile(@Header("authorization") String authorization, @Body MultipartBody fileBody, @Query("tablename") String tablename);
 
+    //文件图片上传
+    @POST("/api/AppCommand/Uploadproof")
+    Observable<String> Uploadproof(@Header("authorization") String authorization,@Query("userId") String userId, @Body MultipartBody fileBody, @Query("tablename") String tablename);
 
     //根据设备编号查询设备信息
     @POST("/api/AppManage/EquipmentInfoForNo")
@@ -355,6 +362,15 @@ public interface ApiService {
     @POST("/api/AppZulin/ChangeGroundingQuantity")
     Observable<String> ChangeGroundingQuantity(@Header("authorization") String authorization,
                                                @Query("UserId") String UserId, @Query("EDicId") String EDicId, @Query("Count") int Count);
+
+    //充值申请
+    @POST("/api/AppMy/MyOutInFund")
+    Observable<String> MyOutInFund(@Header("authorization") String authorization,
+                                       @Body RequestBody infoBody);
+
+    //版本升级
+    @POST("/api/AppUser/GetAppVersion")
+    Observable<String> GetAppVersion(@Header("authorization") String authorization);
 }
 
 

@@ -490,7 +490,7 @@ public class ServiceFragment extends BaseFragment {
                                 public void onNext(String s) {
                                     List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
                                     if (list.size() > 0) {
-                                        DecimalFormat decimalFormat = new DecimalFormat(".00");
+                                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
                                         seekRentMyPrice.setText(list.get(0).getPrice() + "");//单价
 
                                         if (list.get(0).getAllAmount() > 0) { //租金

@@ -15,6 +15,7 @@ import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.VerificationCode;
@@ -116,7 +117,7 @@ public class Update_Phone_One_Activity extends BaseActivity {
                 break;
 
             case R.id.update_commit: //下一步
-                String cCode = verificationCodeUpdate.getVerification();
+                String cCode = MD5Utils.getPwd(verificationCodeUpdate.getVerification());
                 if (cCode.equals("")) {
                     RxToast.warning("请输入验证码");
                 } else if (!cCode.equals(Code)) {

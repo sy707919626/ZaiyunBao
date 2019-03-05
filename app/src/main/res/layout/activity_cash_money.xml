@@ -97,7 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
                     android:gravity="center"
-                    android:text="提现金额（0.6%的服务费）元"
+                    android:text="提现金额（0.1%的服务费）元"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_trhee" />
 
@@ -144,7 +144,6 @@
                 android:layout_height="0.1dp"
                 android:background="@color/color_9c" />
 
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -172,14 +171,13 @@
                         android:id="@+id/cash_money_balance_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2000.00元"
                         android:textColor="@color/text_info"
+                        android:text="0.00"
                         android:textSize="@dimen/text_size_trhee" />
 
                 </LinearLayout>
 
                 <LinearLayout
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -197,8 +195,8 @@
                         android:id="@+id/cash_money_server_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2000.00元"
                         android:textColor="@color/text_info"
+                        android:text="0.00"
                         android:textSize="@dimen/text_size_trhee" />
 
                 </LinearLayout>
@@ -232,6 +230,7 @@
 
     <!-- 这里的FrameLayout用于承载对话框的背景 -->
     <FrameLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
