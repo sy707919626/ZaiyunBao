@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
@@ -39,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -87,8 +89,6 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
     TextView reserveRetireServiceSite;
     @BindView(R.id.fuwu_zhandian)
     RelativeLayout fuwuZhandian;
-    @BindView(R.id.reserve_retire_shouhuoren)
-    TextView reserveRetireShouhuoren;
     @BindView(R.id.reserve_retire_address)
     TextView reserveRetireAddress;
     @BindView(R.id.reserve_retire_lianxiren)
@@ -103,12 +103,12 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
     TextView reserveRetireDataText;
     @BindView(R.id.reserve_retire_data)
     TextView reserveRetireData;
+    @BindView(R.id.error_text)
+    TextView errorText;
     @BindView(R.id.reserve_retire_submission_btn)
     Button reserveRetireSubmissionBtn;
     @BindView(R.id.dialog_bg)
     ImageView dialogBg;
-    @BindView(R.id.error_text)
-    TextView errorText;
 
 
     private String OrdersId = "";
@@ -133,8 +133,8 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
     @Override
     protected void init() {
         ImmersionBar.with(this)
-                .titleBar(R.id.login_bar_title)
-                .titleBarMarginTop(R.id.login_bar_title)
+                .titleBar(R.id.detail_bar_title)
+                .titleBarMarginTop(R.id.detail_bar_title)
                 .navigationBarColorInt(Color.WHITE)
                 .statusBarDarkFont(true, 0.5f)
                 .navigationBarDarkIcon(true, 0.5f)
@@ -208,20 +208,20 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
         reserveRetireStatusText.setText("已收货");
         reserveRetireShebeiName.setText(myOrderDetailsBean.getEquipmentName());
         reserveRetireShebeiSpec.setText(myOrderDetailsBean.getNorm());
-        reserveRetireShebeiPrice.setText(myOrderDetailsBean.getPrice()+"");
+        reserveRetireShebeiPrice.setText(myOrderDetailsBean.getPrice() + "");
         reserveRetireShebeiNum.setText(myOrderDetailsBean.getCount() + "");
 
         reserveRetireCompany.setText(myOrderDetailsBean.getOrgName()); //企业名称
-        reserveRetireContacts.setText(myOrderDetailsBean.getReceiveName());//企业联系人
-        reserveRetireDeposit.setText(myOrderDetailsBean.getDeposit() + "天");//押金
-        reserveRetirePhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//企业联系电话
+        reserveRetireContacts.setText(myOrderDetailsBean.getContactName());//企业联系人
+        reserveRetireDeposit.setText(myOrderDetailsBean.getOrderDeposit() + "元");//押金
+        reserveRetirePhone.setText(myOrderDetailsBean.getContactPhone());//企业联系电话
         reserveRetireServiceSite.setText(myOrderDetailsBean.getStoreName()); //服务站点
 
-
-        reserveRetireShouhuoren.setText(myOrderDetailsBean.getOrgName());//联系人
-        reserveRetireAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
         reserveRetireLianxiren.setText(myOrderDetailsBean.getReceiveName());//联系人
         reserveRetireLianxiPhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//联系电话
+//        reserveRetireShouhuoren.setText(myOrderDetailsBean.getReceiveName());//联系人
+        reserveRetireAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
+
 
         reserveRetireMode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -251,7 +251,7 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
             case R.id.reserve_retire_submission_btn:
                 if (reserveRetireData.getText().toString().trim().equals("")) {
                     RxToast.warning("请选择退租时间");
-                }  else if (reserveRetireMode.getText().toString().trim().equals("")){
+                } else if (reserveRetireMode.getText().toString().trim().equals("")) {
                     RxToast.warning("请选择退租方式");
                 } else {
                     //我要退租

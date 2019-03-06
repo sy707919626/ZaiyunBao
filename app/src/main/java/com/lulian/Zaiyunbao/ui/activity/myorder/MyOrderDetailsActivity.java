@@ -194,7 +194,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
                         @Override
                         public void accept(String s) throws Exception {
                             if (s.equals("[]")) {
-                                RxToast.warning("当前供应商资料不全");
+//                                RxToast.warning("当前供应商资料不全");
                             } else {
                                 areaBean = JSONObject.parseArray(s, AreaBean.class);
                                 Area = areaBean.get(0).getArea();
@@ -213,7 +213,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
                         public void accept(String s) throws Exception {
 
                             if (s.equals("[]")) {
-                                RxToast.warning("当前个人资料不全");
+//                                RxToast.warning("当前个人资料不全");
                             } else {
                                 personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
                                 ZZName = personalInfoBean.get(0).getContactAdress();

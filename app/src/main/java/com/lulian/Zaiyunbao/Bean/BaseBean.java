@@ -1,52 +1,45 @@
 package com.lulian.Zaiyunbao.Bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Administrator on 2018/7/27.
  */
 
 public class BaseBean<T> implements Serializable {
-    private int state = -1;
-    private String msg;
-    private T data;
 
-    @Override
-    public String toString() {
-        return "BaseBean{" +
-                "state=" + state +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
-    }
+    /**
+     * Code : 0
+     * Message : 支付详情成功！
+     * Data : [{"CashOrPay":1,"TradSum":"收入：","Monetary":12,"TradTime":"2019-02-26 16:18:23","SerialNo":"RP2019022616182318231","accountNo":null,"CompanysName":"个人客户"}]
+     */
+
+    private int Code;
+    private String Message;
+    private T Data;
 
     public T getData() {
-        return data;
+        return Data;
     }
 
     public void setData(T data) {
-        this.data = data;
+        Data = data;
     }
 
-    public boolean isSuccess() {
-        return state == 1;
+    public int getCode() {
+        return Code;
     }
 
-    public int getState() {
-        return state;
+    public void setCode(int Code) {
+        this.Code = Code;
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public String getMessage() {
+        return Message;
     }
 
-    public String getMsg() {
-        return msg;
+    public void setMessage(String Message) {
+        this.Message = Message;
     }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-
 }

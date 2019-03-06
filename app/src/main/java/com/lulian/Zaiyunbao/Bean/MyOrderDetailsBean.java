@@ -43,8 +43,8 @@ public class MyOrderDetailsBean implements Serializable {
     private String TargetDeliveryTime;
     private int TransferWay;
     private String TakeAddress;
-    private String ContactName;
-    private String ContactPhone;
+    private String ContactName; //租出方
+    private String ContactPhone; //租出方
     private String Recommend;
     private float Price;
     private int RentDates;

@@ -338,7 +338,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
         TextView msg = builder.findViewById(R.id.tv_msg);
         Button cancle = builder.findViewById(R.id.btn_cancle);
         Button sure = builder.findViewById(R.id.btn_sure);
-        builder.getWindow().getDecorView().setBackground(new BitmapDrawable(getIerceptionScreen()));
+//        builder.getWindow().getDecorView().setBackground(new BitmapDrawable(getIerceptionScreen()));
 
         if (msg == null || cancle == null || sure == null) return;
 

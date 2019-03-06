@@ -32,11 +32,6 @@ import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
-/**
- * @description：
- * @author：bux on 2018/5/21 15:02
- * @email: 471025316@qq.com
- */
 public class MyApplication extends Application {
 
 

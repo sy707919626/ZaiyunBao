@@ -126,7 +126,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         JPushInterface.init(getApplicationContext());
         verifyStoragePermissions(this);
 
-//        checkUpdate();
+        checkUpdate();
     }
 
     private void initView() {
@@ -427,7 +427,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                             dialog = new LevelDialog(MainActivity.this, new LevelDialog.OnLevelListener() {
                                 @Override
                                 public void onClick(Dialog dialog, boolean confirm) {
-                                    downapk("http://"+mAppVersionBean.getDownLoadUrl());
+                                    downapk("http://"+ mAppVersionBean.getDownLoadUrl());
                                 }
                             });
 

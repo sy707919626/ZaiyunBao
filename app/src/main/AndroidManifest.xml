@@ -200,11 +200,11 @@
 
         <!--极光推送 -->
 
-        <!-- For test only 测试高级功能 -->
+        <!-- Testtest only 测试高级功能 -->
         <!--<activity android:name="com.lulian.Zaiyunbao.PushSetActivity" android:label="@string/app_name"></activity>-->
-        <!--&lt;!&ndash; For test only 测试设置 &ndash;&gt;-->
+        <!--&lt;!&ndash; Testtest only 测试设置 &ndash;&gt;-->
         <!--<activity android:name="com.lulian.Zaiyunbao.SettingActivity" android:label="@string/app_name"></activity>-->
-        <!-- For test only 测试状态通知栏，需要打开的Activity -->
+        <!-- Testtest only 测试状态通知栏，需要打开的Activity -->
         <activity android:name=".jg.TestActivity" android:exported="false">
             <intent-filter>
                 <action android:name="jpush.testAction" />
@@ -234,6 +234,7 @@
         <activity android:name=".ui.activity.wallet.CashRechargeActivity" />
         <activity android:name=".ui.activity.UserAgreementActivity" />
         <activity android:name=".ui.activity.wallet.CashRechargeResultActivity" />
+        <activity android:name=".ui.activity.Wallet_Details_Activity" />
 
         <!-- Required SDK 核心功能-->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
@@ -299,7 +300,7 @@
         <!-- Required SDK核心功能-->
         <receiver android:name="cn.jpush.android.service.AlarmReceiver" android:exported="false"/>
 
-        <!-- User defined.  For test only  用户自定义的广播接收器-->
+        <!-- User defined.  Testtest only  用户自定义的广播接收器-->
         <receiver
             android:name=".jg.MyReceiver"
             android:exported="false"
@@ -314,7 +315,7 @@
             </intent-filter>
         </receiver>
 
-        <!-- User defined.  For test only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调-->
+        <!-- User defined.  Testtest only  用户自定义接收消息器,3.0.7开始支持,目前新tag/alias接口设置结果会在该广播接收器对应的方法中回调-->
         <receiver android:name="com.lulian.Zaiyunbao.jg.MyJPushMessageReceiver">
             <intent-filter>
                 <action android:name="cn.jpush.android.intent.RECEIVE_MESSAGE" />

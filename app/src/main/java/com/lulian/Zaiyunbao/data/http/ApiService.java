@@ -1,5 +1,10 @@
 package com.lulian.Zaiyunbao.data.http;
 
+import com.lulian.Zaiyunbao.Bean.BaseBean;
+import com.lulian.Zaiyunbao.Bean.WalletListDetails;
+
+import java.util.List;
+
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -352,6 +357,11 @@ public interface ApiService {
     @POST("/api/AppMy/MyTradeFlowList")
     Observable<String> MyTradeFlowList(@Header("authorization") String authorization,
                                        @Body RequestBody infoBody);
+
+    //我的交易记录详情
+    @POST("/api/AppZulin/TradeFlowItem")
+    Observable<BaseBean<List<WalletListDetails>>> TradeFlowItem(@Header("authorization") String authorization,
+                                                                @Query("FlowId") String FlowId, @Query("UserId") String UserId);
 
     //统计
     @POST("/api/AppManage/StatisticsEquipmentInfo")

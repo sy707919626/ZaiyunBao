@@ -2,6 +2,7 @@ package com.lulian.Zaiyunbao.ui.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.lulian.Zaiyunbao.Bean.WalletDetail;
+import com.lulian.Zaiyunbao.Bean.WalletListDetails;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.ui.activity.Wallet_Details_Activity;
 
 import java.util.ArrayList;
 
@@ -57,6 +60,15 @@ public class WalletDetailListAdapter extends RecyclerView.Adapter<WalletDetailLi
             holder.tvAmount.setTextColor(mContext.getResources().getColor(R.color.text_bule));
             holder.tvAmount.setText("-  " + mWallBean.get(position).getMonetary());
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, Wallet_Details_Activity.class);
+                intent.putExtra("FlowId",  mWallBean.get(position).getId());
+                mContext.startActivity(intent);
+            }
+        });
 
     }
 

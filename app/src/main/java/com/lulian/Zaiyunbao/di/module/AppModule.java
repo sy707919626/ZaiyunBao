@@ -20,12 +20,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-/**
- * @description：
- * @author：bux on 2018/4/2 16:11
- * @email: 471025316@qq.com
- */
-
 @Module
 public class AppModule {
 

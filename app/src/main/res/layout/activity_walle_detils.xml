@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/details_title_basic_bar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:text="湖南共托物流设备租赁有限公司"
+                    android:textColor="@color/text_info"
+                    android:textSize="@dimen/button_size" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/wallet_details_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-1000"
+                        android:textColor="@color/text_bule"
+                        android:textSize="@dimen/text_size_two" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="  元"
+                        android:textColor="@color/text_hint_black2"
+                        android:textSize="@dimen/text_size_trhee" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:text="交易成功"
+                    android:textColor="@color/text_info"
+                    android:textSize="@dimen/text_size_trhee" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="付款方式"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/wallet_details_zffs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:text="我的余额"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/wallet_details_zh_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="35dp"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="充值账户"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/wallet_details_zh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="交易类型"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/wallet_details_jylx"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="交易状态"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/wallet_details_jyzt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:text="支付成功"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="交易时间"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/wallet_details_jy_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="交易编号"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/wallet_details_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

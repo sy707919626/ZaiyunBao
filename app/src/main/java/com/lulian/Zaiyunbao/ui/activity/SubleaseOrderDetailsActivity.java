@@ -168,7 +168,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
                     public void accept(String s) throws Exception {
 
                         if (s.equals("[]")) {
-                            RxToast.warning("当前个人资料不全");
+//                            RxToast.warning("当前个人资料不全");
                         } else {
                             personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
                             ZZName = personalInfoBean.get(0).getContactAdress();
