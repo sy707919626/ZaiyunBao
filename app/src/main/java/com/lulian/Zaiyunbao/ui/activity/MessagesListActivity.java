@@ -1,6 +1,7 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +32,7 @@ import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -61,6 +63,10 @@ public class MessagesListActivity extends BaseActivity implements View.OnClickLi
     TextView btnDelete;
     @BindView(R.id.ll_mycollection_bottom_dialog)
     LinearLayout llMycollectionBottomDialog;
+    @BindView(R.id.message_layout)
+    LinearLayout messageLayout;
+    @BindView(R.id.message_result_layout)
+    LinearLayout messageResultLayout;
 
 
     private MessageListAdapter mAdapter;
@@ -155,6 +161,14 @@ public class MessagesListActivity extends BaseActivity implements View.OnClickLi
                         }
 
                         mMessageList.addAll(messageListBean.getRows());
+
+                        if (mMessageList.size()<=0){
+                            messageLayout.setVisibility(View.GONE);
+                            messageResultLayout.setVisibility(View.VISIBLE);
+                        } else {
+                            messageLayout.setVisibility(View.VISIBLE);
+                            messageResultLayout.setVisibility(View.GONE);
+                        }
 
                         if (mAdapter != null) {
                             mAdapter.notifyDataSetChanged();
@@ -280,4 +294,10 @@ public class MessagesListActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

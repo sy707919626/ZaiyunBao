@@ -20,7 +20,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -31,7 +30,6 @@ import android.widget.Toast;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.AppVersionBean;
-import com.lulian.Zaiyunbao.Bean.BuyOrderInfoBean;
 import com.lulian.Zaiyunbao.Bean.TaskInfo;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
@@ -49,6 +47,7 @@ import com.lulian.Zaiyunbao.ui.fragment.LeaseFragment;
 import com.lulian.Zaiyunbao.ui.fragment.ManageFragment;
 import com.lulian.Zaiyunbao.ui.fragment.MeFragment;
 import com.lulian.Zaiyunbao.ui.fragment.ServiceFragment;
+
 
 import java.io.File;
 
@@ -332,17 +331,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/"+"zyb.apk";
         File file = new File(filePath);
         Uri data;
-        // 判断版本大于等于7.0
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            // "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
-//            data = FileProvider.getUriForFile(mContext, "com.lulian.Zaiyunbao.fileProvider", file);
-//            // 给目标应用一个临时授权
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-//        } else {
-//            data = Uri.fromFile(file);
-//        }
-//        intent.setDataAndType(data, "application/vnd.android.package-archive");
-//        startActivity(intent);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             // "net.csdn.blog.ruancoder.fileprovider"即是在清单文件中配置的authorities
@@ -420,7 +408,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
                         mAppVersionBean = MyApplication.get().getAppComponent().getGson().fromJson(s, AppVersionBean.class);
 
-
                         if (Integer.valueOf(mAppVersionBean.getMinVersionCode()) >
                                 ProjectUtil.getVersionCode(mContext)) {
 
@@ -430,10 +417,10 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                                     downapk("http://"+ mAppVersionBean.getDownLoadUrl());
                                 }
                             });
-
+                            dialog.setCanceledOnTouchOutside(true);
                             dialog.show();
                             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-//                            dialog.downBtn.setCurrentText("立即升级");
+                            dialog.downBtn.setCurrentText("立即升级");
                         }
 
                     }

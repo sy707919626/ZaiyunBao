@@ -6,67 +6,92 @@
 
     <include layout="@layout/details_title_basic_bar" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-        <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/message_smartRefresh_Layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/message_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </android.support.v7.widget.RecyclerView>
-        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
-    </FrameLayout>
-
     <LinearLayout
-        android:id="@+id/ll_mycollection_bottom_dialog"
+        android:id="@+id/message_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <View
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/color_9c" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <RelativeLayout
+            <com.scwang.smartrefresh.layout.SmartRefreshLayout
+                android:id="@+id/message_smartRefresh_Layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/message_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </android.support.v7.widget.RecyclerView>
+            </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_mycollection_bottom_dialog"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:gravity="center_horizontal">
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/read_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginRight="20dp"
-                android:drawableTop="@drawable/message_read"
-                android:gravity="center"
-                android:text="已读"
-                android:textColor="@color/text_info"
-                android:textSize="@dimen/text_size_trhee" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/color_9c" />
 
-            <TextView
-                android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@+id/read_btn"
-                android:drawableTop="@drawable/message_delete"
-                android:gravity="center"
-                android:text="删除"
-                android:textColor="@color/text_info"
-                android:textSize="@dimen/text_size_trhee" />
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/read_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="20dp"
+                    android:drawableTop="@drawable/message_read"
+                    android:gravity="center"
+                    android:text="已读"
+                    android:textColor="@color/text_info"
+                    android:textSize="@dimen/text_size_trhee" />
+
+                <TextView
+                    android:id="@+id/btn_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_toRightOf="@+id/read_btn"
+                    android:drawableTop="@drawable/message_delete"
+                    android:gravity="center"
+                    android:text="删除"
+                    android:textColor="@color/text_info"
+                    android:textSize="@dimen/text_size_trhee" />
+            </RelativeLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/message_result_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/search_error"
+            android:gravity="center"
+            android:text="- 暂无数据 -" />
+
+    </LinearLayout>
 </LinearLayout>

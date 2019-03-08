@@ -1,6 +1,7 @@
 package com.lulian.Zaiyunbao.data.http;
 
 import com.lulian.Zaiyunbao.Bean.BaseBean;
+import com.lulian.Zaiyunbao.Bean.RentOrderDetailBean;
 import com.lulian.Zaiyunbao.Bean.WalletListDetails;
 
 import java.util.List;
@@ -381,6 +382,11 @@ public interface ApiService {
     //版本升级
     @POST("/api/AppUser/GetAppVersion")
     Observable<String> GetAppVersion(@Header("authorization") String authorization);
+
+    //版本升级
+    @POST("/api/AppMy/EquipmentBackRentOrderDetail")
+    Observable<BaseBean<List<RentOrderDetailBean>>> EquipmentBackRentOrderDetail(@Header("authorization") String authorization,
+                                                                                 @Query("OrderId") String OrderId);
 }
 
 

@@ -1,5 +1,6 @@
 package com.lulian.Zaiyunbao.ui.activity.rentback;
 
+import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.ui.activity.myorder.MyOrderDetailsActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseLazyFragment;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -57,7 +59,10 @@ public class RentBackAllFragment extends BaseLazyFragment {
         mAdapter.setOnItemClickListener(new RentBackAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(int position, ArrayList<RentBackBean.RowsBean> orderListBean) {
-
+                Intent intent = new Intent(getContext(), RentOrderDetailsActivity.class);
+                intent.putExtra("OrdersId", orderListBean.get(position).getOrdersId());
+                intent.putExtra("OrderNo", orderListBean.get(position).getOrderNo());
+                getContext().startActivity(intent);
             }
         });
 
@@ -141,7 +146,7 @@ public class RentBackAllFragment extends BaseLazyFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        smartRefreshLayout.autoRefresh(); //触发自动刷新
     }
 
     @Override

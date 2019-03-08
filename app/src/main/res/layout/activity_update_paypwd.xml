@@ -103,7 +103,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="验证码已发送至手机号码  +86  "
+                        android:text="点击获取验证码，发送至  +86  "
                         android:textColor="@color/text_hint_black2"
                         android:textSize="@dimen/text_size_trhee" />
 

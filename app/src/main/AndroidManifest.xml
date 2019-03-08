@@ -4,55 +4,32 @@
     package="com.lulian.Zaiyunbao">
 
     <permission
-        android:name="com.lulian.Zaiyunbao.permission.JPUSH_MESSAGE"
+        android:name="com.lulian.driver.permission.JPUSH_MESSAGE"
         android:protectionLevel="signature" />
 
     <!-- Required  一些系统要求的权限，如访问网络等-->
-    <uses-permission android:name="com.lulian.Zaiyunbao.permission.JPUSH_MESSAGE" />
+    <uses-permission android:name="com.lulian.driver.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
-    <!-- 这个权限用于访问GPS定位-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"></uses-permission>
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口-->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
-    <!-- 用于读取手机当前的状态-->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"></uses-permission>
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-    <!-- 访问网络，网络定位需要上网-->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- SD卡读取权限，用户写入离线定位数据-->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"></uses-permission>
-    <!--//读取系统信息，包含系统版本等信息，用作统计-->
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="21" />
-    <permission
-        android:name="com.lulian.Zaiyunbao.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
-    <!-- Optional for location -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 
     <application
         android:name=".MyApplication"
@@ -96,7 +73,10 @@
         <activity android:name=".ui.activity.MainActivity" />
         <activity android:name=".ui.activity.LoginActivity" />
         <activity android:name=".ui.activity.Updae_pwd_Activity" />
-        <activity android:name=".ui.activity.UploadDataActivity" />
+
+        <activity android:name=".ui.activity.UploadDataActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
         <activity android:name=".ui.activity.ProtocolActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.Forget_Password_Activity" />
@@ -158,7 +138,6 @@
         <activity android:name=".ui.activity.repair.RepairReportActivity" />
         <activity android:name=".ui.activity.pay.WalletChargeResultActivity" />
         <activity android:name=".ui.activity.Register_Two_Activity" />
-        <activity android:name=".ui.dialog.PhotoDialog" />
         <activity android:name=".ui.activity.issueSublease.PointIssueActivity" />
         <activity android:name=".ui.activity.AboutActivity" />
         <activity android:name=".ui.activity.Wallet_Detail_ListActivity" />
@@ -178,16 +157,26 @@
         <activity android:name=".ui.activity.service.RetireServiceMapActivity" />
         <activity android:name=".ui.activity.App_Statistic_Activity" />
 
+        <!--<provider-->
+        <!--android:authorities="com.lulian.Zaiyunbao.fileProvider"-->
+        <!--tools:replace="android:authorities"-->
+        <!--android:name="android.support.v4.content.FileProvider"-->
+        <!--android:grantUriPermissions="true"-->
+        <!--android:exported="false">-->
+        <!--<meta-data-->
+            <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
+            <!--android:resource="@file_path1aths"></meta-data>-->
+    <!--</provider>-->
         <provider
+            android:name=".ui.photoview.CustomFileProvider"
             android:authorities="com.lulian.Zaiyunbao.fileProvider"
-            tools:replace="android:authorities"
-            android:name="android.support.v4.content.FileProvider"
-            android:grantUriPermissions="true"
-            android:exported="false">
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_path1" />
         </provider>
+
 
         <service
             android:name="com.baidu.location.f"
@@ -235,6 +224,7 @@
         <activity android:name=".ui.activity.UserAgreementActivity" />
         <activity android:name=".ui.activity.wallet.CashRechargeResultActivity" />
         <activity android:name=".ui.activity.Wallet_Details_Activity" />
+        <activity android:name=".ui.activity.rentback.RentOrderDetailsActivity" />
 
         <!-- Required SDK 核心功能-->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->

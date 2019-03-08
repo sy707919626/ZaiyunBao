@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.common.CheckPermissionsActivity;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.exception.BaseException;
 import com.lulian.Zaiyunbao.common.exception.RxErrorHandler;
@@ -40,7 +41,7 @@ import okhttp3.RequestBody;
  * Created by Administrator on 2018/9/18.
  */
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends CheckPermissionsActivity {
     @BindView(R.id.login_image_close)
     ImageView loginImageClose;
     @BindView(R.id.login_text_help)

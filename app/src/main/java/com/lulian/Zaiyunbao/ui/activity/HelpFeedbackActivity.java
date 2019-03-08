@@ -115,7 +115,7 @@ public class HelpFeedbackActivity extends BaseActivity {
                 break;
 
             case R.id.text_detail_right: //联系客服
-                ProjectUtil.checkCallPhone(this, "4008005525");
+                ProjectUtil.checkCallPhone(this, "0731-88395758");
                 break;
             default:
                 break;

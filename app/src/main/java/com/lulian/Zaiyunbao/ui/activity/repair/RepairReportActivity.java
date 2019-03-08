@@ -336,14 +336,14 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
         //设置裁剪参数
-        CropOptions cropOptions = new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(false).create();
+        CropOptions cropOptions = new CropOptions.Builder().create();
         //设置压缩参数
         CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
         if (istake) {
-            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
+            takePhoto.onPickFromCapture(getImageCropUri());
         } else {
-            takePhoto.onPickFromGalleryWithCrop(getImageCropUri(), cropOptions);
+            takePhoto.onPickFromGallery();
         }
     }
 
@@ -351,7 +351,7 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
     private Uri getImageCropUri() {
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/temp/" + System.currentTimeMillis() + ".jpg");
 
-        ProjectUtil.show(this, file.getPath());
+//        ProjectUtil.show(this, file.getPath());
 
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         return Uri.fromFile(file);

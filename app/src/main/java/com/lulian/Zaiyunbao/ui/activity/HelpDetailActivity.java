@@ -82,7 +82,7 @@ public class HelpDetailActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.contact_service:
                 //联系客服
-                ProjectUtil.checkCallPhone(this, "400-564654654");
+                ProjectUtil.checkCallPhone(this, "0731-88395758");
                 break;
 
             case R.id.know_sure:

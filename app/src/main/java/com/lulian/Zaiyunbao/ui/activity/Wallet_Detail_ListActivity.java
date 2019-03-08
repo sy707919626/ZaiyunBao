@@ -2,12 +2,14 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,9 +26,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
-import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
@@ -36,6 +36,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -57,6 +58,8 @@ public class Wallet_Detail_ListActivity extends BaseActivity {
     RecyclerView walletRecyclerview;
     @BindView(R.id.wallet_smartRefresh_Layout)
     SmartRefreshLayout walletSmartRefreshLayout;
+    @BindView(R.id.wallet_view_result_layout)
+    LinearLayout walletViewResultLayout;
 
     private WalletDetailListAdapter mAdapter;
     private ArrayList<WalletDetail.RowsBean> mWalletDetailList = new ArrayList<>();
@@ -151,12 +154,22 @@ public class Wallet_Detail_ListActivity extends BaseActivity {
                     public void onNext(String s) {
                         WalletDetail walletDetailBean = MyApplication.get().getAppComponent().getGson().fromJson(s, WalletDetail.class);
 
+
                         if (isRefresh) {
                             mWalletDetailList.clear();
                         }
 
                         mWalletDetailList.addAll(walletDetailBean.getRows());
                         sort();
+
+                        if (mWalletDetailList.size() <= 0){
+                            walletViewResultLayout.setVisibility(View.VISIBLE);
+                            walletSmartRefreshLayout.setVisibility(View.GONE);
+                        } else {
+                            walletViewResultLayout.setVisibility(View.GONE);
+                            walletSmartRefreshLayout.setVisibility(View.VISIBLE);
+                        }
+
 
                         if (mAdapter != null) {
                             mAdapter.notifyDataSetChanged();

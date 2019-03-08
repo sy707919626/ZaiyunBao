@@ -28,18 +28,20 @@ public class RxHttpResponseCompatTest {
                     public ObservableSource<T> apply(final BaseBean<T> baseBean) throws Exception {
 
                         if (baseBean.getCode()== 0 ) {
-                            return Observable.create(new ObservableOnSubscribe<T>() {
-                                @Override
-                                public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
-                                    try {
-                                        subscriber.onNext(baseBean.getData());
-                                        subscriber.onComplete();
+//                            return Observable.create(new ObservableOnSubscribe<T>() {
+//                                @Override
+//                                public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
+//                                    try {
+//                                        subscriber.onNext(baseBean.getData());
+//                                        subscriber.onComplete();
+//
+//                                    } catch (Exception e) {
+//                                        subscriber.onError(e);
+//                                    }
+//                                }
+//                            });
 
-                                    } catch (Exception e) {
-                                        subscriber.onError(e);
-                                    }
-                                }
-                            });
+                            return Observable.just(baseBean.getData());
                         } else {
                             String msg = baseBean.getMessage();
                             return Observable.error(new ApiException(Integer.valueOf(baseBean.getCode()), msg));

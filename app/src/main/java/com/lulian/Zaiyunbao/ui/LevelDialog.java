@@ -38,11 +38,11 @@ public class LevelDialog extends Dialog implements View.OnClickListener{
     private void initView() {
         tipsTv = (TextView)findViewById(R.id.levelup_des_tv);
         downBtn = (DownloadProgressButton)findViewById(R.id.levelup_tv);
-        sureBtn = findViewById(R.id.levelup_btn_sure);
-        cancleBtn = findViewById(R.id.levelup_btn_cancle);
-        sureBtn.setOnClickListener(this);
-        cancleBtn.setOnClickListener(this);
-//        downBtn.setOnClickListener(this);
+//        sureBtn = findViewById(R.id.levelup_btn_sure);
+//        cancleBtn = findViewById(R.id.levelup_btn_cancle);
+//        sureBtn.setOnClickListener(this);
+//        cancleBtn.setOnClickListener(this);
+        downBtn.setOnClickListener(this);
     }
 
     @Override
@@ -51,18 +51,19 @@ public class LevelDialog extends Dialog implements View.OnClickListener{
                 case R.id.levelup_tv://下载按钮
                     //下载操作
 //                    listener.onClick(this,false);
-                    break;
-
-                case R.id.levelup_btn_sure://下载按钮
-                    //下载操作
-                    downBtn.setVisibility(View.VISIBLE);
                     listener.onClick(this,false);
                     break;
-
-                case R.id.levelup_btn_cancle://下载按钮
-                    //下载操作
-                    dismiss();
-                    break;
+//
+//                case R.id.levelup_btn_sure://下载按钮
+//                    //下载操作
+//                    downBtn.setVisibility(View.VISIBLE);
+//
+//                    break;
+//
+//                case R.id.levelup_btn_cancle://下载按钮
+//                    //下载操作
+//                    dismiss();
+//                    break;
             }
     }
     public interface OnLevelListener{

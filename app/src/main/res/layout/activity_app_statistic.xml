@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="保障金总额"
+                    android:text="押金总额"
                     android:textColor="@color/text_black"
                     android:textSize="@dimen/text_size_trhee" />
             </LinearLayout>
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center"
-                    android:text="转租中保证金"
+                    android:text="转租中押金"
                     android:textColor="@color/text_black"
                     android:textSize="14dp" />
             </LinearLayout>

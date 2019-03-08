@@ -2,9 +2,11 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,10 +19,10 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -29,18 +31,21 @@ import butterknife.OnClick;
 
 public class Register_Two_Activity extends BaseActivity {
 
+
     @BindView(R.id.image_back_login_bar)
     ImageView imageBackLoginBar;
     @BindView(R.id.text_login_content)
     TextView textLoginContent;
     @BindView(R.id.agree_login)
     TextView agreeLogin;
+    @BindView(R.id.login_bar_title)
+    RelativeLayout loginBarTitle;
     @BindView(R.id.register_two_hint_text)
     TextView registerTwoHintText;
     @BindView(R.id.register_two_hint_phone_text)
     TextView registerTwoHintPhoneText;
     @BindView(R.id.verification_Code_register)
-    VerificationCode verificationCodeRegister;
+    EditText verificationCodeRegister;
     @BindView(R.id.register_two_getCode)
     Button registerTwoGetCode;
     @BindView(R.id.register_two_next)
@@ -49,8 +54,6 @@ public class Register_Two_Activity extends BaseActivity {
     TextView registerTwoBottomText;
     @BindView(R.id.register_two_yonghu_text)
     TextView registerTwoYonghuText;
-    @BindView(R.id.login_bar_title)
-    RelativeLayout loginBarTitle;
 
     private String tempMobile = "";
     private String Code; //验证码
@@ -80,6 +83,8 @@ public class Register_Two_Activity extends BaseActivity {
         tempMobile = getIntent().getStringExtra("register_phone");
 
         registerTwoHintPhoneText.setText(tempMobile);
+
+
     }
 
     @OnClick({R.id.register_two_getCode, R.id.register_two_next, R.id.register_two_yonghu_text})
@@ -105,10 +110,10 @@ public class Register_Two_Activity extends BaseActivity {
 
             case R.id.register_two_next: //下一步
 
-                if (verificationCodeRegister.getVerification().equals("")) {
+                if (verificationCodeRegister.getText().toString().trim().equals("")) {
                     RxToast.warning("验证码不能为空");
 
-                } else if (!Code.equals(MD5Utils.getPwd(verificationCodeRegister.getVerification()))) {
+                } else if (!Code.equals(MD5Utils.getPwd(verificationCodeRegister.getText().toString().trim()))) {
                     RxToast.warning("验证码输入错误，请重新填写");
 
                 } else {
@@ -126,6 +131,7 @@ public class Register_Two_Activity extends BaseActivity {
                 break;
         }
     }
+
 
     class MyCountDownTimerCode extends CountDownTimer {
 

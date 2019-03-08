@@ -43,8 +43,6 @@ public class RxErrorHandler {
     }
 
     public void showErrorMessage(BaseException e) {
-
         RxToast.error(e.getDisplayMessage());
-
     }
 }

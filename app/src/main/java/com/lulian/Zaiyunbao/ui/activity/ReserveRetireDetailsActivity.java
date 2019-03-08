@@ -286,6 +286,12 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
         obj.put("BackLinkPhone", reserveRetirePhone.getText().toString().trim());
         obj.put("CreateUserId", GlobalParams.sUserId);
 
+        if (reserveRetireMode.getText().toString().equals("送货上门")){
+            obj.put("TransferWay", 1);
+        } else {
+            obj.put("TransferWay", 2);
+        }
+
         String args = obj.toString();
         RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                 args);

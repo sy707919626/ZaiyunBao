@@ -12,15 +12,17 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
@@ -38,11 +40,11 @@ import com.jph.takephoto.permission.TakePhotoInvocationHandler;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
-import com.lulian.Zaiyunbao.common.event.PayEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.DataCleanManager;
 import com.lulian.Zaiyunbao.common.widget.IDCard;
+import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
@@ -64,7 +66,7 @@ import okhttp3.RequestBody;
  * Created by Administrator on 2018/9/19.
  */
 
-public class UploadDataActivity extends BaseActivity implements InvokeListener, TakePhoto.TakeResultListener {
+public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeResultListener, InvokeListener{
     @BindView(R.id.image_back_login_bar)
     ImageView imageBackLoginBar;
     @BindView(R.id.text_login_content)
@@ -167,6 +169,8 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
     private PhotoDisplayDialog IdBackUrlDialog;
     private PhotoDisplayDialog bizLicUrlDialog;
 
+    private PhotoDialog mPhotoDialog;
+
     public static AlertDialog.Builder getConfirmDialog(Context context, String message, DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(message);
@@ -175,9 +179,17 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
         return builder;
     }
 
+
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_uploaddata;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getTakePhoto().onCreate(savedInstanceState);
     }
 
     @SuppressLint("NewApi")
@@ -395,37 +407,119 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
             case R.id.paper_layout_upload_idcard:
                 //身份证照片上传（正面）
                 upLoadType = 0;
-                Intent intent = new Intent(UploadDataActivity.this, PhotoDialog.class);
-                intent.putExtra("photoType", 1);
-                startActivityForResult(intent, 1);
+                mPhotoDialog = new PhotoDialog(this, 1, new PhotoDialog.onPhotoListener() {
+                    @Override
+                    public void onClick(String photoType) {
+                        if (photoType.equals("1")){
+                            initPhotoData(true);
+                        } else {
+                            initPhotoData(false);
+                        }
+                    }
+                });
+                mPhotoDialog.show();
+
                 break;
 
             case R.id.paper_img_upload_idcard_image:
-                IdFrontUrlDialog.setImgUrl(Constants.BASE_URL + IdFrontUrl).show();
+//                IdFrontUrlDialog.setImgUrl(Constants.BASE_URL + IdFrontUrl).show();
+                upLoadType = 0;
+//                Intent intent5 = new Intent(UploadDataActivity.this, PhotoDialog.class);
+//                intent5.putExtra("photoType", 1);
+//                startActivityForResult(intent5, 200);
+//
+                mPhotoDialog = new PhotoDialog(this, 1, new PhotoDialog.onPhotoListener() {
+                    @Override
+                    public void onClick(String photoType) {
+                        if (photoType.equals("1")){
+                            initPhotoData(true);
+                        } else {
+                            initPhotoData(false);
+                        }
+                    }
+                });
+
+                mPhotoDialog.show();
+
+//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
                 break;
 
             case R.id.paper_layout_upload_idcard_back:
                 //身份证照片上传（反面）
                 upLoadType = 1;
-                Intent intent2 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-                intent2.putExtra("photoType", 2);
-                startActivityForResult(intent2, 1);
+                mPhotoDialog = new PhotoDialog(this, 2, new PhotoDialog.onPhotoListener() {
+                    @Override
+                    public void onClick(String photoType) {
+                        if (photoType.equals("1")){
+                            initPhotoData(true);
+                        } else {
+                            initPhotoData(false);
+                        }
+                    }
+                });
+
+                mPhotoDialog.show();
+//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
+
                 break;
 
             case R.id.paper_img_upload_idcard_back_image:
-                IdBackUrlDialog.setImgUrl(Constants.BASE_URL + IdBackUrl).show();
+                upLoadType = 1;
+
+                mPhotoDialog = new PhotoDialog(this, 2, new PhotoDialog.onPhotoListener() {
+                    @Override
+                    public void onClick(String photoType) {
+                        if (photoType.equals("1")){
+                            initPhotoData(true);
+                        } else {
+                            initPhotoData(false);
+                        }
+                    }
+                });
+                mPhotoDialog.show();
+
+//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
                 break;
 
             case R.id.paper_layout_upload_bizLicUrl:
                 //营业执照
                 upLoadType = 2;
-                Intent intent3 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-                intent3.putExtra("photoType", 3);
-                startActivityForResult(intent3, 1);
+//                Intent intent3 = new Intent(UploadDataActivity.this, PhotoDialog.class);
+//                intent3.putExtra("photoType", 3);
+//                startActivityForResult(intent3, 1);
+
+                mPhotoDialog = new PhotoDialog(this, 3, new PhotoDialog.onPhotoListener() {
+                    @Override
+                    public void onClick(String photoType) {
+                        if (photoType.equals("1")){
+                            initPhotoData(true);
+                        } else {
+                            initPhotoData(false);
+                        }
+                    }
+                });
+                mPhotoDialog.show();
+
+//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
                 break;
 
             case R.id.paper_img_upload_bizLicUrl_image:
-                bizLicUrlDialog.setImgUrl(Constants.BASE_URL + bizLicUrl).show();
+//                bizLicUrlDialog.setImgUrl(Constants.BASE_URL + bizLicUrl).show();
+//                Intent intent4 = new Intent(UploadDataActivity.this, PhotoDialog.class);
+//                intent4.putExtra("photoType", 3);
+//                startActivityForResult(intent4, 200);
+
+                mPhotoDialog = new PhotoDialog(this, 3, new PhotoDialog.onPhotoListener() {
+                    @Override
+                    public void onClick(String photoType) {
+                        if (photoType.equals("1")){
+                            initPhotoData(true);
+                        } else {
+                            initPhotoData(false);
+                        }
+                    }
+                });
+                mPhotoDialog.show();
                 break;
 
             case R.id.register_btn: //注册
@@ -569,41 +663,40 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         getTakePhoto().onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                String returnedData = data.getStringExtra("data_return");
-                if (returnedData.equals("1")) {
-                    initPhotoData(true);
-                } else {
-                    initPhotoData(false);
-                }
-            }
-        }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //以下代码为处理Android6.0、7.0动态权限所需
         PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
         PermissionManager.handlePermissionsResult(this, type, invokeParam, this);
     }
 
-    private void initPhotoData(boolean istake) {
+    @Override
+    public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
+        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
+        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
+            this.invokeParam = invokeParam;
+        }
+        return type;
+    }
+
+    private void initPhotoData(boolean isTake) {
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
         //设置裁剪参数
-        CropOptions cropOptions = new CropOptions.Builder().setAspectX(1).setAspectY(1).setWithOwnCrop(false).create();
+        CropOptions cropOptions = new CropOptions.Builder().create();
         //设置压缩参数
         CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
-        if (istake) {
-            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
+        if (isTake) {
+            takePhoto.onPickFromCapture(getImageCropUri());
+//            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
         } else {
-            takePhoto.onPickFromGalleryWithCrop(getImageCropUri(), cropOptions);
+//            takePhoto.onPickFromGalleryWithCrop(getImageCropUri(), cropOptions);
+            takePhoto.onPickFromGallery();
         }
     }
 
@@ -622,15 +715,6 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
             takePhoto = (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this, this));
         }
         return takePhoto;
-    }
-
-    @Override
-    public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
-        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
-        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
-            this.invokeParam = invokeParam;
-        }
-        return type;
     }
 
     @Override
@@ -688,7 +772,6 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
 
     @Override
     public void takeFail(TResult result, String msg) {
-
     }
 
     @Override
@@ -763,6 +846,4 @@ public class UploadDataActivity extends BaseActivity implements InvokeListener, 
         paperUploadIdcard.setVisibility(View.VISIBLE);
         paperUploadBizLicUrl.setVisibility(View.GONE);
     }
-
-
 }

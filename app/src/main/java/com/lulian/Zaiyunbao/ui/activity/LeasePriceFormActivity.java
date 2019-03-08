@@ -108,17 +108,9 @@ public class LeasePriceFormActivity extends BaseActivity {
                         mAdapterSum = new LeasePriceFormSumAdapter(LeasePriceFormActivity.this, mLeasePriceFromBeanSum);
                         scrollablePanelSum.setAdapter(mAdapterSum);
 
-                        RxToast.warning(mLeasePriceFromBean.size() + "");
 
                     }
                 });
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

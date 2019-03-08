@@ -193,11 +193,12 @@ public class CashBankMoneyActivity extends BaseActivity {
                 if (Float.valueOf(mBalance) < Float.valueOf(cashMoneySum.getText().toString().trim()) + money) {
                     RxToast.warning("余额不足");
                 } else {
+                    String moneys = String.valueOf(Float.valueOf(cashMoneySum.getText().toString().trim()) + Float.valueOf(money));
                     //成功
                     JSONObject obj = new JSONObject();
                     obj.put("Number", AccountNo);
                     obj.put("ApplyAccount", ApplyAccount);
-                    obj.put("Balance", cashMoneySum.getText().toString().trim() + money);
+                    obj.put("Balance", moneys);
                     obj.put("UserId", GlobalParams.sUserId);
 
                     String lease = obj.toString();
