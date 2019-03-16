@@ -247,7 +247,9 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                 break;
 
             case R.id.buy_equipment_my_next:
-                if (myAddressQuxian.getText().toString().trim().equals("")) {
+                if (buyMyPayModleSpinner.getText().toString().trim().equals("")){
+                    RxToast.warning("请选择货款以及交付方式");
+                } else if (myAddressQuxian.getText().toString().trim().equals("")) {
                     RxToast.warning("请选择收货区县地址");
                 } else if (buyAddressXiangxi.getText().toString().trim().equals("")) {
                     RxToast.warning("请填写收货详细地址");

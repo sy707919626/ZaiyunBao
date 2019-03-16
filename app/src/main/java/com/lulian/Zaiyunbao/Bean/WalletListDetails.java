@@ -24,6 +24,15 @@ public class WalletListDetails implements Serializable {
     private String SerialNo;
     private String accountNo;
     private String CompanysName;
+    private float Poundage;
+
+    public float getPoundage() {
+        return Poundage;
+    }
+
+    public void setPoundage(float poundage) {
+        Poundage = poundage;
+    }
 
     public int getCashOrPay() {
         return CashOrPay;

@@ -74,8 +74,7 @@ public class DeviceManageBFFragment extends BaseLazyFragment {
         mAdapter = new DeviceManageAdapter(getContext(), mDeviceManageBean, true);
         OrderRecyclerView.setAdapter(mAdapter);
 
-//        smartRefreshLayout.autoRefresh(); //触发自动刷新
-//        getData();
+        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {

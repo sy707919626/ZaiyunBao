@@ -94,7 +94,7 @@ public class MeFragment extends BaseFragment {
         //消息数目提示
         QBadgeView qbadge = new QBadgeView(getActivity());
         qbadge.setBadgeTextSize(12, true);
-        qbadge.bindTarget(itemViewMsg).setBadgeGravity(Gravity.TOP | Gravity.END).setBadgeNumber(100);
+//        qbadge.bindTarget(itemViewMsg).setBadgeGravity(Gravity.TOP | Gravity.END).setBadgeNumber(100);
 
         userName.setText(GlobalParams.sUserName);
         userPhone.setText(GlobalParams.sUserPhone);

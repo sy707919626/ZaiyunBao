@@ -8,6 +8,7 @@ import com.lulian.Zaiyunbao.common.http.util.SSLSocketClient;
 import com.lulian.Zaiyunbao.data.http.ApiService;
 import com.lulian.Zaiyunbao.di.component.Constants;
 
+import java.lang.reflect.Method;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -74,6 +75,8 @@ public class HttpModule {
     ApiService provideApiService(Retrofit retrofit) {
         // LogUtil.e( "provideApiService: " + retrofit);
         return retrofit.create(ApiService.class);
+
+
     }
 
 

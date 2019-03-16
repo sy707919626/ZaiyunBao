@@ -107,6 +107,8 @@ public class OrderFragment extends BaseLazyFragment {
                 getData();
             }
         });
+
+
     }
 
     @Override

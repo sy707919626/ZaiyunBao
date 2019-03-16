@@ -79,7 +79,6 @@ public class Register_Tthree_Activity extends BaseActivity {
 
         tempMobile = getIntent().getStringExtra("register_phone");
         Invitation_Code = getIntent().getStringExtra("invitation_Code"); //邀请码
-        RxToast.warning(tempMobile);
 
         textLoginContent.setText("设置密码");
         registerThreeComplete.setEnabled(false);

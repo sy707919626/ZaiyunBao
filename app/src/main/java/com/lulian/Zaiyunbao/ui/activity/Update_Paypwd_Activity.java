@@ -2,8 +2,10 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,10 +19,10 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -28,6 +30,7 @@ import butterknife.OnClick;
  */
 
 public class Update_Paypwd_Activity extends BaseActivity {
+
 
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
@@ -48,12 +51,11 @@ public class Update_Paypwd_Activity extends BaseActivity {
     @BindView(R.id.update_paypwd_hint_phone_text)
     TextView updatePaypwdHintPhoneText;
     @BindView(R.id.update_paypwd_edit_code)
-    VerificationCode updatePaypwdEditCode;
+    EditText updatePaypwdEditCode;
     @BindView(R.id.update_paypwd_getcode)
     Button updatePaypwdGetcode;
     @BindView(R.id.update_paypwd_commit)
     Button updatePaypwdCommit;
-
     private String Code;
 
     @Override
@@ -104,7 +106,7 @@ public class Update_Paypwd_Activity extends BaseActivity {
         switch (view.getId()) {
             case R.id.update_paypwd_commit: //下一步
                 final String Phone = updatePaypwdEditName.getText().toString().trim();
-                String cCode = MD5Utils.getPwd(updatePaypwdEditCode.getVerification().toString());
+                String cCode = MD5Utils.getPwd(updatePaypwdEditCode.getText().toString().trim());
 
                 if (Phone.equals("")) {
                     RxToast.warning("请输入手机号码");
@@ -122,5 +124,4 @@ public class Update_Paypwd_Activity extends BaseActivity {
                 break;
         }
     }
-
 }

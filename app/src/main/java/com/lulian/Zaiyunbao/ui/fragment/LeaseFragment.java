@@ -1,11 +1,14 @@
 package com.lulian.Zaiyunbao.ui.fragment;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +47,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -54,7 +59,6 @@ import static android.app.Activity.RESULT_OK;
  * 租赁
  */
 public class LeaseFragment extends BaseLazyFragment {
-
 
     @BindView(R.id.tv_address)
     TextView tvAddress;
@@ -271,8 +275,8 @@ public class LeaseFragment extends BaseLazyFragment {
             TypeId.put("name", "equipment.TypeId");
             TypeId.put("type", "=");
 
-            for (EquipmentTypeBean equipmentTypeBean: GlobalParams.sEquipmentTypeBean){
-                if (equipmentTypeBean.getTypeName().equals(zulinShebeiType.getText().toString().trim())){
+            for (EquipmentTypeBean equipmentTypeBean : GlobalParams.sEquipmentTypeBean) {
+                if (equipmentTypeBean.getTypeName().equals(zulinShebeiType.getText().toString().trim())) {
                     TypeId.put("value", equipmentTypeBean.getId());
                 }
             }
@@ -401,4 +405,5 @@ public class LeaseFragment extends BaseLazyFragment {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
 }

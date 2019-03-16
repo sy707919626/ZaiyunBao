@@ -73,7 +73,9 @@ public class ResetPaypwdActivity extends BaseActivity {
                 String PayPwdOne = payOnePassword.getVerification().toString();
                 String PayPwdTwo = payTwoPassword.getVerification().toString();
 
-                if (PayPwdOne.equals("") || PayPwdTwo.equals("")) {
+                if (PayPwdOne.length()<6 && PayPwdTwo.length()<6){
+                    RxToast.warning("支付密码必须设置6位数字");
+                } else if (PayPwdOne.equals("") || PayPwdTwo.equals("")) {
                     RxToast.warning("请输入支付密码");
                 } else if (!PayPwdOne.equals(PayPwdTwo)) {
                     RxToast.warning("两次输入的支付密码不一致");
@@ -85,10 +87,12 @@ public class ResetPaypwdActivity extends BaseActivity {
                                 @Override
                                 public void onNext(String s) {
                                     RxToast.success("支付密码设置成功");
+                                    GlobalParams.setIsPayPwd(true);
                                     stepfinishAll();
                                 }
                             });
                 }
+
                 break;
 
             default:

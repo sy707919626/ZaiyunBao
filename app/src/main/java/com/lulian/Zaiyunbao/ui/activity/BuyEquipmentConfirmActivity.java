@@ -3,6 +3,7 @@ package com.lulian.Zaiyunbao.ui.activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -67,8 +69,6 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
     TextView buySH;
     @BindView(R.id.buy_SH_Address)
     TextView buySHAddress;
-    @BindView(R.id.buy_liaxiren)
-    TextView buyLiaxiren;
     @BindView(R.id.buy_lianxi_phone)
     TextView buyLianxiPhone;
     @BindView(R.id.buy_cancel)
@@ -92,6 +92,7 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
     private String SupplierContactPhone;//出售方电话
 
     private BuyDetailBean buyDetailBean;
+
     @Override
     protected int setLayoutId() {
         return R.layout.buy_equipment_confirm;
@@ -141,6 +142,7 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
                     }
                 });
     }
+
     private void initView() {
         try {
             byte[] bitmapArray;
@@ -173,7 +175,7 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
         buyShijiPay.setText("￥" + getIntent().getFloatExtra("money", 0f) + "");
         buySH.setText(getIntent().getStringExtra("lianxiren"));
         buySHAddress.setText(getIntent().getStringExtra("address"));
-        buyLiaxiren.setText(getIntent().getStringExtra("lianxiren"));
+//        buyLiaxiren.setText(getIntent().getStringExtra("lianxiren"));
         buyLianxiPhone.setText(getIntent().getStringExtra("liaxirenPhone"));
     }
 
@@ -223,5 +225,4 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
                 break;
         }
     }
-
 }

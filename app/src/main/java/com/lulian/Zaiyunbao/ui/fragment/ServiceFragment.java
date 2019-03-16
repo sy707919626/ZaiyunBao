@@ -292,8 +292,12 @@ public class ServiceFragment extends BaseFragment {
 
                                 if (data.get(position).getTitle().equals("送货上门")) {
                                     seekRentSonghuoLayout.setVisibility(View.VISIBLE);
+                                    seekRentAddressQuxian.setText("");
+                                    seekRentAddressXiangxi.setText("");
                                 } else if (data.get(position).getTitle().equals("用户自提")) {
                                     seekRentSonghuoLayout.setVisibility(View.GONE);
+                                    seekRentAddressQuxian.setText("用户自提");
+                                    seekRentAddressXiangxi.setText("用户自提");
                                 }
                             }
                         });
@@ -634,16 +638,8 @@ public class ServiceFragment extends BaseFragment {
 
 
             if (seekRentQuhuoModel.getText().toString().trim().equals("送货上门")) {
-
-                if (seekRentAddressQuxian.getText().toString().trim().equals("")) {
-                    RxToast.warning("请选择区县收货地址");
-                    return;
-                } else if (seekRentAddressXiangxi.getText().toString().trim().equals("")) {
-                    RxToast.warning("请输入详细收货地址");
-                    return;
-                } else {
-                    obj.put("TakeAddress", seekRentAddressQuxian.getText().toString().trim() + seekRentAddressXiangxi.getText().toString().trim());  //收货地点
-                }
+                obj.put("TakeAddress", seekRentAddressQuxian.getText().toString().trim() +
+                        seekRentAddressXiangxi.getText().toString().trim());  //收货地点
             } else {
                 obj.put("TakeAddress", "");  //收货地点
             }

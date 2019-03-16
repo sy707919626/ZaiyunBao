@@ -200,6 +200,7 @@ public class CashBankMoneyActivity extends BaseActivity {
                     obj.put("ApplyAccount", ApplyAccount);
                     obj.put("Balance", moneys);
                     obj.put("UserId", GlobalParams.sUserId);
+                    obj.put("Poundage", money);
 
                     String lease = obj.toString();
                     RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),

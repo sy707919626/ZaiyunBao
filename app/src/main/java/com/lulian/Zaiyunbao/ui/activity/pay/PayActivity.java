@@ -176,7 +176,7 @@ public class PayActivity extends BaseActivity implements PayDialog.PayInterface 
     public void onForget() {
         //当progress显示时，说明在请求网络，这时点击忘记密码不作处理
         if (payDialog.payPassView.progress.getVisibility() != View.VISIBLE) {
-            Toast.makeText(PayActivity.this, "去找回密码", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(PayActivity.this, Update_Paypwd_Activity.class));
 
         }
     }
@@ -188,7 +188,7 @@ public class PayActivity extends BaseActivity implements PayDialog.PayInterface 
         obj.put("PayPassword", password);
         obj.put("Money", money);
         obj.put("UserId", userID);
-        obj.put("PayRemark", "");
+        obj.put("PayRemark", "押金");
         obj.put("OrderType", OrderType);
 
         String messages = obj.toString();

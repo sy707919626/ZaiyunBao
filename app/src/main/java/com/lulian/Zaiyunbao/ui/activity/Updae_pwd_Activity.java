@@ -2,11 +2,13 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,10 +24,10 @@ import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -33,6 +35,7 @@ import butterknife.OnClick;
  */
 
 public class Updae_pwd_Activity extends BaseActivity {
+
 
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
@@ -53,7 +56,7 @@ public class Updae_pwd_Activity extends BaseActivity {
     @BindView(R.id.forgetpwd_hint_phone_text)
     TextView forgetpwdHintPhoneText;
     @BindView(R.id.forgetpwd_edit_code)
-    VerificationCode forgetpwdEditCode;
+    EditText forgetpwdEditCode;
     @BindView(R.id.forgetpwd_btn_getcode)
     Button forgetpwdBtnGetcode;
     @BindView(R.id.forgetpwd_btn_submit)
@@ -164,10 +167,13 @@ public class Updae_pwd_Activity extends BaseActivity {
             case R.id.forgetpwd_btn_submit:
                 if (forgetpwdEditName.getText().toString().trim().equals("")) {
                     RxToast.warning("请输入手机号");
-                } else if (forgetpwdEditCode.getVerification().trim().equals("")) {
-                    RxToast.warning("请输入验证码");
-                } else if (MD5Utils.getPwd(forgetpwdEditCode.getVerification().trim()).equals(Code)) {
+//                } else if (forgetpwdEditCode.getVerification().trim().equals("")) {
+//                    RxToast.warning("请输入验证码");
+//                } else if (MD5Utils.getPwd(forgetpwdEditCode.getVerification().trim()).equals(Code)) {
 
+                } else if (forgetpwdEditCode.getText().toString().trim().equals("")) {
+                    RxToast.warning("请输入验证码");
+                } else if (MD5Utils.getPwd(forgetpwdEditCode.getText().toString().trim()).equals(Code)) {
                     Intent intent = new Intent(Updae_pwd_Activity.this, Setting_Password_Activity.class);
                     intent.putExtra("forget_phone", forgetpwdEditName.getText().toString().trim());
                     startActivity(intent);
@@ -180,4 +186,10 @@ public class Updae_pwd_Activity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

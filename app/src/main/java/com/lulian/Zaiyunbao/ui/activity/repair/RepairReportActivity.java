@@ -281,6 +281,7 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
                                 public void onNext(String s) {
                                     RxToast.success("上传成功");
                                     deteilListBeanList.clear();
+                                    deviceEntryCount.setText("0");
                                     mAdapter.notifyDataSetChanged();
                                 }
                             });
@@ -336,12 +337,12 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
         //设置裁剪参数
-        CropOptions cropOptions = new CropOptions.Builder().create();
+        CropOptions cropOptions = new CropOptions.Builder().setAspectX(800).setAspectY(800).create();
         //设置压缩参数
         CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
         if (istake) {
-            takePhoto.onPickFromCapture(getImageCropUri());
+            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
         } else {
             takePhoto.onPickFromGallery();
         }

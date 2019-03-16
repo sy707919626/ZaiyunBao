@@ -1,8 +1,10 @@
 package com.lulian.Zaiyunbao.ui.activity.bank;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -18,10 +20,10 @@ import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -29,6 +31,7 @@ import butterknife.OnClick;
  */
 
 public class BankDeleteActivity extends BaseActivity {
+
 
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
@@ -53,12 +56,11 @@ public class BankDeleteActivity extends BaseActivity {
     @BindView(R.id.bank_detele_phone_text)
     TextView bankDetelePhoneText;
     @BindView(R.id.bank_detele_test_Code)
-    VerificationCode bankDeteleTestCode;
+    EditText bankDeteleTestCode;
     @BindView(R.id.bank_detele_test_getCode)
     Button bankDeteleTestGetCode;
     @BindView(R.id.bank_detele_test_commit)
     Button bankDeteleTestCommit;
-
     private String Code = "";
 
     private String BankId;
@@ -122,9 +124,13 @@ public class BankDeleteActivity extends BaseActivity {
 
             case R.id.bank_detele_test_commit:
                 //完成
-                if (bankDeteleTestCode.getVerification().equals("")) {
+//                if (bankDeteleTestCode.getVerification().equals("")) {
+//                    RxToast.warning("请输入验证码");
+//                } else if (!MD5Utils.getPwd(bankDeteleTestCode.getVerification()).equals(Code)) {
+//                    RxToast.error("验证码错误，请重新输入");
+                if (bankDeteleTestCode.getText().toString().trim().equals("")) {
                     RxToast.warning("请输入验证码");
-                } else if (!MD5Utils.getPwd(bankDeteleTestCode.getVerification()).equals(Code)) {
+                } else if (!MD5Utils.getPwd(bankDeteleTestCode.getText().toString().trim()).equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");
                 } else {
                     //成功
@@ -145,4 +151,10 @@ public class BankDeleteActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

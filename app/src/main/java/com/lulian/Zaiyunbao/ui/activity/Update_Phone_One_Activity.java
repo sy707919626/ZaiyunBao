@@ -2,8 +2,10 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,10 +20,10 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -50,14 +52,13 @@ public class Update_Phone_One_Activity extends BaseActivity {
     @BindView(R.id.update_hint_phone_text)
     TextView updateHintPhoneText;
     @BindView(R.id.verification_Code_update)
-    VerificationCode verificationCodeUpdate;
+    EditText verificationCodeUpdate;
     @BindView(R.id.update_getCode)
     Button updateGetCode;
     @BindView(R.id.update_commit)
     Button updateCommit;
     @BindView(R.id.update_login_password)
     LinearLayout updateLoginPassword;
-
     private String Code = "";
 
     @Override
@@ -117,7 +118,7 @@ public class Update_Phone_One_Activity extends BaseActivity {
                 break;
 
             case R.id.update_commit: //下一步
-                String cCode = MD5Utils.getPwd(verificationCodeUpdate.getVerification());
+                String cCode = MD5Utils.getPwd(verificationCodeUpdate.getText().toString().trim());
                 if (cCode.equals("")) {
                     RxToast.warning("请输入验证码");
                 } else if (!cCode.equals(Code)) {
@@ -132,4 +133,10 @@ public class Update_Phone_One_Activity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

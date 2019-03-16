@@ -1,11 +1,13 @@
 package com.lulian.Zaiyunbao.ui.activity.wallet;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -16,6 +18,10 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.jph.takephoto.app.TakePhoto;
 import com.jph.takephoto.app.TakePhotoImpl;
 import com.jph.takephoto.compress.CompressConfig;
@@ -192,13 +198,13 @@ public class CashRechargeActivity extends BaseActivity implements InvokeListener
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
         //设置裁剪参数
-        CropOptions cropOptions = new CropOptions.Builder().create();
+        CropOptions cropOptions = new CropOptions.Builder().setAspectX(800).setAspectY(800).create();
         //设置压缩参数
         CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
         if (istake) {
-            takePhoto.onPickFromCapture(getImageCropUri());
-//            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
+//            takePhoto.onPickFromCapture(getImageCropUri());
+            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
 
         } else {
             takePhoto.onPickFromGallery();
@@ -237,6 +243,7 @@ public class CashRechargeActivity extends BaseActivity implements InvokeListener
                         ImageUrl = jsonObject.getString("Path");
                         ImageId = jsonObject.getString("objectid");
                         cashRechargeHzImage.setVisibility(View.VISIBLE);
+
                         Glide.with(CashRechargeActivity.this).load(Constants.BASE_URL + ImageUrl).into(cashRechargeHzImage);
                     }
                 });

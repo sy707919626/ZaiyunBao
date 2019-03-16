@@ -1,11 +1,14 @@
 package com.lulian.Zaiyunbao.ui.activity.bank;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
@@ -18,9 +21,10 @@ import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -30,6 +34,7 @@ import okhttp3.RequestBody;
  */
 
 public class BankAddTestActivity extends BaseActivity {
+
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
     @BindView(R.id.text_detail_content)
@@ -53,11 +58,12 @@ public class BankAddTestActivity extends BaseActivity {
     @BindView(R.id.update_hint_phone_text)
     TextView updateHintPhoneText;
     @BindView(R.id.bank_add_test_Code)
-    VerificationCode bankAddTestCode;
+    EditText bankAddTestCode;
     @BindView(R.id.bank_add_test_getCode)
     Button bankAddTestGetCode;
     @BindView(R.id.bank_add_test_commit)
     Button bankAddTestCommit;
+
     private String BankCardNo;
     private String AccountName;
     private String Code = "";
@@ -123,11 +129,15 @@ public class BankAddTestActivity extends BaseActivity {
 
             case R.id.bank_add_test_commit:
                 //完成
-                if (bankAddTestCode.getVerification().equals("")) {
-                    RxToast.warning("请输入验证码");
-                } else if (!MD5Utils.getPwd(bankAddTestCode.getVerification()).equals(Code)) {
-                    RxToast.error("验证码错误，请重新输入");
+//                if (bankAddTestCode.getVerification().equals("")) {
+//                    RxToast.warning("请输入验证码");
+//                } else if (!MD5Utils.getPwd(bankAddTestCode.getVerification()).equals(Code)) {
+//                    RxToast.error("验证码错误，请重新输入");
 
+                if (bankAddTestCode.getText().toString().trim().equals("")) {
+                    RxToast.warning("请输入验证码");
+                } else if (!MD5Utils.getPwd(bankAddTestCode.getText().toString().trim()).equals(Code)) {
+                    RxToast.error("验证码错误，请重新输入");
                 } else {
                     //成功
                     JSONObject obj = new JSONObject();
@@ -156,4 +166,5 @@ public class BankAddTestActivity extends BaseActivity {
                 break;
         }
     }
+
 }

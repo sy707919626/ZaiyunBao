@@ -1,11 +1,13 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,10 +23,10 @@ import com.lulian.Zaiyunbao.common.widget.MD5Utils;
 import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -32,7 +34,6 @@ import butterknife.OnClick;
  */
 
 public class Update_Phone_Three_Activity extends BaseActivity {
-
 
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
@@ -55,7 +56,7 @@ public class Update_Phone_Three_Activity extends BaseActivity {
     @BindView(R.id.updatePhone_three_hint_phone_text)
     TextView updatePhoneThreeHintPhoneText;
     @BindView(R.id.updatePhone_three_edit_code)
-    VerificationCode updatePhoneThreeEditCode;
+    EditText updatePhoneThreeEditCode;
     @BindView(R.id.updatePhone_three_getcode)
     Button updatePhoneThreeGetcode;
     @BindView(R.id.updatePhone_two_commit)
@@ -142,7 +143,7 @@ public class Update_Phone_Three_Activity extends BaseActivity {
         switch (view.getId()) {
             case R.id.updatePhone_two_commit: //下一步
                 final String Phone = updatePhoneThreeEditName.getText().toString().trim();
-                String cCode = MD5Utils.getPwd(updatePhoneThreeEditCode.getVerification().trim());
+                String cCode = MD5Utils.getPwd(updatePhoneThreeEditCode.getText().toString().trim());
 
                 if (Phone.equals("")) {
                     RxToast.warning("请输入手机号码");
@@ -169,4 +170,10 @@ public class Update_Phone_Three_Activity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

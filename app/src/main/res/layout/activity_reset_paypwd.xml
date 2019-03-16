@@ -26,7 +26,9 @@
             android:id="@+id/pay_one_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"></com.lulian.Zaiyunbao.common.widget.VerificationCode>
+            android:layout_marginTop="15dp">
+
+        </com.lulian.Zaiyunbao.common.widget.VerificationCode>
 
         <TextView
             android:layout_width="wrap_content"

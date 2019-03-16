@@ -25,13 +25,16 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.DicItemBean;
 import com.lulian.Zaiyunbao.Bean.EquipmentTypeBean;
 import com.lulian.Zaiyunbao.Bean.TaskInfo;
+import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.DownloadRunnable;
 import com.lulian.Zaiyunbao.ui.LevelDialog;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.taobao.sophix.SophixManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,21 +72,16 @@ public class WeclcomeActivity extends BaseActivity {
                 .hideBar(BarHide.FLAG_HIDE_BAR)
                 .init();
 
-//        BarUtils.setStatusBarVisibility(this, false);
-
 //        //	注意：这里就是创建了Animation对象，关联了刚才写的anim文件里的东西
 //        Animation anim= AnimationUtils.loadAnimation(this, R.anim.activity_rotate);
 //        //	将ImageView对象执行动画就可以了
 //        weclcomeImg.startAnimation(anim);
         GlobalParams.setToken("Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1Njc4NDY2ODYsInVzZXIiOnsiVXNlcklEIjoiMSIsIlVzZXJOYW1lIjoi6LaF57qn566h55CG5ZGYIn19.U4mnFIJpioXChcKIBD29MLx1UL-NfPiK6hM1XVrw2U8");
 
-
         //        getEquipmentType(); //获取设备类型
         getDicItem();//获取字典
         getEquipmentType();
-
         skipLogin();
-
     }
 
 
@@ -161,4 +159,5 @@ public class WeclcomeActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 }

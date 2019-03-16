@@ -670,15 +670,15 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //以下代码为处理Android6.0、7.0动态权限所需
-        PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        PermissionManager.handlePermissionsResult(this, type, invokeParam, this);
+        PermissionManager.TPermissionType type=PermissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
+        PermissionManager.handlePermissionsResult(this,type,invokeParam,this);
     }
 
     @Override
     public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
-        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
-        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
-            this.invokeParam = invokeParam;
+        PermissionManager.TPermissionType type=PermissionManager.checkPermission(TContextWrap.of(this),invokeParam.getMethod());
+        if(PermissionManager.TPermissionType.WAIT.equals(type)){
+            this.invokeParam=invokeParam;
         }
         return type;
     }
@@ -687,15 +687,13 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
         //设置裁剪参数
-        CropOptions cropOptions = new CropOptions.Builder().create();
+        CropOptions cropOptions = new CropOptions.Builder().setAspectX(800).setAspectY(800).create();
         //设置压缩参数
         CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
         if (isTake) {
-            takePhoto.onPickFromCapture(getImageCropUri());
-//            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
+            takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
         } else {
-//            takePhoto.onPickFromGalleryWithCrop(getImageCropUri(), cropOptions);
             takePhoto.onPickFromGallery();
         }
     }
@@ -710,17 +708,18 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     /**
      * 获取TakePhoto实例
      */
-    public TakePhoto getTakePhoto() {
-        if (takePhoto == null) {
-            takePhoto = (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this, this));
+    public TakePhoto getTakePhoto(){
+        if (takePhoto==null){
+            takePhoto= (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this,this));
         }
         return takePhoto;
     }
 
     @Override
     public void takeSuccess(TResult result) {
-        iconPath = result.getImage().getOriginalPath();
 
+        iconPath = result.getImages().get(0).getOriginalPath();
+        Log.e("排渣 ： ", iconPath);
         String fileType = "";
         File imgFile = new File(iconPath);
 

@@ -1,6 +1,7 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by Administrator on 2018/10/26.
@@ -49,6 +51,8 @@ public class Wallet_Details_Activity extends BaseActivity {
     TextView walletDetailsJyTime;
     @BindView(R.id.wallet_details_number)
     TextView walletDetailsNumber;
+    @BindView(R.id.wallet_details_Poundage)
+    TextView walletDetailsPoundage;
 
     private List<WalletListDetails> mLists = new ArrayList<>();
     private WalletListDetails mWalletListDetails;
@@ -78,7 +82,7 @@ public class Wallet_Details_Activity extends BaseActivity {
 
     }
 
-    private void getData(){
+    private void getData() {
 //        mApi.TradeFlowItem(GlobalParams.sToken, FlowId, GlobalParams.sUserId)
 //                .compose(RxHttpResponseCompatTest.<String>compatResult())
 //                .subscribe(new ErrorHandlerSubscriber<String>() {
@@ -112,7 +116,7 @@ public class Wallet_Details_Activity extends BaseActivity {
 
     private void initView() {
         //支出
-        if (mWalletListDetails.getCashOrPay() == 2){
+        if (mWalletListDetails.getCashOrPay() == 2) {
             walletDetailsMoney.setText("-" + mWalletListDetails.getMonetary());
             walletDetailsZhText.setText("支出账户");
         } else {
@@ -123,5 +127,6 @@ public class Wallet_Details_Activity extends BaseActivity {
         walletDetailsJyTime.setText(mWalletListDetails.getTradTime());
         walletDetailsNumber.setText(mWalletListDetails.getSerialNo());
         walletDetailsZh.setText(mWalletListDetails.getAccountNo());
+        walletDetailsPoundage.setText(String.valueOf(mWalletListDetails.getPoundage()));
     }
 }

@@ -47,10 +47,7 @@ import com.lulian.Zaiyunbao.ui.fragment.LeaseFragment;
 import com.lulian.Zaiyunbao.ui.fragment.ManageFragment;
 import com.lulian.Zaiyunbao.ui.fragment.MeFragment;
 import com.lulian.Zaiyunbao.ui.fragment.ServiceFragment;
-
-
 import java.io.File;
-
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
 

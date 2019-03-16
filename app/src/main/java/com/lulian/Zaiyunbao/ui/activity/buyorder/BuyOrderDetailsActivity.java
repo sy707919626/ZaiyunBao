@@ -194,7 +194,7 @@ public class BuyOrderDetailsActivity extends BaseActivity {
         } else if (myOrderDetailsBean.getOrderStatus() == 6) {
             buyOrderState.setText("已收货");
             buyOrderSubmissionBtn.setVisibility(View.VISIBLE);
-            buyOrderSubmissionBtn.setText("回购返祖");
+            buyOrderSubmissionBtn.setText("回购返租");
 
 
         } else if (myOrderDetailsBean.getOrderStatus() == 7) {
