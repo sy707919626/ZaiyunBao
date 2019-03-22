@@ -20,6 +20,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -28,6 +29,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.AppVersionBean;
 import com.lulian.Zaiyunbao.Bean.TaskInfo;
@@ -50,6 +52,9 @@ import com.lulian.Zaiyunbao.ui.fragment.ServiceFragment;
 import java.io.File;
 import butterknife.BindView;
 import cn.jpush.android.api.JPushInterface;
+import io.reactivex.functions.Consumer;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
     public static final int INDEX_HOME = 0;
@@ -120,8 +125,8 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         registerMessageReceiver();
         JPushInterface.init(getApplicationContext());
-        verifyStoragePermissions(this);
 
+        verifyStoragePermissions(this);
         checkUpdate();
     }
 
@@ -263,12 +268,29 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 if (MESSAGE_RECEIVED_ACTION.equals(intent.getAction())) {
                     String messge = intent.getStringExtra(KEY_MESSAGE);
                     String extras = intent.getStringExtra(KEY_EXTRAS);
+                    String title = intent.getStringExtra(KEY_TITLE);
                     StringBuilder showMsg = new StringBuilder();
                     showMsg.append(KEY_MESSAGE + " : " + messge + "\n");
                     if (!ExampleUtil.isEmpty(extras)) {
                         showMsg.append(KEY_EXTRAS + " : " + extras + "\n");
                     }
-                    setCostomMsg(showMsg.toString());
+
+
+                    JSONObject obj = new JSONObject();
+                    obj.put("CreateId", GlobalParams.sUserId);
+                    obj.put("Content", messge);
+                    obj.put("Title", title);
+
+                    RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
+                            obj.toString());
+                    mApi.AddSystem_Messages(GlobalParams.sToken, body)
+                            .compose(RxHttpResponseCompat.<String>compatResult())
+                            .subscribe(new ErrorHandlerSubscriber<String>() {
+                                @Override
+                                public void onNext(String s) {
+                                    RxToast.success("您有新的消息！");
+                                }
+                            });
                 }
             } catch (Exception e){
             }
@@ -276,7 +298,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void setCostomMsg(String msg){
-        RxToast.showToast(msg);
+//        RxToast.showToast(msg);
     }
 
     @Override

@@ -387,6 +387,15 @@ public interface ApiService {
     @POST("/api/AppMy/EquipmentBackRentOrderDetail")
     Observable<BaseBean<List<RentOrderDetailBean>>> EquipmentBackRentOrderDetail(@Header("authorization") String authorization,
                                                                                  @Query("OrderId") String OrderId);
+
+    //消息保存
+    @POST("/api/AppMy/AddSystem_Messages")
+    Observable<String> AddSystem_Messages(@Header("authorization") String authorization,@Body RequestBody infoBody);
+
+    //消息数量
+    @POST("/api/AppMy/GetMessagesCount")
+    Observable<String> GetMessagesCount(@Header("authorization") String authorization,@Query("UserId") String UserId);
+
 }
 
 

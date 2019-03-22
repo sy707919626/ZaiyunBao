@@ -3,6 +3,7 @@ package com.lulian.Zaiyunbao.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,8 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.event.PayEvent;
@@ -79,6 +83,7 @@ public class MeFragment extends BaseFragment {
     protected int setLayoutId() {
         return R.layout.fragment_me;
     }
+    private int MessageSum = 0;
 
     @SuppressLint("ResourceType")
     @Override
@@ -91,14 +96,26 @@ public class MeFragment extends BaseFragment {
         EventBus.getDefault().register(this);
 
         getData();
-        //消息数目提示
-        QBadgeView qbadge = new QBadgeView(getActivity());
-        qbadge.setBadgeTextSize(12, true);
-//        qbadge.bindTarget(itemViewMsg).setBadgeGravity(Gravity.TOP | Gravity.END).setBadgeNumber(100);
+//        getMessageNumber();
 
         userName.setText(GlobalParams.sUserName);
         userPhone.setText(GlobalParams.sUserPhone);
 
+    }
+
+    private void getMessageNumber() {
+        mApi.GetMessagesCount(GlobalParams.sToken, GlobalParams.sUserId)
+                .compose(RxHttpResponseCompat.<String>compatResult())
+                .subscribe(new ErrorHandlerSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        MessageSum = Integer.valueOf(s);
+                        //消息数目提示
+                        QBadgeView qbadge = new QBadgeView(getActivity());
+                        qbadge.setBadgeTextSize(12, true);
+                        qbadge.bindTarget(itemViewMsg).setBadgeGravity(Gravity.TOP | Gravity.END).setBadgeNumber(MessageSum);
+                    }
+                });
     }
 
     @OnClick({R.id.mydata_relative,
@@ -120,7 +137,7 @@ public class MeFragment extends BaseFragment {
 
             case R.id.item_view_msg:
                 //我的消息
-                getContext().startActivity(new Intent(getContext(), MessagesListActivity.class));
+//                getContext().startActivity(new Intent(getContext(), MessagesListActivity.class));
                 break;
 
             case R.id.item_view_mydata:

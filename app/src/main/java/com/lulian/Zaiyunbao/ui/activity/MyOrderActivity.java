@@ -79,6 +79,7 @@ public class MyOrderActivity extends BaseActivity {
         PagerAdapter adapter = new OrderViewPagerAdapter(this.getSupportFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabsFromPagerAdapter(adapter);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
     }
 

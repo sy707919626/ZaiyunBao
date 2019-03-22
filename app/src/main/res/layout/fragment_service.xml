@@ -220,14 +220,11 @@
                         android:textColorHint="@color/color_99"
                         android:textSize="@dimen/text_size_trhee" />
                 </RelativeLayout>
-            </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -264,325 +261,330 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:id="@+id/seekRent_lease_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="租赁次数"
-                        android:textColor="@color/text_black"
-                        android:textSize="@dimen/text_size_trhee" />
-
-                    <com.lulian.Zaiyunbao.common.widget.ClearEditText
-                        android:id="@+id/seekRent_lease_count"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        android:background="@null"
-                        android:drawablePadding="10dp"
-                        android:gravity="right"
-                        android:hint="请输入租赁次数"
-                        android:inputType="number"
-                        android:textColor="@color/text_color_black"
-                        android:textColorHint="@color/color_99"
-                        android:textSize="@dimen/text_size_trhee" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/seekRent_depositPrice_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="押金单价"
-                            android:textColor="@color/text_black"
-                            android:textSize="14dp" />
-
-                        <com.lulian.Zaiyunbao.common.widget.ClearEditText
-                            android:id="@+id/seekRent_depositPrice"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_marginLeft="15dp"
-                            android:layout_toLeftOf="@+id/seekRent_depositPrice_text2"
-                            android:layout_toRightOf="@+id/seekRent_depositPrice_text"
-                            android:background="@null"
-                            android:gravity="center"
-                            android:hint="请输入押金单价"
-                            android:textColor="@color/text_sum"
-                            android:textColorHint="@color/color_99"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:id="@+id/seekRent_depositPrice_text2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center_vertical"
-                            android:text="元/个/片"
-                            android:textColor="@color/text_black"
-                            android:textSize="14dp" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/seekRent_Deposit_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="押金"
-                            android:textColor="@color/text_black"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:id="@+id/seekRent_Deposit"
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:textColor="@color/text_sum"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center_vertical"
-                            android:text="元"
-                            android:textColor="@color/text_black"
-                            android:textSize="14dp" />
-                    </RelativeLayout>
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/seekRent_price_Text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="指导单价"
-                            android:textColor="@color/text_black"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:id="@+id/seekRent_my_price"
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:textColor="@color/text_sum"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center_vertical"
-                            android:text="元/天/片"
-                            android:textColor="@color/text_black"
-                            android:textSize="14dp" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/seekRent_rent_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="指导租金"
-                            android:textColor="@color/text_black"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:id="@+id/seekRent_my_rent"
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:textColor="@color/text_sum"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center_vertical"
-                            android:text="元"
-                            android:textColor="@color/text_black"
-                            android:textSize="@dimen/text_size_trhee" />
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/seekRent_mianzu_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center"
-                            android:text="免租天数"
-                            android:textColor="@color/text_black"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:id="@+id/seekRent_mianzu"
-                            android:layout_width="80dp"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:gravity="center"
-                            android:textColor="@color/text_sum"
-                            android:textSize="@dimen/text_size_trhee" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center_vertical"
-                            android:text="天"
-                            android:textColor="@color/text_black"
-                            android:textSize="@dimen/text_size_trhee" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <Button
-                            android:id="@+id/seekRent_money_btn"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:layout_width="80dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/button_shixin_shape"
-                            android:gravity="center"
-                            android:text="计算费用"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
-                    </RelativeLayout>
-                </LinearLayout>
             </LinearLayout>
+
+            <!--<LinearLayout-->
+               <!---->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@color/white"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<LinearLayout-->
+                    <!--android:id="@+id/seekRent_lease_layout"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginBottom="5dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="20dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:visibility="gone">-->
+
+                    <!--<TextView-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:gravity="center"-->
+                        <!--android:text="租赁次数"-->
+                        <!--android:textColor="@color/text_black"-->
+                        <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                    <!--<com.lulian.Zaiyunbao.common.widget.ClearEditText-->
+                        <!--android:id="@+id/seekRent_lease_count"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_gravity="center_vertical"-->
+                        <!--android:layout_marginLeft="10dp"-->
+                        <!--android:layout_marginRight="10dp"-->
+                        <!--android:background="@null"-->
+                        <!--android:drawablePadding="10dp"-->
+                        <!--android:gravity="right"-->
+                        <!--android:hint="请输入租赁次数"-->
+                        <!--android:inputType="number"-->
+                        <!--android:textColor="@color/text_color_black"-->
+                        <!--android:textColorHint="@color/color_99"-->
+                        <!--android:textSize="@dimen/text_size_trhee" />-->
+                <!--</LinearLayout>-->
+
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_depositPrice_text"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="押金单价"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="14dp" />-->
+
+                        <!--<com.lulian.Zaiyunbao.common.widget.ClearEditText-->
+                            <!--android:id="@+id/seekRent_depositPrice"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:layout_marginLeft="15dp"-->
+                            <!--android:layout_toLeftOf="@+id/seekRent_depositPrice_text2"-->
+                            <!--android:layout_toRightOf="@+id/seekRent_depositPrice_text"-->
+                            <!--android:background="@null"-->
+                            <!--android:gravity="center"-->
+                            <!--android:hint="请输入押金单价"-->
+                            <!--android:textColor="@color/text_sum"-->
+                            <!--android:textColorHint="@color/color_99"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_depositPrice_text2"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_marginRight="20dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="元/个/片"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="14dp" />-->
+                    <!--</RelativeLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_Deposit_text"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="押金"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_Deposit"-->
+                            <!--android:layout_width="80dp"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:gravity="center"-->
+                            <!--android:textColor="@color/text_sum"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_marginRight="20dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="元"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="14dp" />-->
+                    <!--</RelativeLayout>-->
+
+
+                <!--</LinearLayout>-->
+
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_price_Text"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="指导单价"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_my_price"-->
+                            <!--android:layout_width="80dp"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:gravity="center"-->
+                            <!--android:textColor="@color/text_sum"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_marginRight="20dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="元/天/片"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="14dp" />-->
+                    <!--</RelativeLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_rent_text"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="指导租金"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_my_rent"-->
+                            <!--android:layout_width="80dp"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:gravity="center"-->
+                            <!--android:textColor="@color/text_sum"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_marginRight="20dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="元"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+                    <!--</RelativeLayout>-->
+
+                <!--</LinearLayout>-->
+
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_mianzu_text"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="免租天数"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/seekRent_mianzu"-->
+                            <!--android:layout_width="80dp"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:gravity="center"-->
+                            <!--android:textColor="@color/text_sum"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+
+                        <!--<TextView-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_marginRight="20dp"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="天"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="@dimen/text_size_trhee" />-->
+                    <!--</RelativeLayout>-->
+                <!--</LinearLayout>-->
+
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_marginBottom="5dp"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="10dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<RelativeLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent">-->
+
+                        <!--<Button-->
+                            <!--android:id="@+id/seekRent_money_btn"-->
+                            <!--style="?android:attr/borderlessButtonStyle"-->
+                            <!--android:layout_width="80dp"-->
+                            <!--android:layout_height="30dp"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:layout_marginRight="10dp"-->
+                            <!--android:background="@drawable/button_shixin_shape"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="计算费用"-->
+                            <!--android:textColor="@color/white"-->
+                            <!--android:textSize="14dp" />-->
+                    <!--</RelativeLayout>-->
+                <!--</LinearLayout>-->
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -817,51 +819,51 @@
                     android:textSize="@dimen/text_size_trhee" />
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="@color/white"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginTop="10dp"-->
+                <!--android:background="@color/white"-->
+                <!--android:orientation="vertical">-->
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
-                    android:background="@color/color_9c" />
+                <!--<View-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="0.1dp"-->
+                    <!--android:background="@color/color_9c" />-->
 
-                <RelativeLayout
-                    android:id="@+id/seekRent_my_PriceList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:orientation="horizontal">
+                <!--<RelativeLayout-->
+                    <!--android:id="@+id/seekRent_my_PriceList"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:layout_gravity="center_horizontal"-->
+                    <!--android:layout_marginLeft="20dp"-->
+                    <!--android:layout_marginRight="20dp"-->
+                    <!--android:orientation="horizontal">-->
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_centerVertical="true"
-                        android:gravity="center_vertical">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="40dp"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:gravity="center_vertical">-->
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="查看价格表"
-                            android:textColor="@color/text_black"
-                            android:textSize="14dp" />
-                    </LinearLayout>
+                        <!--<TextView-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="match_parent"-->
+                            <!--android:gravity="center_vertical"-->
+                            <!--android:text="查看价格表"-->
+                            <!--android:textColor="@color/text_black"-->
+                            <!--android:textSize="14dp" />-->
+                    <!--</LinearLayout>-->
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@drawable/next" />
-                </RelativeLayout>
-            </LinearLayout>
+                    <!--<ImageView-->
+                        <!--android:layout_width="20dp"-->
+                        <!--android:layout_height="20dp"-->
+                        <!--android:layout_alignParentEnd="true"-->
+                        <!--android:layout_alignParentRight="true"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:background="@drawable/next" />-->
+                <!--</RelativeLayout>-->
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"

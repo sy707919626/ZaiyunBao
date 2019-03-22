@@ -92,7 +92,7 @@ public class WeclcomeActivity extends BaseActivity {
                 startActivity(new Intent(WeclcomeActivity.this, LoginActivity.class));
                 WeclcomeActivity.this.finish();
             }
-        }, 1000);
+        }, 3000);
     }
 
     private void getEquipmentType() {

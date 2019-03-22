@@ -100,7 +100,8 @@ public class HelpFeedbackActivity extends BaseActivity {
                     RxToast.warning("请留下您的联系方式，方便我们联系您");
                 } else {
                     if (!isFastClick()) {
-                        mApi.addHelpMsg(GlobalParams.sToken, helpFeebackText.getText().toString().trim(), updateFeedbackPhone.getText().toString().trim(), GlobalParams.sUserId)
+                        mApi.addHelpMsg(GlobalParams.sToken, helpFeebackText.getText().toString().trim(),
+                                updateFeedbackPhone.getText().toString().trim(), GlobalParams.sUserId)
                                 .compose(RxHttpResponseCompat.<String>compatResult())
                                 .subscribe(new ErrorHandlerSubscriber<String>() {
                                     @Override

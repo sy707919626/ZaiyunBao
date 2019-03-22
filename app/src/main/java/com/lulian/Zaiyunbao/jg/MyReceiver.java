@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.lulian.Zaiyunbao.ui.activity.MainActivity;
 
 import org.json.JSONException;
@@ -29,6 +28,8 @@ public class MyReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		String message = "";
+		String title = "";
 		try {
 			Bundle bundle = intent.getExtras();
 			Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
@@ -46,6 +47,7 @@ public class MyReceiver extends BroadcastReceiver {
 				Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
 				int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
 				Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
+
 
 			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 				Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
@@ -67,6 +69,8 @@ public class MyReceiver extends BroadcastReceiver {
 			} else {
 				Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
 			}
+
+
 		} catch (Exception e){
 
 		}
@@ -81,6 +85,7 @@ public class MyReceiver extends BroadcastReceiver {
 			}else if(key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)){
 				sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
 			} else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
+				String message = "";
 				if (TextUtils.isEmpty(bundle.getString(JPushInterface.EXTRA_EXTRA))) {
 					Log.i(TAG, "This message has no Extra data");
 					continue;
@@ -94,7 +99,13 @@ public class MyReceiver extends BroadcastReceiver {
 						String myKey = it.next();
 						sb.append("\nkey:" + key + ", value: [" +
 								myKey + " - " +json.optString(myKey) + "]");
+
+						if (key.equals("cn.jpush.android.MESSAGE")){
+							message = json.optString(myKey);
+						}
 					}
+
+
 				} catch (JSONException e) {
 					Log.e(TAG, "Get message extra JSON error!");
 				}
@@ -113,6 +124,7 @@ public class MyReceiver extends BroadcastReceiver {
 			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
 			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+
 			if (!ExampleUtil.isEmpty(extras)) {
 				try {
 					JSONObject extraJson = new JSONObject(extras);
