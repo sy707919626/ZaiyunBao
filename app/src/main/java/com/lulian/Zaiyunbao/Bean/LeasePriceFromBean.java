@@ -40,6 +40,15 @@ public class LeasePriceFromBean {
     private int CustomerType;
     private int RentWay;
     private int Deposit; //押金
+    private float CommisionValue ; //佣金
+
+    public float getCommisionValue() {
+        return CommisionValue;
+    }
+
+    public void setCommisionValue(float commisionValue) {
+        CommisionValue = commisionValue;
+    }
 
     public int getFreeDay() {
         return FreeDay;

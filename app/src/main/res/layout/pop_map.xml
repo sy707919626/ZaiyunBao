@@ -40,6 +40,16 @@
                 android:textSize="@dimen/text_size_trhee" />
 
             <TextView
+                android:id="@+id/tv_map_lxr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/text_hint_black2"
+                android:text="@string/next"
+                android:textSize="@dimen/text_size_trhee" />
+
+            <TextView
                 android:id="@+id/tv_map_juli"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

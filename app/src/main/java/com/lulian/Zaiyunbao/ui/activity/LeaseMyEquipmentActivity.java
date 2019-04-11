@@ -9,6 +9,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -120,6 +121,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     private int leaseSum = 0;
     private int Datasums = 0;
     private int YaJin = 0;
+    private float YongJin = 0f;
     private int MianZuQi = 0;
     private float ZuJin;
 
@@ -231,7 +233,8 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
         UserType = getIntent().getIntExtra("UserType", 0);
         CreateId = getIntent().getStringExtra("CreateId");
         CreateUser = getIntent().getStringExtra("CreateUser");
-        YaJin = getIntent().getIntExtra("Deposit", 0);
+//        YaJin = getIntent().getIntExtra("Deposit", 0);
+
         UID = getIntent().getStringExtra("UID");
 
         initView();
@@ -258,21 +261,28 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                             if (ZuJin <= 0f) {
                                 ZuJin = 0;
                             }
+                            YongJin = list.get(0).getCommisionValue();
+                            YaJin = list.get(0).getDeposit();
                             leaseMyPValue.setText(list.get(0).getPrice() + "");  //租金单价
                             leaseMyRent.setText(decimalFormat.format(ZuJin) + "");//租金
                             leaseMyMianzu.setText(MianZuQi + ""); //免租天数
                             leaseMyRentAll.setText(list.get(0).getAllAmount() + "");//总金额
                             leaseMyFreeDayAmount.setText(freeDayMoney + "");//免租金额
                             leaseMyDiscountAmount.setText(list.get(0).getDiscountAmount() + "");//折扣金额
+                            leaseMyDeposit.setText(YaJin * Integer.valueOf(leaseMySum.getText().toString().trim()) + ""); //押金
+                            leaseMyDepositPrice.setText(YaJin + ""); //押金单价
                         } else {
 //                            leaseMyDepositPrice.setText("0");
 //                            leaseMyDeposit.setText("0");
+                            YaJin = 0;
                             leaseMyPValue.setText("0");
                             leaseMyRent.setText("0");
                             leaseMyMianzu.setText("0");
                             leaseMyRentAll.setText("0");
                             leaseMyFreeDayAmount.setText("0");
                             leaseMyDiscountAmount.setText("0");
+                            leaseMyDepositPrice.setText("0");
+                            leaseMyDeposit.setText("0");
                         }
 
 //                        leaseMyRent.setText(Integer.valueOf(leaseMySum.getText().toString().trim()) *
@@ -284,7 +294,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
     @SuppressLint("NewApi")
     private void initView() {
-        leaseMyDepositPrice.setText(YaJin + ""); //押金单价
+
 
         leaseMyKezuSum.setText(Quantity + "个/片");
 
@@ -352,7 +362,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                         getYajin(); //押金
 
 
-                        leaseMyDeposit.setText(YaJin * Integer.valueOf(leaseMySum.getText().toString().trim()) + ""); //押金
+
 
                     }
                 }
@@ -502,6 +512,8 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                     intent.putExtra("DiscountAmount", leaseMyDiscountAmount.getText().toString().trim()); //折扣金额
 
                     intent.putExtra("UID", UID); //使用者ID
+                    intent.putExtra("YongJin", YongJin); //佣金
+
 
                     startActivity(intent);
 //                    finish();

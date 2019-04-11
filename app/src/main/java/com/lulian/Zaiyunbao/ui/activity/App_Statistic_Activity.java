@@ -69,7 +69,7 @@ public class App_Statistic_Activity extends BaseActivity {
                 .navigationBarDarkIcon(true, 0.5f)
                 .init();
 
-        textDetailContent.setText("统计");
+        textDetailContent.setText("数据统计");
         textDetailRight.setVisibility(View.GONE);
         getData();
     }

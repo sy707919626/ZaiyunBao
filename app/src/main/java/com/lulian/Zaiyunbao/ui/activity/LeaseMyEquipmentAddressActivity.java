@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -208,7 +209,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
 //                        initView();
 //                    }
 //                });
-        if (UID.isEmpty()||UID == null) {
+        if (UID == "" ||UID == null) {
             mApi.getStorehouseInfo(GlobalParams.sToken, StorehouseId)
                     .compose(RxHttpResponseCompat.<String>compatResult())
                     .subscribe(new Consumer<String>() {
@@ -370,7 +371,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                     intent.putExtra("ZDContactName", OperatorId);//供应商ID
                     intent.putExtra("ZDContactPhone", UID);//使用者ID
 
-                    if (UID.isEmpty() || UID == null) {
+                    if (UID == "" || UID == null) {
                         intent.putExtra("Release", ContactName);//发布人
                         intent.putExtra("ReleasePhone", ContactPhone);//发布电话
                     } else {
@@ -380,6 +381,9 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                     intent.putExtra("TypeId", getIntent().getStringExtra("TypeId"));
                     intent.putExtra("TypeName", getIntent().getStringExtra("TypeName"));
                     intent.putExtra("DiscountAmount", getIntent().getStringExtra("DiscountAmount"));//折扣金额
+
+                    intent.putExtra("YongJin", getIntent().getFloatExtra("YongJin", 0f));
+
                     startActivity(intent);
 //                    finish();
                 }

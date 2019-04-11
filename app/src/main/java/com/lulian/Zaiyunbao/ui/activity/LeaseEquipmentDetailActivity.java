@@ -203,7 +203,13 @@ public class LeaseEquipmentDetailActivity extends BaseActivity {
                 intentMy.putExtra("Id", leaseEquipmentDetailBean.getId());//设备ID
                 intentMy.putExtra("StorehouseId", getIntent().getStringExtra("StorehouseId")); //仓库ID
                 intentMy.putExtra("Deposit", leaseEquipmentDetailBean.getDeposit());//押金
-                intentMy.putExtra("Id", leaseEquipmentDetailBean.getUID());//使用者ID
+
+                if (leaseEquipmentDetailBean.getUID() == null){
+                    intentMy.putExtra("UID",""); //使用者ID
+                }else {
+                    intentMy.putExtra("UID", leaseEquipmentDetailBean.getUID()); //使用者ID
+                }
+//                intentMy.putExtra("UID", leaseEquipmentDetailBean.getUID());//使用者ID
                 startActivity(intentMy);
                 break;
 

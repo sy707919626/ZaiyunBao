@@ -3,10 +3,15 @@ package com.lulian.Zaiyunbao.ui.fragment;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -24,6 +29,7 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.DicItemBean;
 import com.lulian.Zaiyunbao.Bean.EquipmentListForTypeBean;
+import com.lulian.Zaiyunbao.Bean.LeasePriceFromBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -35,6 +41,7 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseFragment;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +50,9 @@ import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -54,6 +63,8 @@ import static com.lulian.Zaiyunbao.ui.base.BaseActivity.isFastClick;
  */
 
 public class ServiceFragment extends BaseFragment {
+
+
     @BindView(R.id.tv_service_address)
     TextView tvServiceAddress;
     @BindView(R.id.text_service_content)
@@ -86,6 +97,22 @@ public class ServiceFragment extends BaseFragment {
     TextView seekRentJiesuanModel;
     @BindView(R.id.seekRent_shebei_sum)
     ClearEditText seekRentShebeiSum;
+    @BindView(R.id.seekRent_lease_count)
+    ClearEditText seekRentLeaseCount;
+    @BindView(R.id.seekRent_lease_layout)
+    LinearLayout seekRentLeaseLayout;
+    @BindView(R.id.seekRent_depositPrice_text)
+    TextView seekRentDepositPriceText;
+    @BindView(R.id.seekRent_depositPrice)
+    ClearEditText seekRentDepositPrice;
+    @BindView(R.id.seekRent_depositPrice_text2)
+    TextView seekRentDepositPriceText2;
+    @BindView(R.id.seekRent_Deposit_text)
+    TextView seekRentDepositText;
+    @BindView(R.id.seekRent_Deposit)
+    TextView seekRentDeposit;
+    @BindView(R.id.seekRent_money_btn)
+    Button seekRentMoneyBtn;
     @BindView(R.id.seekRent_quhuo_model_text)
     TextView seekRentQuhuoModelText;
     @BindView(R.id.seekRent_quhuo_model)
@@ -108,12 +135,13 @@ public class ServiceFragment extends BaseFragment {
     Button seekRentSure;
     @BindView(R.id.service_dialog_bg)
     ImageView serviceDialogBg;
-
+    Unbinder unbinder;
     private int Datasums;//租赁天数
     private int leaseModle;//租赁模式
     private boolean isListNull = false;
     private String EtypeId = "";
     private int mDeposit;
+    private float YongJin;
     private TimePickerView pvTime;
     private List<EquipmentListForTypeBean> EquipmentList = new ArrayList<>();
     //设备名称
@@ -170,7 +198,7 @@ public class ServiceFragment extends BaseFragment {
         tvServiceAddress.setVisibility(View.GONE);
         textServiceContent.setText("发布求租");
 
-//        seekRentMoneyBtn.setEnabled(false);
+        seekRentMoneyBtn.setEnabled(false);
 
         serviceDialogBg.setImageAlpha(0);
         serviceDialogBg.setVisibility(View.GONE);
@@ -210,7 +238,7 @@ public class ServiceFragment extends BaseFragment {
 //                                    seekRentLeaseLayout.setVisibility(View.VISIBLE);
 //                                    seekRentMianzuText.setText("使用期限：");
 //                                }
-//                                showView();
+                                showView();
                             }
                         });
             }
@@ -219,7 +247,7 @@ public class ServiceFragment extends BaseFragment {
         seekRentShebeiName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                showView();
+                showView();
                 handleBlur(serviceDialogBg, mHandler);
 
                 String[] list = ShebeiList.toArray(new String[ShebeiList.size()]);
@@ -256,6 +284,9 @@ public class ServiceFragment extends BaseFragment {
                                     seekRentAddressQuxian.setText("用户自提");
                                     seekRentAddressXiangxi.setText("用户自提");
                                 }
+
+                                seekRentLianxiren.setText(GlobalParams.sUserName);
+                                seekRentLianxiPhone.setText(GlobalParams.sUserPhone);
                             }
                         });
             }
@@ -286,8 +317,8 @@ public class ServiceFragment extends BaseFragment {
 
 //        seekRentMianzuText.setText("免租天数");
 
-        seekRentLianxiPhone.setText(GlobalParams.sUserPhone);
-        seekRentLianxiren.setText(GlobalParams.sUserName);
+//        seekRentLianxiPhone.setText(GlobalParams.sUserPhone);
+//        seekRentLianxiren.setText(GlobalParams.sUserName);
 
 //        seekRentEndTime.addTextChangedListener(new TextWatcher() {
 //            @Override
@@ -306,9 +337,9 @@ public class ServiceFragment extends BaseFragment {
 //                if (!TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
 //                        && !TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
 //                        && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-////                    seekRentMoneyBtn.setEnabled(true);
+//                    seekRentMoneyBtn.setEnabled(true);
 //                } else {
-////                    seekRentMoneyBtn.setEnabled(false);
+//                    seekRentMoneyBtn.setEnabled(false);
 //                }
 //            }
 //        });
@@ -330,35 +361,35 @@ public class ServiceFragment extends BaseFragment {
 //                if (!TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
 //                        && !TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
 //                        && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-////                    seekRentMoneyBtn.setEnabled(true);
+//                    seekRentMoneyBtn.setEnabled(true);
 //                } else {
-////                    seekRentMoneyBtn.setEnabled(false);
+//                    seekRentMoneyBtn.setEnabled(false);
 //                }
 //            }
 //        });
 
-//        seekRentShebeiSum.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-////                showView();
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-////                if (!TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
-////                        && !TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
-////                        && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-////                    seekRentMoneyBtn.setEnabled(true);
-////                } else {
-////                    seekRentMoneyBtn.setEnabled(false);
-////                }
-//            }
-//        });
+        seekRentShebeiSum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                showView();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
+                        && !TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
+                        && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
+                    seekRentMoneyBtn.setEnabled(true);
+                } else {
+                    seekRentMoneyBtn.setEnabled(false);
+                }
+            }
+        });
 
     }
 
@@ -377,16 +408,16 @@ public class ServiceFragment extends BaseFragment {
     }
 
     //初始化费用控件
-//    private void showView() {
-//        seekRentDepositPrice.setText("");
-//        seekRentDeposit.setText("");
+    private void showView() {
+        seekRentDepositPrice.setText("");
+        seekRentDeposit.setText("");
 //        seekRentMyPrice.setText("");
 //        seekRentMyRent.setText("");
 //        seekRentMianzu.setText("0");
-//    }
+    }
 
     @OnClick({R.id.seekRent_quhuo_time, R.id.seekRent_startTime, R.id.seekRent_endTime,
-            R.id.seekRent_Sure, R.id.seekRent_address_quxian})
+            R.id.seekRent_Sure, R.id.seekRent_address_quxian, R.id.seekRent_money_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.seekRent_quhuo_time:
@@ -414,45 +445,45 @@ public class ServiceFragment extends BaseFragment {
                 changeAddress("");
                 break;
 
-//            case R.id.seekRent_money_btn:
-//                //计算费用
-//                if (seekRentStartTime.getText().toString().trim().equals("")) {
-//                    RxToast.warning("请选择起租时间");
-//                } else if (seekRentEndTime.getText().toString().trim().equals("")) {
-//                    RxToast.warning("请选择退租时间");
-//                } else if (seekRentShebeiName.getText().toString().trim().equals("")) {
-//                    RxToast.warning("请选择设备类型");
-//                } else if (seekRentShebeiSum.getText().toString().trim().equals("")) {
-//                    RxToast.warning("请输入求租数量");
-//                } else {
-//                    if (seekRentStartTime.getText().toString().trim().equals(seekRentEndTime.getText().toString().trim())) {
-//                        Datasums = 1;
-//                    } else {
-//                        Datasums = Datasum();
-//                    }
-//
-//                    if (seekRentModleSpinner.getText().toString().trim().equals("分时租赁")) {
-//                        leaseModle = 1;
-//                    } else {
-//                        leaseModle = 2;
-//                    }
-//
-//                    for (int i = 0; i < EquipmentList.size(); i++) {
-//                        if (EquipmentList.get(i).getEquipmentName().equals(seekRentShebeiName.getText().toString().trim())) {
-//                            EtypeId = EquipmentList.get(i).getId();
-//                            mDeposit = EquipmentList.get(i).getDeposit();
-//                        }
-//                    }
-//
-//                    mApi.rentPriceList(GlobalParams.sToken, EtypeId, "", leaseModle,
-//                            Integer.valueOf(seekRentShebeiSum.getText().toString().trim()), Datasums)
-//                            .compose(RxHttpResponseCompat.<String>compatResult())
-//                            .subscribe(new ErrorHandlerSubscriber<String>() {
-//                                @Override
-//                                public void onNext(String s) {
-//                                    List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
-//                                    if (list.size() > 0) {
-//                                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+            case R.id.seekRent_money_btn:
+                //计算费用
+                if (seekRentStartTime.getText().toString().trim().equals("")) {
+                    RxToast.warning("请选择起租时间");
+                } else if (seekRentEndTime.getText().toString().trim().equals("")) {
+                    RxToast.warning("请选择退租时间");
+                } else if (seekRentShebeiName.getText().toString().trim().equals("")) {
+                    RxToast.warning("请选择设备类型");
+                } else if (seekRentShebeiSum.getText().toString().trim().equals("")) {
+                    RxToast.warning("请输入求租数量");
+                } else {
+                    if (seekRentStartTime.getText().toString().trim().equals(seekRentEndTime.getText().toString().trim())) {
+                        Datasums = 1;
+                    } else {
+                        Datasums = Datasum();
+                    }
+
+                    if (seekRentModleSpinner.getText().toString().trim().equals("分时租赁")) {
+                        leaseModle = 1;
+                    } else {
+                        leaseModle = 2;
+                    }
+
+                    for (int i = 0; i < EquipmentList.size(); i++) {
+                        if (EquipmentList.get(i).getEquipmentName().equals(seekRentShebeiName.getText().toString().trim())) {
+                            EtypeId = EquipmentList.get(i).getId();
+
+                        }
+                    }
+
+                    mApi.rentPriceList(GlobalParams.sToken, EtypeId, "", leaseModle,
+                            Integer.valueOf(seekRentShebeiSum.getText().toString().trim()), Datasums)
+                            .compose(RxHttpResponseCompat.<String>compatResult())
+                            .subscribe(new ErrorHandlerSubscriber<String>() {
+                                @Override
+                                public void onNext(String s) {
+                                    List<LeasePriceFromBean> list = JSONObject.parseArray(s, LeasePriceFromBean.class);
+                                    if (list.size() > 0) {
+                                        DecimalFormat decimalFormat = new DecimalFormat("0.00");
 //                                        seekRentMyPrice.setText(list.get(0).getPrice() + "");//单价
 //
 //                                        if (list.get(0).getAllAmount() > 0) { //租金
@@ -469,47 +500,49 @@ public class ServiceFragment extends BaseFragment {
 //                                        } else {
 //                                            seekRentMyRent.setText("0");
 //                                        }
-//
-//                                        seekRentDepositPrice.setEnabled(false);
+
+                                        YongJin = list.get(0).getCommisionValue();
+                                        seekRentDepositPrice.setEnabled(false);
 //                                        seekRentMyPrice.setEnabled(false);
-//
-//                                        seekRentDepositPrice.setText(mDeposit + "");
-//                                        seekRentDeposit.setText(mDeposit * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
+
+                                        mDeposit = list.get(0).getDeposit();
+                                        seekRentDepositPrice.setText(mDeposit + "");
+                                        seekRentDeposit.setText(mDeposit * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
 //                                        seekRentMianzu.setText(list.get(0).getFreeDays() + "");
-//
-//                                    } else {
-//                                        seekRentDepositPrice.setEnabled(true);
+
+                                    } else {
+                                        seekRentDepositPrice.setEnabled(true);
 //                                        seekRentMyPrice.setEnabled(true);
+
+//                                        if (seekRentMyPrice.getText().toString().trim().equals("") ||
+//                                                Float.valueOf(seekRentMyPrice.getText().toString().trim()) <= 0f) {
+//                                            RxToast.warning("请输入租赁单价");
 //
-////                                        if (seekRentMyPrice.getText().toString().trim().equals("") ||
-////                                                Float.valueOf(seekRentMyPrice.getText().toString().trim()) <= 0f) {
-////                                            RxToast.warning("请输入租赁单价");
-////
-////                                            seekRentDeposit.setText("");
-////                                            seekRentMianzu.setText("");
-////                                            seekRentMyRent.setText("");
-////
-////                                        } else
-////                                        if (seekRentDepositPrice.getText().toString().trim().equals("") ||
-////                                                Integer.valueOf(seekRentDepositPrice.getText().toString().trim()) == 0) {
-////                                            RxToast.warning("请输入押金单价");
-////                                        } else {
-////                                            seekRentMyRent.setText(Float.valueOf(seekRentMyPrice.getText().toString().trim())
-////                                                    * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) * Datasums + "");
+//                                            seekRentDeposit.setText("");
+//                                            seekRentMianzu.setText("");
+//                                            seekRentMyRent.setText("");
 //
+//                                        } else
+//                                        if (seekRentDepositPrice.getText().toString().trim().equals("") ||
+//                                                Integer.valueOf(seekRentDepositPrice.getText().toString().trim()) == 0) {
+//                                            RxToast.warning("请输入押金单价");
+//                                        } else {
+//                                            seekRentMyRent.setText(Float.valueOf(seekRentMyPrice.getText().toString().trim())
+//                                                    * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) * Datasums + "");
+
 //                                        seekRentMyPrice.setText("0");
 //                                        seekRentMyRent.setText("0");
-//
-//                                        seekRentDeposit.setText(mDeposit *
-//                                                Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
-//
+//                                        seekRentDeposit.setText("0");
+                                        seekRentDeposit.setText(Float.valueOf(seekRentDepositPrice.getText().toString().trim()) *
+                                                Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
+                                        YongJin = 0f;
 //                                        seekRentMianzu.setText("0");
+                                    }
 //                                    }
-////                                    }
-//                                }
-//                            });
-//                }
-//                break;
+                                }
+                            });
+                }
+                break;
         }
     }
 
@@ -530,8 +563,8 @@ public class ServiceFragment extends BaseFragment {
             RxToast.warning("请选择取货方式");
         } else if (seekRentShebeiSum.getText().toString().trim().equals("")) {
             RxToast.warning("请输入求租数量");
-//        } else if (seekRentMyRent.getText().toString().trim().equals("")) {
-//            RxToast.warning("请先计算费用后，再进行发布求租订单");
+        } else if (seekRentDeposit.getText().toString().trim().equals("")) {
+            RxToast.warning("请先计算费用后，再进行发布求租订单");
         } else if (seekRentLianxiPhone.getText().toString().trim().equals("")) {
             RxToast.warning("请输入联系电话");
         } else if (!ProjectUtil.isMobileNO(seekRentLianxiPhone.getText().toString().trim())) {
@@ -617,10 +650,10 @@ public class ServiceFragment extends BaseFragment {
             obj.put("ReceiveUserId", ""); //供应商ID
 
 //            obj.put("Price", Float.valueOf(seekRentMyPrice.getText().toString().trim())); //单价
-//            obj.put("Deposit", Integer.valueOf(seekRentDeposit.getText().toString().trim())); //押金
+            obj.put("Deposit", Integer.valueOf(seekRentDeposit.getText().toString().trim())); //押金
 //            obj.put("RentAmount", Float.valueOf(seekRentMyRent.getText().toString().trim())); //总金额
 //            obj.put("FreeDates", Integer.valueOf(seekRentMianzu.getText().toString().trim())); //免租期
-
+            obj.put("Commision", YongJin); //佣金
             String lease = obj.toString();
             RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                     lease);
@@ -641,8 +674,8 @@ public class ServiceFragment extends BaseFragment {
                                 seekRentLianxiPhone.setText("");
                                 seekRentLianxiren.setText("");
                                 seekRentRemark.setText("");
-
-//                                seekRentDeposit.setText("");
+                                seekRentDepositPrice.setText("");
+                                seekRentDeposit.setText("");
 //                                seekRentMianzu.setText("");
 //                                seekRentMyRent.setText("");
 //                                seekRentMyPrice.setText("");
@@ -782,4 +815,17 @@ public class ServiceFragment extends BaseFragment {
         return 0;
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

@@ -82,6 +82,7 @@ public class SeekRentOrderAdapter extends RecyclerView.Adapter<SeekRentOrderAdap
             holder.orderState.setBackgroundResource(R.drawable.status_bj);
         }
 
+
         if (mOrderList.getStatus() == 0) {
             state = "待接单";
             holder.orderStateBtn.setVisibility(View.GONE);

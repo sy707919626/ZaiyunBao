@@ -77,9 +77,10 @@ public class RetireConfirmActivity extends BaseActivity {
 
         textDetailContent.setText("退租确定");
         textDetailRight.setText("完成");
+
         Quantity = getIntent().getIntExtra("Quantity", 0);
         Count = getIntent().getIntExtra("Count", 0);
-
+        retireConfirmSeeMap.setVisibility(View.GONE);
         initView();
     }
 
@@ -129,6 +130,8 @@ public class RetireConfirmActivity extends BaseActivity {
         obj.put("Count", Count); //实际退租数量
         obj.put("BackLink", getIntent().getStringExtra("BackLink"));
         obj.put("BackLinkPhone", getIntent().getStringExtra("BackLinkPhone"));
+
+        obj.put("BelongMember", getIntent().getStringExtra("BelongMember"));
         obj.put("CreateUserId", GlobalParams.sUserId);
         obj.put("CanRentCount", Quantity); //可退租数量
 

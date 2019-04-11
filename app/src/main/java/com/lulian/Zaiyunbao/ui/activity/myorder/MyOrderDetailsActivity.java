@@ -140,6 +140,15 @@ public class MyOrderDetailsActivity extends BaseActivity {
     @BindView(R.id.my_order_btn_layout)
     LinearLayout myOrderBtnLayout;
 
+    @BindView(R.id.my_order_zulin_price_layout)
+    RelativeLayout myOrderZulinPriceLayout;
+    @BindView(R.id.my_order_Rent_free_layout)
+    RelativeLayout myOrderRentFreeLayout;
+    @BindView(R.id.my_order_rent_layout)
+    RelativeLayout myOrderRentLayout;
+    @BindView(R.id.my_order_yunfei_layout)
+    RelativeLayout myOrderYunfeiLayout;
+
     private String OrdersId = "";
     private String OrderNo = "";
     private String Id = ""; //设备Id
@@ -159,6 +168,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
 
     private String ReceiveUserId;//租出方id
     private String StoreId;//仓库id
+
     @Override
     protected int setLayoutId() {
         return R.layout.order_my_details;
@@ -351,6 +361,26 @@ public class MyOrderDetailsActivity extends BaseActivity {
         } else {
             leaseStatusText.setBackgroundResource(R.drawable.status_bj);
         }
+
+        if (myOrderDetailsBean.getFormType() == 1) {
+            if (myOrderDetailsBean.getStatus() == 0) {
+                myOrderZulinPriceLayout.setVisibility(View.GONE);
+                myOrderRentFreeLayout.setVisibility(View.GONE);
+                myOrderRentLayout.setVisibility(View.GONE);
+                myOrderYunfeiLayout.setVisibility(View.GONE);
+            } else {
+                myOrderZulinPriceLayout.setVisibility(View.VISIBLE);
+                myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+                myOrderRentLayout.setVisibility(View.VISIBLE);
+                myOrderYunfeiLayout.setVisibility(View.VISIBLE);
+            }
+        } else {
+            myOrderZulinPriceLayout.setVisibility(View.VISIBLE);
+            myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+            myOrderRentLayout.setVisibility(View.VISIBLE);
+            myOrderYunfeiLayout.setVisibility(View.VISIBLE);
+        }
+
 
         //未接单 = 0, 已接单 = 1,订单确认待支付 = 2,
         // 已支付待发货 = 3,已发货 = 5,已收货 = 6,退租中 = 7,已退租 = 8,已结算 = 9,已撤销 = 10
@@ -743,4 +773,10 @@ public class MyOrderDetailsActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

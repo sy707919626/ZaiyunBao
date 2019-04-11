@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.RetireServiceSiteBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.di.component.Constants;
+import com.lulian.Zaiyunbao.ui.activity.UploadDataActivity;
 
 import java.util.ArrayList;
 
@@ -112,7 +113,7 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
                     intent.putExtra("StoreId", mRetireServiceSiteBean.get(getAdapterPosition()).getId()); //仓库ID
                     intent.putExtra("Name", mRetireServiceSiteBean.get(getAdapterPosition()).getName());//仓库名字
                     intent.putExtra("Area", mRetireServiceSiteBean.get(getAdapterPosition()).getArea()); //仓库地址
-
+                    intent.putExtra("BelongMember", mRetireServiceSiteBean.get(getAdapterPosition()).getBelongMember());
                     mContext.startActivity(intent);
                 }
             });

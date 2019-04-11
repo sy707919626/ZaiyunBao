@@ -18,8 +18,6 @@ import java.util.Date;
  * 3.重写isDataLoaded()为View返回是否有数据
  * 4.重写 getData()实现数据加载请求
  * 5.重写 setUpData() 为View设置数据 并且getData中获取数据后 显示调用setUpData()为View设置数据
- * @author：Bux on 2018/1/2 14:05
- * @email: 471025316@qq.com
  */
 
 public abstract class BaseLazyFragment extends BaseFragment {

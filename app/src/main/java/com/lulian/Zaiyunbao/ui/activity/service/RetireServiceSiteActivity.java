@@ -62,7 +62,7 @@ public class RetireServiceSiteActivity extends BaseActivity {
     private RetireServiceSiteAdapter mAdapter;
     private ArrayList<RetireServiceSiteBean.RowsBean> mRetireServiceSiteList = new ArrayList<>();
     private boolean isRefresh; //刷新
-
+    RetireServiceSiteBean retireServiceSiteListBean;
     private int pageSize = 10;
     private int page = 1;
 
@@ -82,7 +82,7 @@ public class RetireServiceSiteActivity extends BaseActivity {
                 .init();
 
 
-        mapDetailContent.setText("服务站点");
+        mapDetailContent.setText("服务网点");
         mapServiceAddress.setText(GlobalParams.district);
         retireRecyclerview.setItemAnimator(new DefaultItemAnimator());
         retireRecyclerview.setLayoutManager(new LinearLayoutManager(this));
@@ -128,8 +128,9 @@ public class RetireServiceSiteActivity extends BaseActivity {
 
             case R.id.map_service_ditu:
                 //地图
-
-                startActivity(new Intent(this, RetireServiceMapActivity.class));
+                Intent intent = new Intent(this, RetireServiceMapActivity.class);
+                intent.putExtra("RetireServiceSiteListBean", retireServiceSiteListBean);
+                startActivity(intent);
                 break;
 
             case R.id.retire_bar_search:
@@ -175,7 +176,7 @@ public class RetireServiceSiteActivity extends BaseActivity {
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        RetireServiceSiteBean retireServiceSiteListBean = MyApplication.get().getAppComponent().getGson().fromJson(s, RetireServiceSiteBean.class);
+                        retireServiceSiteListBean = MyApplication.get().getAppComponent().getGson().fromJson(s, RetireServiceSiteBean.class);
 
                         if (isRefresh) {
                             mRetireServiceSiteList.clear();

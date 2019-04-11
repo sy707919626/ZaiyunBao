@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.IssueListBean;
+import com.lulian.Zaiyunbao.Bean.LeasePriceFromBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
@@ -22,8 +23,10 @@ import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -33,6 +36,8 @@ import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
+
+import static com.alibaba.fastjson.JSON.parseArray;
 
 
 /**
@@ -78,6 +83,7 @@ public class ListingIssueActivity extends BaseActivity {
     @BindView(R.id.listing_issue_btn)
     Button listingIssueBtn;
     private IssueListBean issueListBean;
+    private int YaJin = 0;
 
     public IssueListBean getIssueListBean() {
         return issueListBean;
@@ -107,6 +113,7 @@ public class ListingIssueActivity extends BaseActivity {
         issueListBean = (IssueListBean) getIntent().getSerializableExtra("issueListBean");
         initView();
 
+
         listingIssueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,16 +123,40 @@ public class ListingIssueActivity extends BaseActivity {
                     RxToast.warning("请输入转租数量");
                 } else if (Integer.valueOf(listingIssueCount.getText().toString().trim()) > issueListBean.getQuantity()) {
                     RxToast.warning("转租数量不能超过设备闲置库存数量");
+                } else if (listingIssueYajin.getText().toString().trim().equals("")) {
+                    RxToast.warning("请输入转租数量");
                 } else {
-                    listingIssueYajin.setText(issueListBean.getDeposit() *
-                            Integer.valueOf(listingIssueCount.getText().toString().trim()) + "元");
-
                     uploadData();
                 }
 
             }
         });
     }
+
+    //获取押金
+    private void getYajin() {
+        mApi.rentPriceListPoint(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
+                Integer.valueOf(listingIssueCount.getText().toString().trim()))
+                .compose(RxHttpResponseCompat.<String>compatResult())
+                .subscribe(new ErrorHandlerSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
+                        if (list.size() > 0) {
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
+                            YaJin = list.get(0).getDeposit();
+
+                            listingIssueYajin.setText(YaJin *
+                                    Integer.valueOf(listingIssueCount.getText().toString().trim()) + "元");
+                        } else {
+                            YaJin = 0;
+                            listingIssueYajin.setText("0");
+                        }
+                    }
+                });
+    }
+
 
 //    @Override
 //    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -199,8 +230,7 @@ public class ListingIssueActivity extends BaseActivity {
             @Override
             public void accept(@NonNull CharSequence charSequence) throws Exception {
 
-                listingIssueYajin.setText(issueListBean.getDeposit() *
-                        Integer.valueOf(listingIssueCount.getText().toString().trim()) + "元");
+               getYajin();
 
             }
         });

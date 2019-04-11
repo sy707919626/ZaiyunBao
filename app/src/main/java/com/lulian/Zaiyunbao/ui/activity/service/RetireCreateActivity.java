@@ -267,6 +267,7 @@ public class RetireCreateActivity extends BaseActivity {
                     intent.putExtra("BackLinkPhone", retireCreatePhone.getText().toString().trim());
                     intent.putExtra("TakeAddress", retireCreateSiteAddress.getText().toString().trim());
                     intent.putExtra("ReserveMode", retireCreateMode.getText().toString().trim());
+                    intent.putExtra("BelongMember", getIntent().getStringExtra("BelongMember"));
                     startActivity(intent);
                     finish();
                 }

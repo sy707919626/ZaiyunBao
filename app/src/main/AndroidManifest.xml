@@ -190,7 +190,7 @@
             android:process=":remote"></service>
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="OyG6BR75xmoCPiyg9QUd7BslODC8BPMG"></meta-data>
+            android:value="gXrotWGVRInWw11GTMbderS4tPTGUYpo"></meta-data>
 
 
         <!--极光推送 -->
@@ -320,7 +320,7 @@
         </receiver>
         <!-- Required  . Enable it you can get statistics data with channel -->
         <meta-data android:name="JPUSH_CHANNEL" android:value="developer-default"/>
-        <meta-data android:name="JPUSH_APPKEY" android:value="4077d94799987deb4ce16f48" /> <!--  </>值来自开发者平台取得的AppKey-->
+        <meta-data android:name="JPUSH_APPKEY" android:value="431cf90a74ed24aee3dc18d3" /> <!--  </>值来自开发者平台取得的AppKey-->
 
 
     </application>

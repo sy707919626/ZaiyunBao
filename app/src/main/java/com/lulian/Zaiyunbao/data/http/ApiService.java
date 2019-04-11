@@ -196,7 +196,7 @@ public interface ApiService {
     @POST("/api/AppManage/MyEquipmentOpt")
     Observable<String> MyEquipmentOpt(@Header("Authorization") String authorization, @Query("Ids") String[] ids, @Query("UseStatus") int UseStatus);
 
-    //设备详情
+    //设备详情EquipmentList
     @POST("/api/AppManage/MyEquipmentDetail")
     Observable<String> MyEquipmentDetail(@Header("Authorization") String authorization, @Query("Ecode") String Ecode);
 
@@ -383,7 +383,6 @@ public interface ApiService {
     @POST("/api/AppUser/GetAppVersion")
     Observable<String> GetAppVersion(@Header("authorization") String authorization);
 
-    //版本升级
     @POST("/api/AppMy/EquipmentBackRentOrderDetail")
     Observable<BaseBean<List<RentOrderDetailBean>>> EquipmentBackRentOrderDetail(@Header("authorization") String authorization,
                                                                                  @Query("OrderId") String OrderId);

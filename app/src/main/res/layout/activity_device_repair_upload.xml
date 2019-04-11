@@ -93,7 +93,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"
                         android:gravity="center_vertical"
-                        android:text="报废状况"
+                        android:text="设备状况"
                         android:textColor="@color/text_black"
                         android:textSize="14dp" />
 
@@ -349,7 +349,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text=" 片"
+                            android:text=" 个"
                             android:textSize="@dimen/text_size_four" />
                     </LinearLayout>
                 </RelativeLayout>
@@ -386,7 +386,7 @@
                     android:layout_marginLeft="80dp"
                     android:layout_marginRight="80dp"
                     android:background="@drawable/button_shixin_shape"
-                    android:text="维修上报"
+                    android:text="提交"
                     android:textColor="@color/white"
                     android:textSize="14dp" />
             </LinearLayout>

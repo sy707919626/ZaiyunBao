@@ -114,6 +114,16 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
     Button myOrderSure;
     @BindView(R.id.my_order_btn_layout)
     LinearLayout myOrderBtnLayout;
+    @BindView(R.id.my_order_zulin_price_layout)
+    RelativeLayout myOrderZulinPriceLayout;
+    @BindView(R.id.my_order_Rent_free_layout)
+    RelativeLayout myOrderRentFreeLayout;
+    @BindView(R.id.my_order_rent_layout)
+    RelativeLayout myOrderRentLayout;
+    @BindView(R.id.my_order_yunfei_layout)
+    RelativeLayout myOrderYunfeiLayout;
+
+
     private String OrdersId = "";
     private String OrderNo = "";
     private String Id = ""; //设备ID
@@ -167,6 +177,20 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
             myOrderImgPhoto.setImageBitmap(bitmap);
         } catch (Exception e) {
         }
+
+        if (myOrderDetailsBean.getStatus() == 0) {
+            //未接单
+            myOrderZulinPriceLayout.setVisibility(View.GONE);
+            myOrderRentFreeLayout.setVisibility(View.GONE);
+            myOrderRentLayout.setVisibility(View.GONE);
+            myOrderYunfeiLayout.setVisibility(View.GONE);
+        } else {
+            myOrderZulinPriceLayout.setVisibility(View.VISIBLE);
+            myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+            myOrderRentLayout.setVisibility(View.VISIBLE);
+            myOrderYunfeiLayout.setVisibility(View.VISIBLE);
+        }
+
 
         myOrderShebeiName.setText(myOrderDetailsBean.getEquipmentName());
         myOrderShebeiSpec.setText(myOrderDetailsBean.getNorm());
@@ -248,6 +272,7 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
 
             myOrderSubmissionLayout.setVisibility(View.GONE);
             myOrderBtnLayout.setVisibility(View.GONE);
+            myOrderZulinPriceLayout.setVisibility(View.GONE);
 
 //            leaseInfoLinearLayout.setVisibility(View.GONE);
             leaseStatusText.setText("未接单");
@@ -454,5 +479,11 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
             getData();
         }
     }
-    
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

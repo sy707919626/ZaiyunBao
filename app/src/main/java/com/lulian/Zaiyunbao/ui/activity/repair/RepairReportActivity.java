@@ -155,7 +155,7 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
                 .navigationBarDarkIcon(true, 0.5f)
                 .init();
 
-        textDetailContent.setText("维修上报");
+        textDetailContent.setText("报修报废");
         textDetailRight.setText("查看列表");
 
         dialogBg.setImageAlpha(0);
@@ -180,18 +180,18 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
             @Override
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
-                String[] list = {"磨损", "破裂", "损毁"};
+                String[] list = {"故障", "破损", "报废"};
 
                 BaseDialog(RepairReportActivity.this, dialogBg, list,
                         deviceRepairStatu.getText().toString(), "设备状况", mHandler, new OnItemClickListener() {
                             @Override
                             public void onItemClickListener(int position, List<SaleEntity> data) {
                                 deviceRepairStatu.setText(data.get(position).getTitle());
-                                if (data.get(position).getTitle().equals("磨损")) {
+                                if (data.get(position).getTitle().equals("故障")) {
                                     repair = 1;
-                                } else if (data.get(position).getTitle().equals("破裂")) {
+                                } else if (data.get(position).getTitle().equals("破损")) {
                                     repair = 2;
-                                } else if (data.get(position).getTitle().equals("损毁")) {
+                                } else if (data.get(position).getTitle().equals("报废")) {
                                     repair = 3;
                                 }
                             }

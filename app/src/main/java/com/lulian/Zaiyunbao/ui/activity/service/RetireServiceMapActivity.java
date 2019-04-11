@@ -25,12 +25,18 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.TextOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.model.inner.GeoPoint;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.gyf.barlibrary.ImmersionBar;
+import com.lulian.Zaiyunbao.Bean.RetireServiceSiteBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -58,8 +64,10 @@ public class RetireServiceMapActivity extends BaseActivity {
     @BindView(R.id.map_view)
     MapView mapView;
 
-    private BaiduMap mBaiduMap;
 
+    private BaiduMap mBaiduMap;
+    private RetireServiceSiteBean retireServiceSiteBean;
+    private ArrayList<RetireServiceSiteBean.RowsBean> mRetireServiceSiteList = new ArrayList<>();
     @Override
     protected int setLayoutId() {
         return R.layout.activity_retire_service_map;
@@ -77,19 +85,36 @@ public class RetireServiceMapActivity extends BaseActivity {
 
         mapServiceAddress.setText(GlobalParams.district);
         mapDetailContent.setText("服务站点");
+        mapServiceDitu.setVisibility(View.GONE);
+        retireServiceSiteBean = (RetireServiceSiteBean) getIntent().getSerializableExtra("RetireServiceSiteListBean");
+        mRetireServiceSiteList.addAll(retireServiceSiteBean.getRows());
+
+        initView();
+
+    }
+
+    private void initView() {
         //获取地图控件引用
         mBaiduMap = mapView.getMap();
         //显示卫星图层
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setMyLocationEnabled(true);
-        setMarker(GlobalParams.latitude + 0.1, GlobalParams.longitude + 0.1, "望月");
-        setMarker(GlobalParams.latitude + 0.3, GlobalParams.longitude + 0.21, "岳麓");
-        setMarker(GlobalParams.latitude + 0.23, GlobalParams.longitude + 0.11, "雨花");
-        setMarker(GlobalParams.latitude - 0.2, GlobalParams.longitude - 0.1, "天心");
-        setMarker(GlobalParams.latitude, GlobalParams.longitude, "我的");
-        setUserMapCenter();
 
+        for (int i = 0; i< mRetireServiceSiteList.size(); i++){
+            setMarker(mRetireServiceSiteList.get(i).getYPoint(),
+                    mRetireServiceSiteList.get(i).getXPoint(),
+                    mRetireServiceSiteList.get(i).getName(),
+                    mRetireServiceSiteList.get(i).getArea(),
+                    mRetireServiceSiteList.get(i).getTouch(),
+                    mRetireServiceSiteList.get(i).getManager(),
+                    mRetireServiceSiteList.get(i).getId());
+        }
+
+        setMarker(GlobalParams.latitude, GlobalParams.longitude, "当前位置","","","", "");
+
+        setUserMapCenter();
     }
+
 
 
     /**
@@ -106,20 +131,26 @@ public class RetireServiceMapActivity extends BaseActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         //改变地图状态
         mBaiduMap.setMapStatus(mMapStatusUpdate);
-
         mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                String s = String.valueOf(marker.getExtraInfo().get("deviceSN"));
-                Toast.makeText(RetireServiceMapActivity.this, s + "被点击了！", Toast.LENGTH_SHORT).show();
-                MapDialog(s, "我是地址", "距离我很远很远");
+
+                String name = String.valueOf(marker.getExtraInfo().get("deviceSN"));
+                String address = String.valueOf(marker.getExtraInfo().get("address"));
+                String phone = String.valueOf(marker.getExtraInfo().get("phone"));
+                String userName = String.valueOf(marker.getExtraInfo().get("userName"));
+                double juli = marker.getExtraInfo().getDouble("juli");
+                boolean ismine = marker.getExtraInfo().getBoolean("isMine");
+                String Id = String.valueOf(marker.getExtraInfo().get("userName"));
+                if (!ismine) {
+                    MapDialog(name, address, userName, phone, juli, Id);
+                }
                 return false;
             }
         });
     }
 
-    public void MapDialog(final String siteName, final String address, final String juli) {
-
+    public void MapDialog(final String siteName, final String address, final String userName, final String phone, final double juli, final String id) {
 
         final AlertDialog builder = new AlertDialog.Builder(mContext)
                 .create();
@@ -131,13 +162,15 @@ public class RetireServiceMapActivity extends BaseActivity {
 
         TextView mapSite = builder.findViewById(R.id.tv_map_site);
         TextView mapAddress = builder.findViewById(R.id.tv_map_address);
+        TextView maplxr = builder.findViewById(R.id.tv_map_lxr);
         TextView mapJuli = builder.findViewById(R.id.tv_map_juli);
         Button cancle = builder.findViewById(R.id.btn_cancle);
         Button sure = builder.findViewById(R.id.btn_sure);
 
         mapSite.setText(siteName);
-        mapAddress.setText(address);
-        mapJuli.setText(juli);
+        mapAddress.setText("地址："+ address);
+        maplxr.setText("联系人："+ userName + "   联系电话："+phone);
+        mapJuli.setText("距离我："+ String.format("%.2f", juli/1000) + "  KM");
 
         WindowManager m = getWindowManager();
         Display d = m.getDefaultDisplay(); // 获取屏幕宽、高用
@@ -148,16 +181,28 @@ public class RetireServiceMapActivity extends BaseActivity {
         cancle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RxToast.warning("退租预约");
-                builder.dismiss();
+                Intent intent = new Intent(mContext, RetireCreateActivity.class);
+                intent.putExtra("StoreId",id); //仓库ID
+                intent.putExtra("Name", siteName);//仓库名字
+                intent.putExtra("Area", address); //仓库地址
+
+                for (int i = 0 ; i < retireServiceSiteBean.getRows().size(); i++){
+                    if (retireServiceSiteBean.getRows().get(i).getId().equals(id)){
+                        intent.putExtra("BelongMember", retireServiceSiteBean.getRows().get(i).getBelongMember());
+                    }
+                }
+
+                mContext.startActivity(intent);
             }
         });
 
         sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RxToast.warning("立即租赁");
-                builder.dismiss();
+                Intent intent = new Intent(mContext, RetireServiceLeaseActivity.class);
+                intent.putExtra("StoreId",id); //仓库ID
+                intent.putExtra("Name", siteName);//仓库名字
+                mContext.startActivity(intent);
             }
         });
 
@@ -173,22 +218,60 @@ public class RetireServiceMapActivity extends BaseActivity {
     /**
      * 添加marker
      */
-    private void setMarker(double latitude, double longitude, String name) {
+    private void setMarker(double latitude, double longitude, String name, String address, String phone, String userName, String id) {
+        Marker marker = null;
         //定义Maker坐标点
         LatLng point = new LatLng(latitude, longitude);
         //构建Marker图标
         BitmapDescriptor bitmap = BitmapDescriptorFactory
                 .fromResource(R.drawable.map_bs);
-        //构建MarkerOption，用于在地图上添加Marker
-        OverlayOptions option = new MarkerOptions()
-                .position(point)
-                .icon(bitmap);
-        //在地图上添加Marker，并显示
-        Marker marker = (Marker) (mBaiduMap.addOverlay(option));
 
-        // 设置额外的信息
+        BitmapDescriptor bitmapMin = BitmapDescriptorFactory
+                .fromResource(R.drawable.map_mine);
+
+        double distance = DistanceUtil.getDistance( new LatLng(GlobalParams.latitude, GlobalParams.longitude), point);
         Bundle bundle = new Bundle();
+
+        if (GlobalParams.latitude != latitude && GlobalParams.longitude != longitude){ //站点位置
+            OverlayOptions option = new MarkerOptions()
+                    .position(point)
+                    .icon(bitmap)
+                    .title(name);
+
+            OverlayOptions textOption = new TextOptions()
+                    .fontSize(36)
+                    .fontColor(0xFFFF0000)
+                    .text(name)
+                    .position(point);
+
+            //在地图上添加该文字对象并显示
+            mBaiduMap.addOverlay(textOption);
+
+            //在地图上添加Marker，并显示
+            marker = (Marker) (mBaiduMap.addOverlay(option));
+            // 设置额外的信息
+            bundle.putBoolean("isMine", false);
+
+        } else { //我的位置
+
+            //构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option = new MarkerOptions()
+                    .position(point)
+                    .icon(bitmapMin)
+                    .title(name);
+
+            //在地图上添加Marker，并显示
+            marker = (Marker) (mBaiduMap.addOverlay(option));
+
+            bundle.putBoolean("isMine", true);
+
+        }
+
         bundle.putString("deviceSN", name);
+        bundle.putString("address", address);
+        bundle.putString("phone", phone);
+        bundle.putString("userName", userName);
+        bundle.putDouble("juli", distance);
         marker.setExtraInfo(bundle);
     }
 

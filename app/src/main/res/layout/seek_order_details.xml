@@ -375,6 +375,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:id="@+id/my_order_zulin_price_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
@@ -441,6 +442,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:id="@+id/my_order_Rent_free_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
@@ -474,6 +476,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:id="@+id/my_order_rent_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"
@@ -540,6 +543,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:id="@+id/my_order_yunfei_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="10dp"

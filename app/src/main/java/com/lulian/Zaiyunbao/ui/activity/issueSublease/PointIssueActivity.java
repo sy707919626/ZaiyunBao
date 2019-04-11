@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -101,6 +102,8 @@ public class PointIssueActivity extends BaseActivity {
     private String UserType;
     private String UserName;
     private float ZuJin;
+    private float YaJin;
+    private float YongJin;
     private List<LeasePriceFromBean> list = new ArrayList<>();
 
     @Override
@@ -121,6 +124,7 @@ public class PointIssueActivity extends BaseActivity {
 
         issueDialogBg.setImageAlpha(0);
         issueDialogBg.setVisibility(View.GONE);
+
 
         mHandler = new Handler() {
             @Override
@@ -153,7 +157,8 @@ public class PointIssueActivity extends BaseActivity {
 
                             ZuJin = Float.valueOf(decimalFormat.format(list.get(0).getAllAmount() -
                                     (list.get(0).getFreeDay() * list.get(0).getPrice()) - list.get(0).getDiscountAmount()));
-
+                            YaJin = list.get(0).getDeposit();
+                            YongJin = list.get(0).getCommisionValue();
                             if (ZuJin <= 0) {
                                 ZuJin = 0;
                             }
@@ -162,6 +167,7 @@ public class PointIssueActivity extends BaseActivity {
                     }
                 });
     }
+
 
     private void initView() {
 
@@ -301,7 +307,7 @@ public class PointIssueActivity extends BaseActivity {
                     obj.put("TakeAddress", pointAddressArea.getText().toString() + pointAddressName.getText().toString());  //收货地点
                     obj.put("Price", list.get(0).getPrice());
                     obj.put("RentAmount", ZuJin); //租金
-                    obj.put("Deposit", issueListBean.getDeposit()); //押金
+                    obj.put("Deposit", YaJin); //押金
 
                     obj.put("ReceiveUserType", UserType); //租入方用户类型 1=加盟商 2=客户 3=经纪人
                     obj.put("ContactName", UserName); //租入方名字
@@ -311,7 +317,7 @@ public class PointIssueActivity extends BaseActivity {
                     obj.put("Release", ""); //发布人
                     obj.put("ReleasePhone", ""); //发布人电话
 
-
+                    obj.put("Commision", YongJin); //佣金
                     String lease = obj.toString();
                     final RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                             lease);

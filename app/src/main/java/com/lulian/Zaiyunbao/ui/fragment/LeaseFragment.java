@@ -141,10 +141,10 @@ public class LeaseFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 List<String> userTypeList = new ArrayList<>();
-                userTypeList.add("用户类型");
-                userTypeList.add("用户");
-                userTypeList.add("供应商");
-                userTypeList.add("我的");
+                userTypeList.add("信息类型");
+                userTypeList.add("转租信息");
+                userTypeList.add("出租信息");
+                userTypeList.add("我的发布");
 
                 SelectPopupWindow popup = new SelectPopupWindow(getContext(), userTypeList, zulinUserType.getText().toString());
                 popup.showAsDropDown(titleBar);
@@ -214,7 +214,6 @@ public class LeaseFragment extends BaseLazyFragment {
         mAdapter = new EquipmentListAdapter(getContext(), mEquipmentList, mApi);
         fragmentRecyclerview.setAdapter(mAdapter);
 
-
         mAdapter.setOnItemClickListener(new EquipmentListAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(int position, EquipmentListBean.RowsBean equipmentList) {
@@ -222,7 +221,12 @@ public class LeaseFragment extends BaseLazyFragment {
                 intent.putExtra("ShebeiId", equipmentList.getId());
                 intent.putExtra("OperatorId", equipmentList.getOperator()); //供应商ID
                 intent.putExtra("StorehouseId", equipmentList.getStorehouseId());
-                intent.putExtra("UID", equipmentList.getUID()); //使用者ID
+
+                if (equipmentList.getUID() == null){
+                    intent.putExtra("UID",""); //使用者ID
+                }else {
+                    intent.putExtra("UID", equipmentList.getUID()); //使用者ID
+                }
                 getContext().startActivity(intent);
             }
         });
@@ -253,18 +257,18 @@ public class LeaseFragment extends BaseLazyFragment {
 
         List<JSONObject> list = new ArrayList<JSONObject>();
 
-        if (zulinUserType.getText().toString().trim().equals("用户")) {
+        if (zulinUserType.getText().toString().trim().equals("转租信息")) {
             useTypeId.put("name", "len(UID)");
             useTypeId.put("type", ">");
             useTypeId.put("value", 0);
             list.add(useTypeId);
 
-        } else if (zulinUserType.getText().toString().trim().equals("供应商")) {
+        } else if (zulinUserType.getText().toString().trim().equals("出租信息")) {
             useTypeId.put("name", "len(UID)");
             useTypeId.put("type", "!>");
             useTypeId.put("value", 0);
             list.add(useTypeId);
-        } else if (zulinUserType.getText().toString().trim().equals("我的")) {
+        } else if (zulinUserType.getText().toString().trim().equals("我的发布")) {
             useTypeId.put("name", "UID");
             useTypeId.put("type", "=");
             useTypeId.put("value", GlobalParams.sUserId);

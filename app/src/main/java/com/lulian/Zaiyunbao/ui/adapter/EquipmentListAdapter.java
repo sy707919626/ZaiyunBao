@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -135,7 +136,15 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
                 intentMy.putExtra("OperatorId", mEquipmentList.getOperator()); //加盟商id
                 intentMy.putExtra("Id", mEquipmentList.getId());//设备ID
                 intentMy.putExtra("StorehouseId", mEquipmentList.getStorehouseId());//仓库ID
-                intentMy.putExtra("UID", mEquipmentList.getUID());//使用者Id
+
+                if (mEquipmentList.getUID() == null){
+                    intentMy.putExtra("UID", "");//使用者Id
+//                    Log.e("UIDDDD : ", mEquipmentList.getUID());
+                } else {
+                    intentMy.putExtra("UID", mEquipmentList.getUID());//使用者Id
+                }
+
+
                 intentMy.putExtra("Deposit", mEquipmentList.getDeposit());//押金
                 mContext.startActivity(intentMy);
             }

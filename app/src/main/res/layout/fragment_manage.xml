@@ -121,7 +121,7 @@
                     android:layout_marginTop="10dp"
                     android:drawablePadding="10dp"
                     android:gravity="center"
-                    android:text="服务"
+                    android:text="服务网点"
                     android:textColor="@color/text_black"
                     android:textSize="14dp" />
             </LinearLayout>
@@ -146,7 +146,7 @@
                     android:layout_marginTop="10dp"
                     android:drawablePadding="10dp"
                     android:gravity="center"
-                    android:text="维修上报"
+                    android:text="报修报废"
                     android:textColor="@color/text_black"
                     android:textSize="14dp" />
             </LinearLayout>
@@ -171,7 +171,7 @@
                     android:layout_marginTop="10dp"
                     android:drawablePadding="10dp"
                     android:gravity="center"
-                    android:text="统计"
+                    android:text="数据统计"
                     android:textColor="@color/text_black"
                     android:textSize="14dp" />
             </LinearLayout>

@@ -44,11 +44,11 @@ public class RepairReportAdapter extends RecyclerView.Adapter<RepairReportAdapte
         holder.repairReportOrderNo.setText(mDeteilListBean.get(position).getECode());
 
         if (mDeteilListBean.get(position).getRepairType() == 1) {
-            holder.repairReportType.setText("磨损");
+            holder.repairReportType.setText("故障");
         } else if (mDeteilListBean.get(position).getRepairType() == 2) {
-            holder.repairReportType.setText("破裂");
+            holder.repairReportType.setText("破损");
         } else if (mDeteilListBean.get(position).getRepairType() == 3) {
-            holder.repairReportType.setText("损毁");
+            holder.repairReportType.setText("报废");
         }
     }
 

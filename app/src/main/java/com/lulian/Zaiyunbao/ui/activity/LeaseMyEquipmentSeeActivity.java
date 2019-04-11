@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -109,6 +110,7 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
     TextView leaseContactsText;
     @BindView(R.id.lease_contact_phone_text)
     TextView leaseContactPhoneText;
+    private String UID = "";
 
     private String Id = "";
     private List<EquipmentDetailBean> equipmentDetailBean = new ArrayList<>();
@@ -146,6 +148,8 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                 .init();
 
         Id = getIntent().getStringExtra("Id"); //设备ID
+        UID = getIntent().getStringExtra("UID");
+
         textDetailContent.setText("确认订单");
         textDetailRight.setVisibility(View.GONE);
         getData();
@@ -214,9 +218,7 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
             leaseConsigneeText.setText("提货人：");
             leaseContactsText.setText("取货联系人：");
             leaseContactPhoneText.setText("取货联系电话：");
-
         }
-
     }
 
     @OnClick({R.id.lease_cancel, R.id.lease_Sure})
@@ -236,13 +238,13 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                 obj.put("ETypeId", Id);
                 obj.put("ETypeName", leaseDetailsShebeiName.getText().toString().trim()); //设备名称
 
+
                 //加盟商ID与使用者ID相同  则此订单为转租单
-                if (getIntent().getStringExtra("UID").length() > 0) {
-                    obj.put("UID", getIntent().getStringExtra("UID"));
+                if (UID != "" && UID != null) {
+                    obj.put("UID", UID);
 
-                    if (getIntent().getStringExtra("UID").equals(getIntent().getStringExtra("OperatorId"))) {
+                    if (UID.equals(getIntent().getStringExtra("OperatorId"))) {
                         obj.put("FormType", 2); //1,求租,2租赁,3转租
-
                     } else {
                         obj.put("FormType", 3);
 //                        if (getIntent().getStringExtra("UID").equals(GlobalParams.sUserId)) {
@@ -250,7 +252,6 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
 //                        } else {
 //                            obj.put("FormType", 2); //1,求租,2租赁,3转租
 //                        }
-
                     }
 //                    obj.put("FormType", 3); //1,求租,2租赁,3转租
 
@@ -330,7 +331,7 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                 obj.put("ReceiveWay", Integer.valueOf(getIntent().getStringExtra("deliveryModesCode")));//送货方式
                 obj.put("HandRentWay", Integer.valueOf(getIntent().getStringExtra("MyBalanceModeCode")));//结算方式
 
-
+                obj.put("Commision", getIntent().getFloatExtra("YongJin", 0f)); //佣金
                 String lease = obj.toString();
                 RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                         lease);
