@@ -41,8 +41,6 @@ import okhttp3.RequestBody;
  */
 
 public class BuyFragment extends BaseLazyFragment {
-
-
     @BindView(R.id.image_back_title_bar)
     ImageView imageBackTitleBar;
     @BindView(R.id.text_content)
@@ -67,7 +65,6 @@ public class BuyFragment extends BaseLazyFragment {
 
     @Override
     protected void init() {
-
         ImmersionBar.with(getActivity())
                 .titleBar(R.id.title_buy_toolbar)
                 .navigationBarColor(R.color.toolbarBG)
@@ -77,7 +74,9 @@ public class BuyFragment extends BaseLazyFragment {
         textContent.setText("购买");
         imageBackTitleBar.setVisibility(View.GONE);
 
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -130,7 +129,6 @@ public class BuyFragment extends BaseLazyFragment {
         obj.put("BeforePagingFilters", beforePagingFilters);
 //        obj.put("Filters", filters);
 
-
         String messages = obj.toString();
         RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
                 messages);
@@ -138,6 +136,8 @@ public class BuyFragment extends BaseLazyFragment {
         mApi.EquipmentBuyList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -170,7 +170,9 @@ public class BuyFragment extends BaseLazyFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(BuyEvent event) {
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
     }
 
     @Override

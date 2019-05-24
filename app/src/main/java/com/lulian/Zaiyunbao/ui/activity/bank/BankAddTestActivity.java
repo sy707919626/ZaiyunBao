@@ -2,6 +2,7 @@ package com.lulian.Zaiyunbao.ui.activity.bank;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,7 +102,7 @@ public class BankAddTestActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.bank_add_test_getCode:
                 //获取验证码
-                if (bankAddTestPhone.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(bankAddTestPhone.getText().toString().trim())) {
                     RxToast.warning("请输入手机号码");
                 } else if (ProjectUtil.isMobileNO(bankAddTestPhone.getText().toString().trim())) {
                     updateHintPhoneText.setText(bankAddTestPhone.getText().toString().trim());
@@ -134,7 +136,7 @@ public class BankAddTestActivity extends BaseActivity {
 //                } else if (!MD5Utils.getPwd(bankAddTestCode.getVerification()).equals(Code)) {
 //                    RxToast.error("验证码错误，请重新输入");
 
-                if (bankAddTestCode.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(bankAddTestCode.getText().toString().trim())) {
                     RxToast.warning("请输入验证码");
                 } else if (!MD5Utils.getPwd(bankAddTestCode.getText().toString().trim()).equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");

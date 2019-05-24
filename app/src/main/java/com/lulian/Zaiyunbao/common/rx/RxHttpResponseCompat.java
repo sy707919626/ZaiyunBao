@@ -33,18 +33,24 @@ public class RxHttpResponseCompat {
                         if (state.equals("0")) {
                             final String data = jsonObject.getString("Data");
 
-                            return Observable.create(new ObservableOnSubscribe<T>() {
-                                @Override
-                                public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
-                                    try {
-                                        subscriber.onNext((T) data);
-                                        subscriber.onComplete();
+//                            if (data.equals("[]")) {
+//                                String msg = "暂无数据！";
+//                                return Observable.error(new ApiException(Integer.valueOf(state), msg));
+//
+//                            } else{
+                                return Observable.create(new ObservableOnSubscribe<T>() {
+                                    @Override
+                                    public void subscribe(ObservableEmitter<T> subscriber) throws Exception {
+                                        try {
+                                            subscriber.onNext((T) data);
+                                            subscriber.onComplete();
 
-                                    } catch (Exception e) {
-                                        subscriber.onError(e);
+                                        } catch (Exception e) {
+                                            subscriber.onError(e);
+                                        }
                                     }
-                                }
-                            });
+                                });
+//                        }
 
                         } else {
                             String msg = jsonObject.getString("Message");

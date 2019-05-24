@@ -15,6 +15,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -121,7 +122,6 @@ public class RetireConfirmActivity extends BaseActivity {
 
     private void upadteData() {
         JSONObject obj = new JSONObject();
-        RxToast.warning(Count + "");
 //        obj.put("RentOrderID", getIntent().getStringExtra("OrdersId"));
         obj.put("TargetDeliveryTime", getIntent().getStringExtra("TargetDeliveryTime"));
         obj.put("StoreId", getIntent().getStringExtra("StoreId"));

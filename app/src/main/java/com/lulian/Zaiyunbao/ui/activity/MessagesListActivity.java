@@ -28,6 +28,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 
@@ -103,7 +104,9 @@ public class MessagesListActivity extends BaseActivity implements View.OnClickLi
         //初始化消息列表
         initView();
 
-        messageSmartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getMessageData();
+//        messageSmartRefreshLayout.autoRefresh(); //触发自动刷新
 
         messageSmartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
@@ -151,6 +154,9 @@ public class MessagesListActivity extends BaseActivity implements View.OnClickLi
 
         mApi.messagesList(GlobalParams.sToken, GlobalParams.sUserId, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -294,10 +300,4 @@ public class MessagesListActivity extends BaseActivity implements View.OnClickLi
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

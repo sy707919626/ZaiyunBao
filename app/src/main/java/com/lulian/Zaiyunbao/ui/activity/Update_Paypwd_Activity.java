@@ -3,6 +3,7 @@ package com.lulian.Zaiyunbao.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,8 +31,6 @@ import butterknife.OnClick;
  */
 
 public class Update_Paypwd_Activity extends BaseActivity {
-
-
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
     @BindView(R.id.text_detail_content)
@@ -89,6 +88,7 @@ public class Update_Paypwd_Activity extends BaseActivity {
                 //处理获取手机验证码网络请求
                 mApi.sendVerifySms(GlobalParams.sToken, tempMobile, "3")
                         .compose(RxHttpResponseCompat.<String>compatResult())
+
                         .subscribe(new ErrorHandlerSubscriber<String>() {
                             @Override
                             public void onNext(String s) {
@@ -108,9 +108,9 @@ public class Update_Paypwd_Activity extends BaseActivity {
                 final String Phone = updatePaypwdEditName.getText().toString().trim();
                 String cCode = MD5Utils.getPwd(updatePaypwdEditCode.getText().toString().trim());
 
-                if (Phone.equals("")) {
+                if (TextUtils.isEmpty(Phone)) {
                     RxToast.warning("请输入手机号码");
-                } else if (cCode.equals("")) {
+                } else if (TextUtils.isEmpty(cCode)) {
                     RxToast.warning("请输入验证码");
                 } else if (!cCode.equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");

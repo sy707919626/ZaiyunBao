@@ -88,11 +88,11 @@ public class MyOrderActivity extends BaseActivity {
     @OnClick({R.id.rbtn_zulin, R.id.rbtn_zhuanzu, R.id.rbtn_qiuzu, R.id.rbtn_goumai, R.id.rbtn_tuizu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.rbtn_zulin:
-                //租赁
-                startActivity(new Intent(MyOrderActivity.this, LeaseOrderActivity.class));
-
-                break;
+//            case R.id.rbtn_zulin:
+//                //租赁
+//                startActivity(new Intent(MyOrderActivity.this, LeaseOrderActivity.class));
+//
+//                break;
             case R.id.rbtn_zhuanzu:
                 //转租
                 startActivity(new Intent(MyOrderActivity.this, SubleaseOrderActivity.class));

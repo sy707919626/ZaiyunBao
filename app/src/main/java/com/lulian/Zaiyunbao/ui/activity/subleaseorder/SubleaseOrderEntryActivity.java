@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.PermissionsActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.yzq.zxinglibrary.common.Constant;
 
 import java.util.ArrayList;
@@ -119,15 +121,14 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
         ecodeAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextSum = Integer.valueOf(subleaseEntrySum.getText().toString().trim());
-                if (subleaseEntrySum.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(subleaseEntrySum.getText().toString().trim())) {
                     RxToast.warning("请输入设备数量");
 
-                } else if (TextSum + orderList.size() > Count) {
+                } else if (Integer.valueOf(subleaseEntrySum.getText().toString().trim()) + orderList.size() > Count) {
                     RxToast.warning("录入设备总数不能大于可转租数量");
-                } else {
 
-                    for (int i = 0; i < TextSum; i++) {
+                } else if (mEcodeListBean.size() > 0){
+                    for (int i = 0; i < Integer.valueOf(subleaseEntrySum.getText().toString().trim()); i++) {
                         orderList.add(mEcodeListBean.get(i).getECode());
                     }
 
@@ -139,6 +140,8 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
                     }
 
                     subleaseEntryCount.setText(orderList.size() + "");
+                } else {
+                    RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
                 }
             }
         });
@@ -162,19 +165,15 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
                     }
                     subleaseEntryCount.setText(orderList.size() + "");
                 }
-
-
                 break;
 
             case R.id.sublease_entry_Scan:
-
                 if (orderList.size() > Count) {
                     RxToast.warning("设备录入数量不能大于可转租数量");
                 } else {
                     scanCode();
                     subleaseEntryCount.setText(orderList.size() + "");
                 }
-
                 break;
 
             case R.id.sublease_entry_btn:
@@ -202,8 +201,6 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
                 Intent intents = new Intent(this, SubleaseDeliveryActivity.class);
                 startActivity(intents);
                 break;
-
-
             default:
                 break;
         }
@@ -232,14 +229,31 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
 
     }
 
-
     private void getEquimentCode(int Sum) {
         mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         mEcodeListBean = JSONObject.parseArray(s, ECodeBean.class);
+                        if (mEcodeListBean.size() <= 0 ){
+                            RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                            ecodeAddBtn.setEnabled(false);
+                            subleaseEntrySum.setEnabled(false);
+                        } else {
+                            ecodeAddBtn.setEnabled(true);
+                            subleaseEntrySum.setEnabled(true);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        ecodeAddBtn.setEnabled(false);
+                        subleaseEntrySum.setEnabled(false);
+                        super.onError(t);
                     }
                 });
     }

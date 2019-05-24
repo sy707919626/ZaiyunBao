@@ -24,6 +24,7 @@ import com.lulian.Zaiyunbao.common.widget.InvitationCode;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -108,12 +109,15 @@ public class Register_One_Activity extends BaseActivity {
                 break;
 
             case R.id.register_one_next: //下一步
-                if (registerOneEditName.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(registerOneEditName.getText().toString().trim())) {
                     RxToast.warning("请输入手机号码");
                 } else if (ProjectUtil.isMobileNO(registerOneEditName.getText().toString().trim())) {
                     //验证手机号码是否占用
                     mApi.phoneIsExists(GlobalParams.sToken, registerOneEditName.getText().toString().trim())
                             .compose(RxHttpResponseCompat.<String>compatResult())
+                            .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                            .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                            .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                             .subscribe(new ErrorHandlerSubscriber<String>() {
                                 @Override
                                 public void onNext(String s) {

@@ -26,6 +26,7 @@
                 android:paddingTop="20dp">
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
@@ -38,7 +39,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="10dp"
                         android:gravity="center"
-                        android:text="设备可退租共"
+                        android:text="共"
                         android:textColor="@color/text_info"
                         android:textSize="14dp" />
 

@@ -133,6 +133,15 @@ public class RentBackBean {
         private String Picture;
         private String Structural;
         private int Deposit;
+        private String RentOrderID;
+
+        public String getRentOrderID() {
+            return RentOrderID;
+        }
+
+        public void setRentOrderID(String rentOrderID) {
+            RentOrderID = rentOrderID;
+        }
 
         public String getOrdersId() {
             return OrdersId;

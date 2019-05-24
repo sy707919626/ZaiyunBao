@@ -62,6 +62,43 @@ public class MyOrderDetailsBean implements Serializable {
     private int FormType; //订单类型1求租2租赁3转租
     private float OrderDeposit; //押金
     private float TrafficFee; //运费
+    private int ReceiveUserType; // 1、加盟商  2、用户
+
+    private String Release;
+    private String ReleasePhone;
+    private String ReceiveAddress ;
+
+    public int getReceiveUserType() {
+        return ReceiveUserType;
+    }
+
+    public void setReceiveUserType(int receiveUserType) {
+        ReceiveUserType = receiveUserType;
+    }
+
+    public String getRelease() {
+        return Release;
+    }
+
+    public void setRelease(String release) {
+        Release = release;
+    }
+
+    public String getReleasePhone() {
+        return ReleasePhone;
+    }
+
+    public void setReleasePhone(String releasePhone) {
+        ReleasePhone = releasePhone;
+    }
+
+    public String getReceiveAddress() {
+        return ReceiveAddress;
+    }
+
+    public void setReceiveAddress(String receiveAddress) {
+        ReceiveAddress = receiveAddress;
+    }
 
     public float getTrafficFee() {
         return TrafficFee;

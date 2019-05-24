@@ -238,8 +238,11 @@ public interface ApiService {
     //发货无码设备台账获取
     @POST("/api/AppMy/GetECodeForSend")
     Observable<String> GetECodeForSend(@Header("Authorization") String authorization, @Query("EquipmentId") String EquipmentId,
+                                       @Query("UserId") String UserId, @Query("Quantity") int Quantity, @Query("OrderId") String OrderId);
+    //发货无码设备台账获取
+    @POST("/api/AppMy/GetECodeForSend")
+    Observable<String> GetECodeForSend(@Header("Authorization") String authorization, @Query("EquipmentId") String EquipmentId,
                                        @Query("UserId") String UserId, @Query("Quantity") int Quantity);
-
 
     ////////////////////////////////////////////////////////////////////购买.////////////////////////////////////////
     //可购买设备列表
@@ -394,6 +397,10 @@ public interface ApiService {
     //消息数量
     @POST("/api/AppMy/GetMessagesCount")
     Observable<String> GetMessagesCount(@Header("authorization") String authorization,@Query("UserId") String UserId);
+
+    //日志
+    @POST("/api/AppManage/AddLog")
+    Observable<String> AddLog(@Header("authorization") String authorization,@Query("errorMsg") String errorMsg);
 
 }
 

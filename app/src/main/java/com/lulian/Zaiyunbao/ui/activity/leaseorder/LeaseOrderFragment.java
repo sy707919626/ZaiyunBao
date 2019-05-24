@@ -80,8 +80,9 @@ public class LeaseOrderFragment extends BaseLazyFragment {
             }
         });
 
-
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -142,6 +143,8 @@ public class LeaseOrderFragment extends BaseLazyFragment {
         mApi.myEquipmentRentOrderList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -177,7 +180,9 @@ public class LeaseOrderFragment extends BaseLazyFragment {
         super.onResume();
 
         if (isAutoRefresh) {
-            smartRefreshLayout.autoRefresh();
+//            smartRefreshLayout.autoRefresh();
+            isRefresh = true;
+            getData();
             Constants.setIsAutoRefresh(false);
         }
     }

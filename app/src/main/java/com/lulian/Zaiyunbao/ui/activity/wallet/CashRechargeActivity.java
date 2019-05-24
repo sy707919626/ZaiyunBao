@@ -2,12 +2,14 @@ package com.lulian.Zaiyunbao.ui.activity.wallet;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.TimedText;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -42,6 +44,8 @@ import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+
 import java.io.File;
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -106,13 +110,13 @@ public class CashRechargeActivity extends BaseActivity implements InvokeListener
         switch (view.getId()) {
             case R.id.cash_recharge_btn_commit:
                 //下一步
-                if (cashRechargeBankName.getText().toString().equals("")) {
+                if (TextUtils.isEmpty(cashRechargeBankName.getText().toString())) {
                     RxToast.warning("请填写银行卡开户支行名称");
-                } else if (cashRechargeBankNo.getText().toString().equals("")) {
+                } else if (TextUtils.isEmpty(cashRechargeBankNo.getText().toString())) {
                     RxToast.warning("请填写银行卡号");
                 } else if (!BankCode.checkBankCard(cashRechargeBankNo.getText().toString())) {
                     RxToast.warning("请填写正确的银行卡号");
-                } else if (ImageUrl.equals("")) {
+                } else if (TextUtils.isEmpty(ImageUrl)) {
                     RxToast.warning("请上传打款回执单照片");
                 } else {
                     uploadData();

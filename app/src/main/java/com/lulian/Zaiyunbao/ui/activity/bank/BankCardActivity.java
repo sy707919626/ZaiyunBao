@@ -19,6 +19,7 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,9 @@ public class BankCardActivity extends BaseActivity {
 
         mApi.MyBankBindList(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

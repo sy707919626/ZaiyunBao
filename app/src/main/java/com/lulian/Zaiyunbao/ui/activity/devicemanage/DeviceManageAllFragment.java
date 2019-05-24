@@ -52,7 +52,7 @@ public class DeviceManageAllFragment extends BaseLazyFragment {
     LinearLayout llMycollectionBottomDialog;
     Unbinder unbinder;
 
-    private boolean isRefresh; //刷新
+    private boolean isRefresh = true; //刷新
 
     private int pageSize = 10;
     private int page = 1;
@@ -74,7 +74,8 @@ public class DeviceManageAllFragment extends BaseLazyFragment {
         mAdapter = new DeviceManageAdapter(getContext(), mDeviceManageBean, true);
         OrderRecyclerView.setAdapter(mAdapter);
 
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -129,6 +130,8 @@ public class DeviceManageAllFragment extends BaseLazyFragment {
         mApi.MyEquipmentList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -164,7 +167,10 @@ public class DeviceManageAllFragment extends BaseLazyFragment {
         super.onResume();
 
         if (isAutoRefresh) {
-            smartRefreshLayout.autoRefresh();
+//            smartRefreshLayout.autoRefresh();
+
+            isRefresh = true;
+            getData();
             isAutoRefresh = false;
         }
     }

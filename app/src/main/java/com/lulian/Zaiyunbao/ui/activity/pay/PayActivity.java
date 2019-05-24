@@ -34,6 +34,7 @@ import com.lulian.Zaiyunbao.ui.activity.Update_Paypwd_Activity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.wxapi.WxPayManager;
 import com.lulian.Zaiyunbao.wxapi.WxPrePayInfo;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -268,7 +269,6 @@ public class PayActivity extends BaseActivity implements PayDialog.PayInterface 
                     public void onNext(String s) {
                         performAliPay(s);
                     }
-
                 });
     }
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
@@ -80,8 +81,9 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
             }
         });
 
-
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -116,7 +118,7 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
         FormType.put("type", "=");
         FormType.put("value", "1");
 
-        if (!Status.equals("")) {
+        if (!TextUtils.isEmpty(Status)) {
             JSONObject mStatus = new JSONObject();
             mStatus.put("name", "Status");
             mStatus.put("type", "=");
@@ -144,6 +146,8 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
         mApi.myEquipmentRentOrderList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -179,7 +183,9 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
     public void onResume() {
         super.onResume();
         if (isAutoRefresh) {
-            smartRefreshLayout.autoRefresh();
+            isRefresh = true;
+            getData();
+//            smartRefreshLayout.autoRefresh();
             Constants.setIsAutoRefresh(false);
         }
     }

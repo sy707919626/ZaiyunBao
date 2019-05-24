@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.View;
@@ -34,6 +35,7 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -249,9 +251,9 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
                 break;
 
             case R.id.reserve_retire_submission_btn:
-                if (reserveRetireData.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(reserveRetireData.getText().toString().trim())) {
                     RxToast.warning("请选择退租时间");
-                } else if (reserveRetireMode.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(reserveRetireMode.getText().toString().trim())) {
                     RxToast.warning("请选择退租方式");
                 } else {
                     //我要退租
@@ -285,6 +287,7 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
         obj.put("BackLink", reserveRetireContacts.getText().toString().trim());
         obj.put("BackLinkPhone", reserveRetirePhone.getText().toString().trim());
         obj.put("CreateUserId", GlobalParams.sUserId);
+
 
         if (reserveRetireMode.getText().toString().equals("送货上门")){
             obj.put("TransferWay", 1);

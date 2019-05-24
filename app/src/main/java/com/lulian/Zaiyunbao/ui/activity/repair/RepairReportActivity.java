@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -204,9 +205,9 @@ public class RepairReportActivity extends BaseActivity implements InvokeListener
             @Override
             public void onClick(View v) {
                 //继续添加
-                if (clearDeviceNo.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(clearDeviceNo.getText().toString().trim())) {
                     RxToast.warning("请输入设备编号");
-                } else if (Image1.equals("") || Image2.equals("") || Image3.equals("")) {
+                } else if (TextUtils.isEmpty(Image1) || TextUtils.isEmpty(Image2) || TextUtils.isEmpty(Image3)) {
                     RxToast.warning("请上传设备实景图片");
                 } else {
                     List<String> Images = new ArrayList<>();

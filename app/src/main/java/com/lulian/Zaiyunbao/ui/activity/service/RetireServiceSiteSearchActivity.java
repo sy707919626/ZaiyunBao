@@ -35,6 +35,7 @@ import com.lulian.Zaiyunbao.common.widget.RecyclerItemDecoration;
 import com.lulian.Zaiyunbao.common.widget.SPUtils;
 import com.lulian.Zaiyunbao.ui.adapter.SearchHistoryAdatper;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -151,7 +152,7 @@ public class RetireServiceSiteSearchActivity extends BaseActivity {
             }
         }
 
-        if (!history.equals("")) {
+        if (!TextUtils.isEmpty(history)) {
             historyLists = Arrays.asList(historyList);
             showSearchHistory(historyLists);
         }
@@ -193,7 +194,7 @@ public class RetireServiceSiteSearchActivity extends BaseActivity {
                                             .getWindowToken(),
                                     InputMethodManager.HIDE_NOT_ALWAYS);
                     // TODO 跳转搜索结果页面
-                    if (!etSearch.getText().toString().trim().equals("")) {
+                    if (!TextUtils.isEmpty(etSearch.getText().toString().trim())) {
 
                     } else {
                         Toast.makeText(RetireServiceSiteSearchActivity.this, "请输入搜索内容", Toast.LENGTH_SHORT).show();
@@ -309,6 +310,9 @@ public class RetireServiceSiteSearchActivity extends BaseActivity {
 
         mApi.storeHouseList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

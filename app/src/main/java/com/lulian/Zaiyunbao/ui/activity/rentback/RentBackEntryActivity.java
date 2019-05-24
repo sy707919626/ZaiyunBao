@@ -30,6 +30,7 @@ import com.lulian.Zaiyunbao.ui.activity.PermissionsActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseDeliveryActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseEntryOrderAdapter;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.yzq.zxinglibrary.common.Constant;
 
 import java.util.ArrayList;
@@ -39,14 +40,13 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
+import io.reactivex.Observable;
 
 /**
  * Created by Administrator on 2018/11/15.
  */
 
 public class RentBackEntryActivity extends BaseActivity {
-
-
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
     @BindView(R.id.text_detail_content)
@@ -72,6 +72,7 @@ public class RentBackEntryActivity extends BaseActivity {
     private String EquipmentName;
     private String EquipmentNorm;
     private String OrderId;
+    private String RentOrderID;
     private int Count;
     private int TextSum = 0;
 
@@ -103,6 +104,7 @@ public class RentBackEntryActivity extends BaseActivity {
         EquipmentName = getIntent().getStringExtra("EquipmentName");
         EquipmentNorm = getIntent().getStringExtra("EquipmentNorm");
         OrderId = getIntent().getStringExtra("OrderId");
+        RentOrderID = getIntent().getStringExtra("RentOrderID");
         Count = getIntent().getIntExtra("Count", 0); //可租数量
         EquipmentId = getIntent().getStringExtra("Id");
 
@@ -112,7 +114,7 @@ public class RentBackEntryActivity extends BaseActivity {
         subleaseEntryRecycler.setAdapter(mAdapter);
 
         getEquimentCode(Count);
-//        setupSearchView();
+
 
         subleaseEntrySum.addTextChangedListener(new TextWatcher() {
             @Override
@@ -125,14 +127,15 @@ public class RentBackEntryActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (Count <= mEcodeListBean.size()) {
                     if (!TextUtils.isEmpty(subleaseEntrySum.getText().toString().trim())) {
                         ecodeAddBtn.setEnabled(true);
                     } else {
+                        subleaseEntryCount.setText("0");
                         orderList.clear();
                         mAdapter.notifyDataSetChanged();
                         ecodeAddBtn.setEnabled(false);
+                        RxToast.warning("请输入设备数量");
                     }
                 }
             }
@@ -141,12 +144,15 @@ public class RentBackEntryActivity extends BaseActivity {
         ecodeAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextSum = Integer.valueOf(subleaseEntrySum.getText().toString().trim());
-                if (TextSum + orderList.size() > Count) {
-                    RxToast.warning("录入设备总数不能大于可退租数量");
-                } else {
 
-                    for (int i = 0; i < TextSum; i++) {
+                if (TextUtils.isEmpty(subleaseEntrySum.getText().toString().trim())) {
+                    RxToast.warning("请输入设备数量");
+
+                } else if (Integer.valueOf(subleaseEntrySum.getText().toString().trim()) + orderList.size() > Count) {
+                    RxToast.warning("录入设备总数不能大于可退租数量");
+
+                } else if (mEcodeListBean.size() > 0){
+                    for (int i = 0; i < Integer.valueOf(subleaseEntrySum.getText().toString().trim()); i++) {
                         orderList.add(mEcodeListBean.get(i).getECode());
                     }
 
@@ -158,32 +164,65 @@ public class RentBackEntryActivity extends BaseActivity {
                     }
 
                     subleaseEntryCount.setText(orderList.size() + "");
+
+                } else {
+                    RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
                 }
             }
         });
     }
 
     private void getEquimentCode(int Sum) {
-        mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum)
-                .compose(RxHttpResponseCompat.<String>compatResult())
+        Observable<String> observable;
+
+        if (TextUtils.isEmpty(RentOrderID)){
+            observable =  mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum);
+        } else {
+            observable =  mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum, RentOrderID);
+        }
+
+        observable.compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         mEcodeListBean = JSONObject.parseArray(s, ECodeBean.class);
-                        if (Count > mEcodeListBean.size()) {
-                            RxToast.warning("当前库存设备，不足以退租发货，不能继续进行退租操作！");
-                            subleaseEntryBtn.setEnabled(false);
-                            subleaseEntryRFID.setEnabled(false);
-                            subleaseEntryScan.setEnabled(false);
-                            subleaseEntrySum.setEnabled(false);
-                        } else {
-                            subleaseEntryBtn.setEnabled(true);
-                            subleaseEntryRFID.setEnabled(true);
-                            subleaseEntryScan.setEnabled(true);
+
+                        if (mEcodeListBean.size() > 0 ) {
+                            if (Count > mEcodeListBean.size()) {
+                                RxToast.warning("源订单设备不足，无法按订单退租，请于我的-服务 进行退租操作");
+                                subleaseEntryBtn.setEnabled(false);
+                                subleaseEntryRFID.setEnabled(false);
+                                subleaseEntryScan.setEnabled(false);
+                                subleaseEntrySum.setEnabled(false);
+                            } else {
+                                subleaseEntryBtn.setEnabled(true);
+                                subleaseEntryRFID.setEnabled(true);
+                                subleaseEntryScan.setEnabled(true);
+                                subleaseEntrySum.setEnabled(true);
+                            }
+
+                            ecodeAddBtn.setEnabled(true);
                             subleaseEntrySum.setEnabled(true);
+                        } else {
+                            RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                            ecodeAddBtn.setEnabled(false);
+                            subleaseEntrySum.setEnabled(false);
                         }
+
+                    }
+
+                    @Override
+                    public void onError(Throwable t) {
+                        RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                        ecodeAddBtn.setEnabled(false);
+                        subleaseEntrySum.setEnabled(false);
+                        super.onError(t);
                     }
                 });
+
     }
 
     @OnClick({R.id.sublease_entry_RFID, R.id.sublease_entry_Scan, R.id.sublease_entry_btn, R.id.text_detail_right})
@@ -202,8 +241,6 @@ public class RentBackEntryActivity extends BaseActivity {
                     }
                     subleaseEntryCount.setText(orderList.size() + "");
                 }
-
-
                 break;
 
             case R.id.sublease_entry_Scan:

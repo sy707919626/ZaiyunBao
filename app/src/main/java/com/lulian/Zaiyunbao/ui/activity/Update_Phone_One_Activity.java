@@ -3,6 +3,7 @@ package com.lulian.Zaiyunbao.ui.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -119,7 +120,7 @@ public class Update_Phone_One_Activity extends BaseActivity {
 
             case R.id.update_commit: //下一步
                 String cCode = MD5Utils.getPwd(verificationCodeUpdate.getText().toString().trim());
-                if (cCode.equals("")) {
+                if (TextUtils.isEmpty(cCode)) {
                     RxToast.warning("请输入验证码");
                 } else if (!cCode.equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");
@@ -133,10 +134,4 @@ public class Update_Phone_One_Activity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

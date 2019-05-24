@@ -41,6 +41,15 @@ public class LeasePriceFromBean {
     private int RentWay;
     private int Deposit; //押金
     private float CommisionValue ; //佣金
+    private int DepositAmount; //实际押金单价
+
+    public int getDepositAmount() {
+        return DepositAmount;
+    }
+
+    public void setDepositAmount(int depositAmount) {
+        DepositAmount = depositAmount;
+    }
 
     public float getCommisionValue() {
         return CommisionValue;

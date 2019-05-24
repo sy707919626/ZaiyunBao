@@ -2,6 +2,7 @@ package com.lulian.Zaiyunbao.ui.activity.bank;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,7 +96,7 @@ public class BankDeleteActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.bank_detele_test_getCode:
                 //获取验证码
-                if (bankDeteleTestPhone.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(bankDeteleTestPhone.getText().toString().trim())) {
                     RxToast.warning("请输入手机号码");
                 } else if (ProjectUtil.isMobileNO(bankDeteleTestPhone.getText().toString().trim())) {
 
@@ -128,7 +130,7 @@ public class BankDeleteActivity extends BaseActivity {
 //                    RxToast.warning("请输入验证码");
 //                } else if (!MD5Utils.getPwd(bankDeteleTestCode.getVerification()).equals(Code)) {
 //                    RxToast.error("验证码错误，请重新输入");
-                if (bankDeteleTestCode.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(bankDeteleTestCode.getText().toString().trim())) {
                     RxToast.warning("请输入验证码");
                 } else if (!MD5Utils.getPwd(bankDeteleTestCode.getText().toString().trim()).equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");
@@ -151,10 +153,4 @@ public class BankDeleteActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

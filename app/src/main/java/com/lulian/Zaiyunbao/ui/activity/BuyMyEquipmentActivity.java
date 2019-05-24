@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -186,21 +187,31 @@ public class BuyMyEquipmentActivity extends BaseActivity {
     }
 
     private void initView() {
-
         buyMyPayModleSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
 
-                String[] list = GlobalParams.ZFTypeList.toArray(new String[GlobalParams.ZFTypeList.size()]);
+                if (GlobalParams.ZFTypeList.size() > 0) {
+                    String[] list = GlobalParams.ZFTypeList.toArray(new String[GlobalParams.ZFTypeList.size()]);
 
-                BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
-                        buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
-                            @Override
-                            public void onItemClickListener(int position, List<SaleEntity> data) {
-                                buyMyPayModleSpinner.setText(data.get(position).getTitle());
-                            }
-                        });
+                    BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
+                            buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    buyMyPayModleSpinner.setText(data.get(position).getTitle());
+                                }
+                            });
+                } else {
+                    String[] list ={"全款自提", "全款送货", "预付30%送货，货到结清"};
+                    BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
+                            buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    buyMyPayModleSpinner.setText(data.get(position).getTitle());
+                                }
+                            });
+                }
 
             }
         });
@@ -247,17 +258,17 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                 break;
 
             case R.id.buy_equipment_my_next:
-                if (buyMyPayModleSpinner.getText().toString().trim().equals("")){
+                if (TextUtils.isEmpty(buyMyPayModleSpinner.getText().toString().trim())){
                     RxToast.warning("请选择货款以及交付方式");
-                } else if (myAddressQuxian.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(myAddressQuxian.getText().toString().trim())) {
                     RxToast.warning("请选择收货区县地址");
-                } else if (buyAddressXiangxi.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(buyAddressXiangxi.getText().toString().trim())) {
                     RxToast.warning("请填写收货详细地址");
-                } else if (buyMyLianxiren.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(buyMyLianxiren.getText().toString().trim())) {
                     RxToast.warning("请填写联系人");
-                } else if (buyMyLianxirenPhone.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(buyMyLianxirenPhone.getText().toString().trim())) {
                     RxToast.warning("请填写联系电话");
-                } else if (buyMySum.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(buyMySum.getText().toString().trim())) {
                     RxToast.warning("请输入购买数量");
                 } else {
                     Intent intent = new Intent(BuyMyEquipmentActivity.this, BuyEquipmentConfirmActivity.class);

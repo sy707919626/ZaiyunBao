@@ -101,6 +101,15 @@ public class RetireServiceSiteBean implements Serializable {
         private double XPoint;
         private double YPoint;
         private String Url;
+        private int IsManager; //1.平台 2.加盟商
+
+        public int getIsManager() {
+            return IsManager;
+        }
+
+        public void setIsManager(int isManager) {
+            IsManager = isManager;
+        }
 
         public String getId() {
             return Id;

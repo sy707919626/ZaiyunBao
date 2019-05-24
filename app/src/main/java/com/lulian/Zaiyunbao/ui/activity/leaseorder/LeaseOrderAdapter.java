@@ -23,6 +23,7 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 

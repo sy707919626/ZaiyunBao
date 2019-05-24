@@ -23,6 +23,7 @@ import com.lulian.Zaiyunbao.common.widget.IDCard;
 import com.lulian.Zaiyunbao.common.widget.LoginUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -165,7 +166,7 @@ public class Setting_Password_Activity extends BaseActivity {
                 //处理密码修改逻辑
                 String pwd = settingParsswordNew.getText().toString().trim();
                 String pwdAgain = settingParsswordConfirm.getText().toString().trim();
-                if (pwd.equals("") || pwdAgain.equals("")) {
+                if (TextUtils.isEmpty(pwd) || TextUtils.isEmpty(pwdAgain)) {
                     RxToast.warning("密码不能为空!");
                 } else if (pwd.length() < 8 || pwd.length() > 16) {
                     RxToast.warning("请输入8到16位的密码!");

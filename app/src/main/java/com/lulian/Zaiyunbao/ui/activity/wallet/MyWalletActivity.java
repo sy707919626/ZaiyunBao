@@ -2,6 +2,7 @@ package com.lulian.Zaiyunbao.ui.activity.wallet;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,6 +19,7 @@ import com.lulian.Zaiyunbao.ui.activity.Wallet_Detail_ListActivity;
 import com.lulian.Zaiyunbao.ui.activity.bank.BankCardActivity;
 import com.lulian.Zaiyunbao.ui.activity.bank.CashBankMoneyActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -82,12 +84,25 @@ public class MyWalletActivity extends BaseActivity {
     private void getData() {
         mApi.myMoneyInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         JSONObject jsonObject = JSONObject.parseObject(s);
-                        myBalance.setText(jsonObject.getString("Balance") + "元");
-                        myDeposit.setText(jsonObject.getString("Deposit") + "元");
+
+                        if (TextUtils.isEmpty(jsonObject.getString("Balance"))){
+                            myBalance.setText("0元");
+                        } else {
+                            myBalance.setText(jsonObject.getString("Balance") + "元");
+                        }
+
+                        if (TextUtils.isEmpty(jsonObject.getString("Deposit"))){
+                            myDeposit.setText("0元");
+                        } else {
+                            myDeposit.setText(jsonObject.getString("Deposit") + "元");
+                        }
                     }
                 });
     }

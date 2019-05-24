@@ -3,6 +3,7 @@ package com.lulian.Zaiyunbao.ui.activity.wallet;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.alipay.AliPayManager;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.event.PayEvent;
 import com.lulian.Zaiyunbao.common.exception.BaseException;
 import com.lulian.Zaiyunbao.common.exception.RxErrorHandler;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
@@ -30,6 +32,9 @@ import com.lulian.Zaiyunbao.ui.activity.pay.WalletChargeResultActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.wxapi.WxPayManager;
 import com.lulian.Zaiyunbao.wxapi.WxPrePayInfo;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Date;
 import java.util.Map;
@@ -131,7 +136,7 @@ public class WalletRechargeActivity extends BaseActivity {
         rechargeNextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (rechargeMoneyText.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(rechargeMoneyText.getText().toString().trim())) {
                     RxToast.warning("请输入充值金额");
                 } else {
                     if (payWay == 0) {
@@ -175,6 +180,9 @@ public class WalletRechargeActivity extends BaseActivity {
     private void getData() {
         mApi.myMoneyInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -204,6 +212,9 @@ public class WalletRechargeActivity extends BaseActivity {
 
         mApi.aliPayGetInfo(GlobalParams.sToken, GlobalParams.sUserId, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -238,6 +249,9 @@ public class WalletRechargeActivity extends BaseActivity {
 
         mApi.alipaySuccConfirm(GlobalParams.sToken, tradePayRespJo.getString("out_trade_no"))
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -260,6 +274,7 @@ public class WalletRechargeActivity extends BaseActivity {
     private void jumpToChargeResult(boolean isSuccess, String msg) {
         if (isSuccess) {
             startActivity(new Intent(this, WalletChargeResultActivity.class));
+            EventBus.getDefault().post(new PayEvent());
         } else {
             Intent intent = new Intent(this, WalletChargeFailActivity.class);
             intent.putExtra("payMsg", msg);
@@ -283,6 +298,9 @@ public class WalletRechargeActivity extends BaseActivity {
 
         mApi.wxPrePay(GlobalParams.sToken, GlobalParams.sUserId, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

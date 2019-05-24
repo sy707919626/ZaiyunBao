@@ -27,6 +27,7 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -252,8 +253,11 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
         } else if (myOrderTransferWay.getText().toString().trim().equals("用户自提")) {
             shouhuoDizhiText.setText("提货地址");
             myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
-            myOrderContactPeisong.setText(myOrderDetailsBean.getReceiveName());//接单联系人
-            myOrderLianxiPhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//接单联系电话
+//            myOrderContactPeisong.setText(myOrderDetailsBean.getReceiveName());//接单联系人
+//            myOrderLianxiPhone.setText(myOrderDetailsBean.getAlianceLinkPhone());//接单联系电话
+
+            myOrderContactPeisong.setText(myOrderDetailsBean.getRelease());//接单联系人
+            myOrderLianxiPhone.setText(myOrderDetailsBean.getReleasePhone());//接单联系电话
         }
 
         leaseServiceRecommend.setText(myOrderDetailsBean.getRecommend());//推荐人
@@ -478,12 +482,5 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
         if (isAutoRefresh) {
             getData();
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

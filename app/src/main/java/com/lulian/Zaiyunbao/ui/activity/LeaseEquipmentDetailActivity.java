@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -126,7 +127,6 @@ public class LeaseEquipmentDetailActivity extends BaseActivity {
     private void getData() {
         mApi.equipmentDetails2(GlobalParams.sToken, ShebeiId, OperatorId, UID)
                 .compose(RxHttpResponseCompat.<String>compatResult())
-                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -204,11 +204,11 @@ public class LeaseEquipmentDetailActivity extends BaseActivity {
                 intentMy.putExtra("StorehouseId", getIntent().getStringExtra("StorehouseId")); //仓库ID
                 intentMy.putExtra("Deposit", leaseEquipmentDetailBean.getDeposit());//押金
 
-                if (leaseEquipmentDetailBean.getUID() == null){
-                    intentMy.putExtra("UID",""); //使用者ID
-                }else {
+//                if (TextUtils.isEmpty(leaseEquipmentDetailBean.getUID())){
+//                    intentMy.putExtra("UID",""); //使用者ID
+//                }else {
                     intentMy.putExtra("UID", leaseEquipmentDetailBean.getUID()); //使用者ID
-                }
+//                }
 //                intentMy.putExtra("UID", leaseEquipmentDetailBean.getUID());//使用者ID
                 startActivity(intentMy);
                 break;

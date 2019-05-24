@@ -76,7 +76,6 @@ public class ManageFragment extends BaseLazyFragment {
 
     }
 
-
     @OnClick({R.id.tv_shebeiManage, R.id.tv_myOrder, R.id.tv_release,
             R.id.tv_shebeiTJ, R.id.tv_service, R.id.iv_manage_code, R.id.tv_repair_report})
     public void onViewClicked(View view) {

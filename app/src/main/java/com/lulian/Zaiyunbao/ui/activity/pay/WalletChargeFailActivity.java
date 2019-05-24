@@ -26,6 +26,7 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.wxapi.WxPayManager;
 import com.lulian.Zaiyunbao.wxapi.WxPrePayInfo;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.Date;
 import java.util.Map;
@@ -120,6 +121,9 @@ public class WalletChargeFailActivity extends BaseActivity {
     private void getData() {
         mApi.myMoneyInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -149,6 +153,9 @@ public class WalletChargeFailActivity extends BaseActivity {
 
         mApi.aliPayGetInfo(GlobalParams.sToken, GlobalParams.sUserId, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -183,6 +190,9 @@ public class WalletChargeFailActivity extends BaseActivity {
 
         mApi.alipaySuccConfirm(GlobalParams.sToken, tradePayRespJo.getString("out_trade_no"))
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -224,6 +234,9 @@ public class WalletChargeFailActivity extends BaseActivity {
 
         mApi.wxPrePay(GlobalParams.sToken, GlobalParams.sUserId, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

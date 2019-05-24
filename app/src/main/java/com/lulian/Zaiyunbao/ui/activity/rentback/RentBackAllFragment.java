@@ -61,13 +61,16 @@ public class RentBackAllFragment extends BaseLazyFragment {
             public void onItemClickListener(int position, ArrayList<RentBackBean.RowsBean> orderListBean) {
                 Intent intent = new Intent(getContext(), RentOrderDetailsActivity.class);
                 intent.putExtra("OrdersId", orderListBean.get(position).getOrdersId());
+                intent.putExtra("Id", orderListBean.get(position).getId());
                 intent.putExtra("OrderNo", orderListBean.get(position).getOrderNo());
                 getContext().startActivity(intent);
             }
         });
 
 
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -114,6 +117,8 @@ public class RentBackAllFragment extends BaseLazyFragment {
         mApi.MyEquipmentBackRentOrderList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -146,7 +151,9 @@ public class RentBackAllFragment extends BaseLazyFragment {
     @Override
     public void onResume() {
         super.onResume();
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
     }
 
     @Override

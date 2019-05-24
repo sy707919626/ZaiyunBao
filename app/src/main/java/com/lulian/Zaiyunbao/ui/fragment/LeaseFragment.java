@@ -6,6 +6,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +118,9 @@ public class LeaseFragment extends BaseLazyFragment {
 
         tvAddress.setText(GlobalParams.district);
 
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -222,7 +225,7 @@ public class LeaseFragment extends BaseLazyFragment {
                 intent.putExtra("OperatorId", equipmentList.getOperator()); //供应商ID
                 intent.putExtra("StorehouseId", equipmentList.getStorehouseId());
 
-                if (equipmentList.getUID() == null){
+                if (TextUtils.isEmpty(equipmentList.getUID())){
                     intent.putExtra("UID",""); //使用者ID
                 }else {
                     intent.putExtra("UID", equipmentList.getUID()); //使用者ID
@@ -239,7 +242,6 @@ public class LeaseFragment extends BaseLazyFragment {
 
     }
 
-
     @Override
     public void getData() {
         if (isRefresh) {
@@ -250,7 +252,6 @@ public class LeaseFragment extends BaseLazyFragment {
 
         JSONObject TypeId = new JSONObject();//设备类型Id
         JSONObject useTypeId = new JSONObject(); //用户类型
-
         JSONObject obj = new JSONObject();
         obj.put("Page", page);
         obj.put("Rows", 10);
@@ -300,6 +301,8 @@ public class LeaseFragment extends BaseLazyFragment {
         mApi.equipmentList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -400,7 +403,9 @@ public class LeaseFragment extends BaseLazyFragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(LeaseEvent event) {
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
     }
 
 

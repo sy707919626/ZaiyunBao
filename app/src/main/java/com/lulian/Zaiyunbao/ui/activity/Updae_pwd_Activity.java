@@ -130,7 +130,7 @@ public class Updae_pwd_Activity extends BaseActivity {
 
                 forgetpwdHintPhoneText.setText(tempMobile);
 
-                if (tempMobile.equals("")) {
+                if (TextUtils.isEmpty(tempMobile)) {
                     RxToast.warning("请输入手机号码");
 
                 } else if (ProjectUtil.isMobileNO(tempMobile)) {
@@ -165,13 +165,13 @@ public class Updae_pwd_Activity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.forgetpwd_btn_submit:
-                if (forgetpwdEditName.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(forgetpwdEditName.getText().toString().trim())) {
                     RxToast.warning("请输入手机号");
 //                } else if (forgetpwdEditCode.getVerification().trim().equals("")) {
 //                    RxToast.warning("请输入验证码");
 //                } else if (MD5Utils.getPwd(forgetpwdEditCode.getVerification().trim()).equals(Code)) {
 
-                } else if (forgetpwdEditCode.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(forgetpwdEditCode.getText().toString().trim())) {
                     RxToast.warning("请输入验证码");
                 } else if (MD5Utils.getPwd(forgetpwdEditCode.getText().toString().trim()).equals(Code)) {
                     Intent intent = new Intent(Updae_pwd_Activity.this, Setting_Password_Activity.class);
@@ -186,10 +186,4 @@ public class Updae_pwd_Activity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

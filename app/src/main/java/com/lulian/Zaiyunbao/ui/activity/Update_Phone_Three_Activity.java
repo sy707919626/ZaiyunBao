@@ -24,6 +24,7 @@ import com.lulian.Zaiyunbao.common.widget.MyCountDownTimer;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -112,7 +113,7 @@ public class Update_Phone_Three_Activity extends BaseActivity {
             public void onClick(View view) {
                 String tempMobile = updatePhoneThreeEditName.getText().toString().trim();
 
-                if (tempMobile.equals("")) {
+                if (TextUtils.isEmpty(tempMobile)) {
                     RxToast.warning("请输入手机号码");
 
                 } else if (ProjectUtil.isMobileNO(tempMobile)) {
@@ -145,9 +146,9 @@ public class Update_Phone_Three_Activity extends BaseActivity {
                 final String Phone = updatePhoneThreeEditName.getText().toString().trim();
                 String cCode = MD5Utils.getPwd(updatePhoneThreeEditCode.getText().toString().trim());
 
-                if (Phone.equals("")) {
+                if (TextUtils.isEmpty(Phone)) {
                     RxToast.warning("请输入手机号码");
-                } else if (cCode.equals("")) {
+                } else if (TextUtils.isEmpty(cCode)) {
                     RxToast.warning("请输入验证码");
                 } else if (!cCode.equals(Code)) {
                     RxToast.error("验证码错误，请重新输入");
@@ -170,10 +171,4 @@ public class Update_Phone_Three_Activity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

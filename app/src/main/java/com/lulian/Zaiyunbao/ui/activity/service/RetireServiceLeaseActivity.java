@@ -24,6 +24,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 
@@ -98,8 +99,9 @@ public class RetireServiceLeaseActivity extends BaseActivity {
             }
         });
 
-
-        retireServiceLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        retireServiceLayout.autoRefresh(); //触发自动刷新
         retireServiceLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -141,6 +143,9 @@ public class RetireServiceLeaseActivity extends BaseActivity {
 
         mApi.equipmentList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

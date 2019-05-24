@@ -38,7 +38,25 @@ public class RentOrderDetailBean implements Serializable {
     private int TransferWay;
     private String ReceiveAddress;
     private float Price;
+    private String RentOrderID;
 
+    public String getReceiverPhone() {
+        return ReceiverPhone;
+    }
+
+    public void setReceiverPhone(String receiverPhone) {
+        ReceiverPhone = receiverPhone;
+    }
+
+    private String ReceiverPhone;
+
+    public String getRentOrderID() {
+        return RentOrderID;
+    }
+
+    public void setRentOrderID(String rentOrderID) {
+        RentOrderID = rentOrderID;
+    }
 
     public String getReceiverName() {
         return ReceiverName;

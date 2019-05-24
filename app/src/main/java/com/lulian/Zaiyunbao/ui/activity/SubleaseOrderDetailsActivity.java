@@ -27,6 +27,7 @@ import com.lulian.Zaiyunbao.ui.activity.leaseorder.ReceiveLeaseInfoActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderEntryActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,6 +164,9 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
         //根据仓库Id获取仓库与所属加盟商信息
         mApi.GetPersonalInfo(GlobalParams.sToken, ReceiveUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
@@ -183,6 +187,9 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
     private void getData() {
         mApi.myEquipmentRentOrderDetail(GlobalParams.sToken, OrdersId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -224,8 +231,15 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
             subleaseOrderNameText.setText("收货人");
             subleaseOrderPhoneText.setText("收货人联系电话");
 
-            subleaseSHOrderName.setText(ZZContactName);
-            subleaseSHOrderPhone.setText(ZZContactPhone);
+            //1、加盟商  2、用户
+            if (myOrderDetailsBean.getReceiveUserType()==2){
+                subleaseSHOrderName.setText(GlobalParams.sUserName);
+                subleaseSHOrderPhone.setText(GlobalParams.sUserPhone);
+            } else {
+                subleaseSHOrderName.setText(ZZContactName);
+                subleaseSHOrderPhone.setText(ZZContactPhone);
+            }
+
             subleaseOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//收货地址
             subleaseOrderName.setText(myOrderDetailsBean.getContactName());//联系人
             subleaseOrderPhone.setText(myOrderDetailsBean.getContactPhone()); //收货人联系电话
@@ -385,6 +399,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
                         //撤销订单
                         mApi.CancelOrder(GlobalParams.sToken, 1, OrdersId)
                                 .compose(RxHttpResponseCompat.<String>compatResult())
+
                                 .subscribe(new ErrorHandlerSubscriber<String>() {
                                     @Override
                                     public void onNext(String s) {
@@ -438,6 +453,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
                         //确认接单
                         mApi.updateOrderStatus(GlobalParams.sToken, 1, OrdersId, 2)
                                 .compose(RxHttpResponseCompat.<String>compatResult())
+
                                 .subscribe(new ErrorHandlerSubscriber<String>() {
                                     @Override
                                     public void onNext(String s) {
@@ -523,10 +539,4 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

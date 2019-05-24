@@ -24,6 +24,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 
@@ -83,8 +84,9 @@ public class ReceiveLeaseInfoActivity extends BaseActivity {
 
         AdapterPage = getIntent().getStringExtra("AdapterPage");
 
-
-        smartLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartLayout.autoRefresh(); //触发自动刷新
         smartLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -151,6 +153,9 @@ public class ReceiveLeaseInfoActivity extends BaseActivity {
 
         mApi.myEquipmentRentOrderItem(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

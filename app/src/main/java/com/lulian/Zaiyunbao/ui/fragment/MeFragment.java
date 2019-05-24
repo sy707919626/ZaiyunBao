@@ -3,8 +3,10 @@ package com.lulian.Zaiyunbao.ui.fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +34,7 @@ import com.lulian.Zaiyunbao.ui.activity.MyDataActivity;
 import com.lulian.Zaiyunbao.ui.activity.SettingActivity;
 import com.lulian.Zaiyunbao.ui.activity.wallet.MyWalletActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseFragment;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -106,6 +109,9 @@ public class MeFragment extends BaseFragment {
     private void getMessageNumber() {
         mApi.GetMessagesCount(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -166,13 +172,23 @@ public class MeFragment extends BaseFragment {
         mApi.myMoneyInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
                         JSONObject jsonObject = JSONObject.parseObject(s);
-                        meTxtYuer.setText(jsonObject.getString("Balance") + "元");
-                        meTxtYajin.setText(jsonObject.getString("Deposit") + "元");
+                        if (TextUtils.isEmpty(jsonObject.getString("Balance"))){
+                            meTxtYuer.setText("0元");
+                        } else {
+                            meTxtYuer.setText(jsonObject.getString("Balance") + "元");
+                        }
 
+                        if (TextUtils.isEmpty(jsonObject.getString("Deposit"))){
+                            meTxtYajin.setText("0元");
+                        } else {
+                            meTxtYajin.setText(jsonObject.getString("Deposit") + "元");
+                        }
                     }
                 });
     }

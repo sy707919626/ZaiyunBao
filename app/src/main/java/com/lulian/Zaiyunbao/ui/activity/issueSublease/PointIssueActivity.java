@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,7 @@ import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -103,6 +105,7 @@ public class PointIssueActivity extends BaseActivity {
     private String UserName;
     private float ZuJin;
     private float YaJin;
+    private float JiaGe;
     private float YongJin;
     private List<LeasePriceFromBean> list = new ArrayList<>();
 
@@ -146,26 +149,55 @@ public class PointIssueActivity extends BaseActivity {
 
     //获取押金
     private void getYajin() {
-        mApi.rentPriceListPoint(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
-                issueListBean.getQuantity())
+//        mApi.rentPriceListPoint(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
+//                issueListBean.getQuantity())
+//                .compose(RxHttpResponseCompat.<String>compatResult())
+//                .subscribe(new ErrorHandlerSubscriber<String>() {
+//                    @Override
+//                    public void onNext(String s) {
+//                        list = parseArray(s, LeasePriceFromBean.class);
+//                        if (list.size() > 0) {
+//
+//                            ZuJin = Float.valueOf(decimalFormat.format(list.get(0).getAllAmount() -
+//                                    (list.get(0).getFreeDay() * list.get(0).getPrice()) - list.get(0).getDiscountAmount()));
+//                            YaJin = list.get(0).getDeposit();
+//                            YongJin = list.get(0).getCommisionValue();
+//                            if (ZuJin <= 0) {
+//                                ZuJin = 0;
+//                            }
+//                        }
+//                    }
+//                });
+
+
+        mApi.rentPriceList(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
+                issueListBean.getQuantity(), 0)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        list = parseArray(s, LeasePriceFromBean.class);
+                        List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
                         if (list.size() > 0) {
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
+                            ZuJin = list.get(0).getAllAmount() - freeDayMoney - list.get(0).getDiscountAmount();
 
-                            ZuJin = Float.valueOf(decimalFormat.format(list.get(0).getAllAmount() -
-                                    (list.get(0).getFreeDay() * list.get(0).getPrice()) - list.get(0).getDiscountAmount()));
-                            YaJin = list.get(0).getDeposit();
-                            YongJin = list.get(0).getCommisionValue();
-                            if (ZuJin <= 0) {
+                            if (ZuJin <= 0f) {
                                 ZuJin = 0;
                             }
+                            YongJin = list.get(0).getCommisionValue();
+                            YaJin = list.get(0).getDepositAmount();
+                            JiaGe = list.get(0).getPrice();
 
+                        } else {
+                            YaJin = 0;
                         }
                     }
                 });
+
     }
 
 
@@ -259,15 +291,15 @@ public class PointIssueActivity extends BaseActivity {
         pointIssueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (pointIssuePhone.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(pointIssuePhone.getText().toString().trim())) {
                     RxToast.warning("请输入手机号码");
-                } else if (pointSum.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(pointSum.getText().toString().trim())) {
                     RxToast.warning("请输入转租数量");
                 } else if (Integer.valueOf(pointSum.getText().toString().trim()) > issueListBean.getQuantity()) {
                     RxToast.warning("转租数量不能大于可转租数量");
-                } else if (pointZLmodle.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(pointZLmodle.getText().toString().trim())) {
                     RxToast.warning("请选择租赁模式");
-                } else if (pointSHMode.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(pointSHMode.getText().toString().trim())) {
                     RxToast.warning("请选择送货方式");
                 } else {
 
@@ -305,7 +337,7 @@ public class PointIssueActivity extends BaseActivity {
                     }
 
                     obj.put("TakeAddress", pointAddressArea.getText().toString() + pointAddressName.getText().toString());  //收货地点
-                    obj.put("Price", list.get(0).getPrice());
+                    obj.put("Price", JiaGe);
                     obj.put("RentAmount", ZuJin); //租金
                     obj.put("Deposit", YaJin); //押金
 
@@ -327,6 +359,7 @@ public class PointIssueActivity extends BaseActivity {
                                 issueListBean.getQuantity(), Integer.valueOf(pointSum.getText().toString().trim()),
                                 pointAddressArea.getText().toString() + pointAddressName.getText().toString())
                                 .compose(RxHttpResponseCompat.<String>compatResult())
+
                                 .subscribe(new ErrorHandlerSubscriber<String>() {
                                     @Override
                                     public void onNext(String s) {
@@ -356,6 +389,9 @@ public class PointIssueActivity extends BaseActivity {
     private void isPhone(final String Phone) {
         mApi.phoneIsExists(GlobalParams.sToken, Phone)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

@@ -20,6 +20,7 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.di.component.DaggerAppComponent;
 import com.lulian.Zaiyunbao.di.module.AppModule;
 import com.lulian.Zaiyunbao.di.module.HttpModule;
+import com.lulian.Zaiyunbao.ui.activity.CrashHandler;
 import com.lulian.Zaiyunbao.ui.base.BaiduMapBase;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
@@ -33,10 +34,7 @@ import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class MyApplication extends Application {
-
-
     private static MyApplication mMyApplication;
-
     //static 代码段可以防止内存泄露
     static {
         //设置全局的Header构建器
@@ -79,12 +77,15 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mMyApplication = this;
+
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .httpModule(new HttpModule()).build();
 
         initActivityLifecycle();
         registerWxAppId();
+
+        CrashHandler.getInstance().init(this, this);
 
         //****************************************百度地图***********************************
         SDKInitializer.initialize(this);

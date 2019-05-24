@@ -23,6 +23,7 @@ import com.lulian.Zaiyunbao.ui.base.BaseLazyFragment;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
@@ -123,7 +124,9 @@ public class DeviceManageXZFragment extends BaseLazyFragment {
         });
 
 
-        smartRefreshLayout.autoRefresh(); //触发自动刷新
+        isRefresh = true;
+        getData();
+//        smartRefreshLayout.autoRefresh(); //触发自动刷新
         smartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -195,6 +198,8 @@ public class DeviceManageXZFragment extends BaseLazyFragment {
         mApi.MyEquipmentList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -317,6 +322,9 @@ public class DeviceManageXZFragment extends BaseLazyFragment {
         String[] arr = Ids.toArray(new String[Ids.size()]);
         mApi.MyEquipmentOpt(GlobalParams.sToken, arr, 3)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -371,7 +379,9 @@ public class DeviceManageXZFragment extends BaseLazyFragment {
     public void onResume() {
         super.onResume();
         if (isAutoRefresh) {
-            smartRefreshLayout.autoRefresh();
+//            smartRefreshLayout.autoRefresh();
+            isRefresh = true;
+            getData();
             isAutoRefresh = false;
         }
     }

@@ -68,7 +68,6 @@ public class BuyDetailActivity extends BaseActivity {
 
     @Override
     protected void init() {
-
         ImmersionBar.with(this)
                 .titleBar(R.id.detail_bar_title)
                 .titleBarMarginTop(R.id.detail_bar_title)

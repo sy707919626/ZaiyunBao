@@ -24,6 +24,8 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshLoadmoreListener;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 
@@ -57,7 +59,7 @@ public class BuyOrderInfoActivity extends BaseActivity {
     private ArrayList<BuyOrderInfoBean.RowsBean> mBuyOrderInfoList = new ArrayList<>();
     private int pageSize = 10;
     private int page = 1;
-    private boolean isRefresh; //刷新
+    private boolean isRefresh = true; //刷新
     private String OrdersId = "";
 
     @Override
@@ -79,7 +81,8 @@ public class BuyOrderInfoActivity extends BaseActivity {
         textDetailRight.setVisibility(View.GONE);
         OrdersId = getIntent().getStringExtra("OrdersId");
 
-        smartLayout.autoRefresh(); //触发自动刷新
+        getData();
+//        smartLayout.autoRefresh(); //触发自动刷新
         smartLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
@@ -116,9 +119,7 @@ public class BuyOrderInfoActivity extends BaseActivity {
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-
                         Constants.setIsAutoRefresh(true);
-
                         RxToast.success("订单收货成功");
                         finish();
                     }
@@ -126,7 +127,6 @@ public class BuyOrderInfoActivity extends BaseActivity {
     }
 
     public void getData() {
-
         if (isRefresh) {
             page = 1;
         } else {
@@ -145,6 +145,9 @@ public class BuyOrderInfoActivity extends BaseActivity {
 
         mApi.MyEquipmentBuyOrderItem(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

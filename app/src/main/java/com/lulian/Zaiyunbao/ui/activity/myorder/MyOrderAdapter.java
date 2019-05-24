@@ -31,6 +31,7 @@ import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.leaseorder.ReceiveLeaseInfoActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderEntryActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 
@@ -444,10 +445,10 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
                     if (status == 1) {
                         if (mOrderListBean.get(getAdapterPosition()).getFormType() == 3) { //转租
                             //已接单待确认（转租单）
-                            if (mOrderListBean.get(getAdapterPosition()).getIsRendIn() == 1) {
+                            if (mOrderListBean.get(getAdapterPosition()).getIsRendIn() == 0) {
                                 showDialog("确认是否接单", status, EquipmentViewHolder.this, getAdapterPosition());
-                            } else {
-                                showDialog("确认是否撤回订单", status, EquipmentViewHolder.this, getAdapterPosition());
+//                            } else {
+//                                showDialog("确认是否撤回订单", status, EquipmentViewHolder.this, getAdapterPosition());
                             }
                         }
 

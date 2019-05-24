@@ -36,6 +36,7 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.DownloadRunnable;
 import com.lulian.Zaiyunbao.ui.LevelDialog;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 
@@ -278,6 +279,9 @@ public class SettingActivity extends BaseActivity {
     private void checkUpdate() {
         mApi.GetAppVersion(GlobalParams.sToken)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

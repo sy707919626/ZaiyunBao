@@ -238,6 +238,7 @@ public class DatePickerView extends View {
         return f < 0 ? 0 : f;
     }
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked()) {
@@ -287,9 +288,9 @@ public class DatePickerView extends View {
         if (mTask != null) {
             mTask.cancel();
             mTask = null;
-        }
+}
         mLastDownY = event.getY();
-    }
+                }
 
     private void doUp() {
         // 抬起手后mCurrentSelected的位置由当前位置move到中间选中位置

@@ -154,7 +154,6 @@ public class LeaseDetailActivity extends BaseActivity {
     private void getData() {
         mApi.equipmentDetails1(GlobalParams.sToken, ShebeiId, OperatorId, UID)
                 .compose(RxHttpResponseCompat.<String>compatResult())
-                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -200,7 +199,7 @@ public class LeaseDetailActivity extends BaseActivity {
                 intentMy.putExtra("Id", equipmentDetailBean.get(0).getId());//设备ID
                 intentMy.putExtra("StorehouseId", getIntent().getStringExtra("StorehouseId")); //仓库ID
                 intentMy.putExtra("Deposit", equipmentDetailBean.get(0).getDeposit());//押金
-                intentMy.putExtra("UID", equipmentDetailBean.get(0).getUID());//使用者ID
+                intentMy.putExtra("UID", UID);//使用者ID
 
                 startActivity(intentMy);
                 break;

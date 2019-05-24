@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -137,12 +138,11 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
                 intentMy.putExtra("Id", mEquipmentList.getId());//设备ID
                 intentMy.putExtra("StorehouseId", mEquipmentList.getStorehouseId());//仓库ID
 
-                if (mEquipmentList.getUID() == null){
-                    intentMy.putExtra("UID", "");//使用者Id
-//                    Log.e("UIDDDD : ", mEquipmentList.getUID());
-                } else {
+//                if (TextUtils.isEmpty(mEquipmentList.getUID())){
+//                    intentMy.putExtra("UID", "");//使用者Id
+//                } else {
                     intentMy.putExtra("UID", mEquipmentList.getUID());//使用者Id
-                }
+//                }
 
 
                 intentMy.putExtra("Deposit", mEquipmentList.getDeposit());//押金

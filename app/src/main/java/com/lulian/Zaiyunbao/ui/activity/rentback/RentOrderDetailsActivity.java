@@ -1,5 +1,6 @@
 package com.lulian.Zaiyunbao.ui.activity.rentback;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -17,9 +18,12 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.RentOrderDetailBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompatTest;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +38,6 @@ import static com.lulian.Zaiyunbao.di.component.Constants.isAutoRefresh;
  */
 
 public class RentOrderDetailsActivity extends BaseActivity {
-
 
     @BindView(R.id.image_back_detail_bar)
     ImageView imageBackDetailBar;
@@ -86,8 +89,11 @@ public class RentOrderDetailsActivity extends BaseActivity {
     Button myOrderSubmissionBtn;
     @BindView(R.id.my_order_submission_layout)
     LinearLayout myOrderSubmissionLayout;
+    @BindView(R.id.my_order_cancel)
+    Button mMyOrderCancel;
     private String OrdersId = "";
     private String OrderNo = "";
+    private String Id = "";
     private List<RentOrderDetailBean> mOrderDetailsList = new ArrayList<>();
     private RentOrderDetailBean mRentOrderDetailBean;
 
@@ -110,7 +116,7 @@ public class RentOrderDetailsActivity extends BaseActivity {
         textDetailRight.setVisibility(View.GONE);
         OrdersId = getIntent().getStringExtra("OrdersId");
         OrderNo = getIntent().getStringExtra("OrderNo");
-
+        Id = getIntent().getStringExtra("Id");
         getData();
     }
 
@@ -138,7 +144,7 @@ public class RentOrderDetailsActivity extends BaseActivity {
         } catch (Exception e) {
         }
 
-        if (mRentOrderDetailBean.getTransferWay() == 1){
+        if (mRentOrderDetailBean.getTransferWay() == 1) {
             myOrderTransferWay.setText("送货上门");
         } else {
             myOrderTransferWay.setText("物流运输");
@@ -151,13 +157,13 @@ public class RentOrderDetailsActivity extends BaseActivity {
 
         myOrderTakeTime.setText(mRentOrderDetailBean.getRentTime());//退租时间
 
-        myOrderContacts.setText(GlobalParams.sUserName);
-        myOrderPhone.setText(GlobalParams.sUserPhone);
+        myOrderContacts.setText(mRentOrderDetailBean.getBackLink()); //退租方
+        myOrderPhone.setText(mRentOrderDetailBean.getBackLinkPhone());
 
-        myOrderConsignee.setText(mRentOrderDetailBean.getBackLink());
+        myOrderConsignee.setText(mRentOrderDetailBean.getReceiverName());
 
         myOrderAddress.setText(mRentOrderDetailBean.getReceiveAddress());
-        myOrderLianxiPhone.setText(mRentOrderDetailBean.getBackLinkPhone());
+        myOrderLianxiPhone.setText(mRentOrderDetailBean.getReceiverPhone());
 
 
         // 新建 = 0,已接单 = 1,已发货 = 3,已收货 = 4, 已完成 = 5
@@ -193,12 +199,59 @@ public class RentOrderDetailsActivity extends BaseActivity {
                 intent.putExtra("EquipmentNorm", mRentOrderDetailBean.getNorm());
                 intent.putExtra("OrderId", OrdersId);
                 intent.putExtra("Count", mRentOrderDetailBean.getCount());
-                intent.putExtra("Id", mRentOrderDetailBean.getId());
+                intent.putExtra("Id", Id);
+                intent.putExtra("RentOrderID", mRentOrderDetailBean.getRentOrderID());
                 mContext.startActivity(intent);
             }
         });
+
+        mMyOrderCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog("是否确认撤销退租订单？");
+            }
+        });
+
     }
 
+    private void showDialog(String message) {
+        final AlertDialog builder = new AlertDialog.Builder(mContext)
+                .create();
+        builder.show();
+        if (builder.getWindow() == null) return;
+        builder.getWindow().setContentView(R.layout.pop_user);//设置弹出框加载的布局
+        TextView msg = builder.findViewById(R.id.tv_msg);
+        Button cancle = builder.findViewById(R.id.btn_cancle);
+        Button sure = builder.findViewById(R.id.btn_sure);
+
+        if (msg == null || cancle == null || sure == null) return;
+
+        msg.setText(message);
+
+        cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.dismiss();
+            }
+        });
+
+        sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mApi.CancelOrder(GlobalParams.sToken, 3, OrdersId)
+                        .compose(RxHttpResponseCompat.<String>compatResult())
+                        .subscribe(new ErrorHandlerSubscriber<String>() {
+                            @Override
+                            public void onNext(String s) {
+                                RxToast.success("退租订单撤销成功");
+                                finish();
+                            }
+                        });
+                builder.dismiss();
+            }
+        });
+
+    }
 
     @Override
     protected void onResume() {
@@ -206,12 +259,5 @@ public class RentOrderDetailsActivity extends BaseActivity {
         if (isAutoRefresh) {
             getData();
         }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }

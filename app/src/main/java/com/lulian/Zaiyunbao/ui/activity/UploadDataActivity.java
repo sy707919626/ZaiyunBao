@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -50,6 +51,7 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.ui.dialog.PhotoDialog;
 import com.lulian.Zaiyunbao.ui.photoview.PhotoDisplayDialog;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -373,7 +375,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                 String title = "";
 
                 if (ActivityType == 1) {
-                    if (userTypeEditName.getText().toString().trim().equals("")) {
+                    if (TextUtils.isEmpty(userTypeEditName.getText().toString().trim())) {
                         userType = "1";
                     }
                 }
@@ -529,19 +531,19 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                         userTypeEditName.setText("企业用户");
                     }
 
-                    if (userTypeEditName.getText().toString().trim().equals("")) {
+                    if (TextUtils.isEmpty(userTypeEditName.getText().toString().trim())) {
                         RxToast.warning("请选择用户类型");
-                    } else if (paperTypeEditUsername.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(paperTypeEditUsername.getText().toString().trim())) {
                         RxToast.warning("请输入姓名");
-                    } else if (usersexEditName.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(usersexEditName.getText().toString().trim())) {
                         RxToast.warning("请选择性别");
-                    } else if (paperTypeEditName.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(paperTypeEditName.getText().toString().trim())) {
                         RxToast.warning("请选择企业类型");
-                    } else if (companyNameEditName.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(companyNameEditName.getText().toString().trim())) {
                         RxToast.warning("请输入企业名称");
-                    } else if (paperEditIdcard.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(paperEditIdcard.getText().toString().trim())) {
                         RxToast.warning("请输入机构代码");
-                    } else if (bizLicUrl.equals("")) {
+                    } else if (TextUtils.isEmpty(bizLicUrl)) {
                         RxToast.warning("请上传营业执照");
 
                     } else {
@@ -588,19 +590,19 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                         userTypeEditName.setText("个人用户");
                     }
 
-                    if (userTypeEditName.getText().toString().trim().equals("")) {
+                    if (TextUtils.isEmpty(userTypeEditName.getText().toString().trim())) {
                         RxToast.warning("请选择用户类型");
-                    } else if (paperTypeEditUsername.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(paperTypeEditUsername.getText().toString().trim())) {
                         RxToast.warning("请输入姓名");
-                    } else if (usersexEditName.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(usersexEditName.getText().toString().trim())) {
                         RxToast.warning("请选择性别");
-                    } else if (paperTypeEditName.getText().toString().trim().equals("")) {
+                    } else if (TextUtils.isEmpty(paperTypeEditName.getText().toString().trim())) {
                         RxToast.warning("请选择证件类型");
-                    } else if (idCard.equals("") || !IDCard.validate_effective(idCard, false)) {
+                    } else if (TextUtils.isEmpty(idCard) || !IDCard.validate_effective(idCard, false)) {
                         RxToast.warning("请输入正确的证件号码");
-                    } else if (IdFrontUrl.equals("")) {
+                    } else if (TextUtils.isEmpty(IdFrontUrl)) {
                         RxToast.warning("请上传身份证正面照");
-                    } else if (IdBackUrl.equals("")) {
+                    } else if (TextUtils.isEmpty(IdBackUrl)) {
                         RxToast.warning("请上传身份证反面照");
                     } else {
 
@@ -628,6 +630,9 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                         //上传接口
                         mApi.saveUserInfo(GlobalParams.sToken, body)
                                 .compose(RxHttpResponseCompat.<String>compatResult())
+                                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                                 .subscribe(new ErrorHandlerSubscriber<String>() {
                                     @Override
                                     public void onNext(String s) {
@@ -717,9 +722,8 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
 
     @Override
     public void takeSuccess(TResult result) {
-
         iconPath = result.getImages().get(0).getOriginalPath();
-        Log.e("排渣 ： ", iconPath);
+
         String fileType = "";
         File imgFile = new File(iconPath);
 
@@ -739,6 +743,9 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
 
         mApi.uploadImage(GlobalParams.sToken, GlobalParams.sUserId, multipartBody, fileType)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -781,6 +788,9 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     private void getuserInfo() {
         mApi.GetUserInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -791,12 +801,15 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                             IdFrontUrl = JSONObject.parseObject(s).getString("IdFrontUrl");
                             IdBackUrl = JSONObject.parseObject(s).getString("IdBackUrl");
 
-                            if (JSONObject.parseObject(s).getInteger("Sex") == 1) {
-                                usersexEditName.setText("男");
+                            if (TextUtils.isEmpty(JSONObject.parseObject(s).getString("Sex"))){
+                                usersexEditName.setText(" ");
                             } else {
-                                usersexEditName.setText("女");
+                                if (JSONObject.parseObject(s).getInteger("Sex") == 1) {
+                                    usersexEditName.setText("男");
+                                } else {
+                                    usersexEditName.setText("女");
+                                }
                             }
-
                             paperImgUploadIdcardImage.setVisibility(View.VISIBLE);
                             paperImgUploadIdcard.setVisibility(View.GONE);
                             paperTypeEditName.setText("身份证");

@@ -22,6 +22,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -211,7 +212,6 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
                             public void onNext(String s) {
                                 RxToast.success("购买订单发布成功");
                                 EventBus.getDefault().post(new BuyEvent());
-
                                 stepfinishAll();
                             }
                         });

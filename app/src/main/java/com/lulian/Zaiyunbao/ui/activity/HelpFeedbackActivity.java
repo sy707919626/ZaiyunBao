@@ -3,6 +3,7 @@ package com.lulian.Zaiyunbao.ui.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -94,9 +96,9 @@ public class HelpFeedbackActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.btn_Submission: //提交
 
-                if (helpFeebackText.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(helpFeebackText.getText().toString().trim())) {
                     RxToast.warning("填写您的评价和建议");
-                } else if (updateFeedbackPhone.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(updateFeedbackPhone.getText().toString().trim())) {
                     RxToast.warning("请留下您的联系方式，方便我们联系您");
                 } else {
                     if (!isFastClick()) {

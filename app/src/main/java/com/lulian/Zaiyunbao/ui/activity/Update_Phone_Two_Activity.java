@@ -22,6 +22,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -114,13 +115,16 @@ public class Update_Phone_Two_Activity extends BaseActivity {
             case R.id.updatePhone_two_next: //下一步
                 String passWord = updatePhoneTwoPassword.getText().toString().trim();
 
-                if (passWord.equals("")) {
+                if (TextUtils.isEmpty(passWord)) {
                     RxToast.warning("请输入登录密码");
                 }
 
                 //检验密码是否正确
                 mApi.pwdIsRight(GlobalParams.sToken, GlobalParams.sUserId, passWord)
                         .compose(RxHttpResponseCompat.<String>compatResult())
+                        .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                        .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                        .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                         .subscribe(new ErrorHandlerSubscriber<String>() {
                             @Override
                             public void onNext(String s) {

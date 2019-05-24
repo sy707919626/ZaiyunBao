@@ -20,6 +20,8 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -193,8 +195,8 @@ public class BuyOrderDetailsActivity extends BaseActivity {
 
         } else if (myOrderDetailsBean.getOrderStatus() == 6) {
             buyOrderState.setText("已收货");
-            buyOrderSubmissionBtn.setVisibility(View.VISIBLE);
-            buyOrderSubmissionBtn.setText("回购返租");
+            buyOrderSubmissionBtn.setVisibility(View.GONE);
+//            buyOrderSubmissionBtn.setText("回购返租");
 
 
         } else if (myOrderDetailsBean.getOrderStatus() == 7) {

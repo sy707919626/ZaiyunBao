@@ -14,6 +14,7 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompatTest;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +97,9 @@ public class Wallet_Details_Activity extends BaseActivity {
 
         mApi.TradeFlowItem(GlobalParams.sToken, FlowId, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompatTest.<List<WalletListDetails>>compatResult())
+                .compose(this.<List<WalletListDetails>>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<List<WalletListDetails>>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<List<WalletListDetails>>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<List<WalletListDetails>>() {
                     @Override
                     public void onNext(List<WalletListDetails> walletListDetails) {

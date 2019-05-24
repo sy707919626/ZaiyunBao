@@ -1,11 +1,23 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionValues;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -31,11 +43,19 @@ import com.lulian.Zaiyunbao.common.widget.ProjectUtil;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.SPUtils;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+
+import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by Administrator on 2018/9/18.
@@ -97,6 +117,8 @@ public class LoginActivity extends CheckPermissionsActivity {
 
         dialogHandler = new ProgressDialogHandler(this);
         sp = SPUtils.getInstance(this);
+
+
         initView();
     }
 
@@ -222,9 +244,9 @@ public class LoginActivity extends CheckPermissionsActivity {
 
                 break;
             case R.id.btn_submit:
-                if (editName.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(editName.getText().toString().trim())) {
                     RxToast.warning("手机号码不能为空");
-                } else if (editPwd.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(editPwd.getText().toString().trim())) {
                     RxToast.warning("密码不能为空");
                 } else if (ProjectUtil.isMobileNO(editName.getText().toString().trim())) {
                     login();
@@ -255,7 +277,12 @@ public class LoginActivity extends CheckPermissionsActivity {
 
         mApi.login(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
+
+                    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
                     @Override
                     public void onNext(String s) {
                         RxToast.success("登录成功");
@@ -265,15 +292,15 @@ public class LoginActivity extends CheckPermissionsActivity {
                         GlobalParams.setuserName(jsonObject.getString("Name"));
                         GlobalParams.setuserType(jsonObject.getString("UserType"));
                         GlobalParams.setuserPhone(jsonObject.getString("Phone"));
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        loginErrorText.setText("");
-                        sp.put("name", userId);
-                        sp.put("pwd", pwd);
 
                         //验证是否有支付密码
                         PayPwdIsSet(jsonObject.getString("UserId"));
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
 
+                        loginErrorText.setText("");
+                        sp.put("name", userId);
+                        sp.put("pwd", pwd);
                         finish();
                     }
 

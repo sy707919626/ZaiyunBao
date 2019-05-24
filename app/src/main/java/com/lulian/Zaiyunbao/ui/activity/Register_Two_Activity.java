@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -110,7 +111,7 @@ public class Register_Two_Activity extends BaseActivity {
 
             case R.id.register_two_next: //下一步
 
-                if (verificationCodeRegister.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(verificationCodeRegister.getText().toString().trim())) {
                     RxToast.warning("验证码不能为空");
 
                 } else if (!Code.equals(MD5Utils.getPwd(verificationCodeRegister.getText().toString().trim()))) {

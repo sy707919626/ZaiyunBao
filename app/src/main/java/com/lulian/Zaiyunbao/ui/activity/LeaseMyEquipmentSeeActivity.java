@@ -28,6 +28,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -113,6 +114,8 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
     private String UID = "";
 
     private String Id = "";
+
+
     private List<EquipmentDetailBean> equipmentDetailBean = new ArrayList<>();
 
     public static AlertDialog.Builder getConfirmDialog(Context context, String message, DialogInterface.OnClickListener onClickListener) {
@@ -238,27 +241,32 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                 obj.put("ETypeId", Id);
                 obj.put("ETypeName", leaseDetailsShebeiName.getText().toString().trim()); //设备名称
 
+                obj.put("ReceiverName", getIntent().getStringExtra("ReceiverName")); //发布人
+                obj.put("ReceiverPhone", getIntent().getStringExtra("ReceiverPhone")); //发布人电话
+                obj.put("SendOutAddress", getIntent().getStringExtra("SendOutAddress")); //地址
 
-                //加盟商ID与使用者ID相同  则此订单为转租单
-                if (UID != "" && UID != null) {
-                    obj.put("UID", UID);
+//                //加盟商ID与使用者ID相同  则此订单为转租单
+//                if (UID != "" && UID != null) {
+//                    obj.put("UID", UID);
+//
+//                    if (UID.equals(getIntent().getStringExtra("OperatorId"))) {
+//                        obj.put("FormType", 2); //1,求租,2租赁,3转租
+//                    } else {
+//                        obj.put("FormType", 3);
+////                        if (getIntent().getStringExtra("UID").equals(GlobalParams.sUserId)) {
+////                            obj.put("FormType", 3); //1,求租,2租赁,3转租
+////                        } else {
+////                            obj.put("FormType", 2); //1,求租,2租赁,3转租
+////                        }
+//                    }
+////                    obj.put("FormType", 3); //1,求租,2租赁,3转租
+//
+//                } else {
+//                    obj.put("FormType", 2); //1,求租,2租赁,3转租
+//                }
 
-                    if (UID.equals(getIntent().getStringExtra("OperatorId"))) {
-                        obj.put("FormType", 2); //1,求租,2租赁,3转租
-                    } else {
-                        obj.put("FormType", 3);
-//                        if (getIntent().getStringExtra("UID").equals(GlobalParams.sUserId)) {
-//                            obj.put("FormType", 3); //1,求租,2租赁,3转租
-//                        } else {
-//                            obj.put("FormType", 2); //1,求租,2租赁,3转租
-//                        }
-                    }
-//                    obj.put("FormType", 3); //1,求租,2租赁,3转租
 
-                } else {
-                    obj.put("FormType", 2); //1,求租,2租赁,3转租
-                }
-
+                obj.put("FormType", 3);//转租
 
                 obj.put("TargetDeliveryTime", getIntent().getStringExtra("MyStartTime")); //租赁开始时间
                 obj.put("ReturnBakcTime", getIntent().getStringExtra("MyEndTime")); //退租日期(归还时间)
@@ -322,10 +330,10 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                 obj.put("StoreName", getIntent().getStringExtra("StoreName")); //仓库名
                 obj.put("StoreId", getIntent().getStringExtra("StoreId")); //仓库Id\
 
-                if (TextUtils.isEmpty(getIntent().getStringExtra("UID"))) {
+                if (TextUtils.isEmpty(UID)) {
                     obj.put("ReceiveUserId", getIntent().getStringExtra("OperatorId")); //供应商ID
                 } else {
-                    obj.put("ReceiveUserId", getIntent().getStringExtra("UID"));
+                    obj.put("ReceiveUserId", UID);
                 }
 
                 obj.put("ReceiveWay", Integer.valueOf(getIntent().getStringExtra("deliveryModesCode")));//送货方式

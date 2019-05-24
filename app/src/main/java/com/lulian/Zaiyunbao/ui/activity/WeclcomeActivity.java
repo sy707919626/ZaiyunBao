@@ -35,6 +35,7 @@ import com.lulian.Zaiyunbao.ui.DownloadRunnable;
 import com.lulian.Zaiyunbao.ui.LevelDialog;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.taobao.sophix.SophixManager;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -100,6 +101,7 @@ public class WeclcomeActivity extends BaseActivity {
 
         mApi.equipmentTypeList(GlobalParams.sToken)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -124,6 +126,7 @@ public class WeclcomeActivity extends BaseActivity {
 
         mApi.GetDicItem(GlobalParams.sToken)
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

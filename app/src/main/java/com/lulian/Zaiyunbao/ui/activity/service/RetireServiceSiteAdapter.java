@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.RetireServiceSiteBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.di.component.Constants;
-import com.lulian.Zaiyunbao.ui.activity.UploadDataActivity;
 
 import java.util.ArrayList;
 
@@ -51,6 +50,12 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
         holder.retireServiceSiteAddress.setText(mRetireServiceSite.getArea());
         holder.retireServiceSiteUserName.setText(mRetireServiceSite.getManager());
         holder.retireServiceSitePhone.setText(mRetireServiceSite.getTouch());
+
+        if (mRetireServiceSite.getIsManager() == 1) {
+            holder.mRetireServiceSiteIsManager.setText("平台");
+        } else {
+            holder.mRetireServiceSiteIsManager.setText("加盟商");
+        }
 
 //        holder.retireServiceSiteJuli.setText(mRetireServiceSite.getTouch() + "KM");
         Glide.with(mContext).load(Constants.BASE_URL + mRetireServiceSite.getUrl()).into(holder.retireServiceSiteImgPhoto);
@@ -91,6 +96,8 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
         Button retireServiceSiteLijiBtn;
         @BindView(R.id.retire_service_site_back_btn)
         Button retireServiceSiteBackBtn;
+        @BindView(R.id.retire_service_site_isManager)
+        TextView mRetireServiceSiteIsManager;
 
         public ServiceSiteViewHolder(View itemView) {
             super(itemView);

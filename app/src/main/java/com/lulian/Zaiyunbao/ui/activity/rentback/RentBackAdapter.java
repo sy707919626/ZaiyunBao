@@ -1,5 +1,6 @@
 package com.lulian.Zaiyunbao.ui.activity.rentback;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,10 @@ import android.widget.TextView;
 
 import com.lulian.Zaiyunbao.Bean.RentBackBean;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
+import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
 
 import java.util.ArrayList;
@@ -53,13 +58,13 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
     public void onBindViewHolder(LeaseViewHolder holder, final int position) {
         final RentBackBean.RowsBean mOrderList = mOrderListBean.get(position);
 
-        holder.rentBackOrderId.setText(mOrderList.getOrderNo());
+        holder.mRentBackOrderId.setText(mOrderList.getOrderNo());
         try {
             byte[] bitmapArray;
             bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
                     bitmapArray.length);
-            holder.rentBackImgPhoto.setImageBitmap(bitmap);
+            holder.mRentBackImgPhoto.setImageBitmap(bitmap);
         } catch (Exception e) {
         }
 
@@ -67,43 +72,46 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
 
         if (mOrderList.getStatus() == 0) {
             state = "未接单";
-            holder.rentBackBtn.setVisibility(View.GONE);
+            holder.mRentBackBtn.setVisibility(View.GONE);
 
         } else if (mOrderList.getStatus() == 1 || mOrderList.getStatus() == 2) {
             state = "待发货";
             stateBtn = "确认发货";
-            holder.rentBackBtn.setVisibility(View.VISIBLE);
+            holder.mRentBackBtn.setVisibility(View.VISIBLE);
+
 
         } else if (mOrderList.getStatus() == 3) {
             state = "已发货";
-            holder.rentBackBtn.setVisibility(View.GONE);
+            holder.mRentBackBtn.setVisibility(View.GONE);
+
 
         } else if (mOrderList.getStatus() == 4) {
             state = "已收货";
-            holder.rentBackBtn.setVisibility(View.GONE);
+            holder.mRentBackBtn.setVisibility(View.GONE);
+
 
         } else if (mOrderList.getStatus() == 5) {
             state = "已完成";
-            holder.rentBackBtn.setVisibility(View.GONE);
+            holder.mRentBackBtn.setVisibility(View.GONE);
 
         }
 
-        holder.rentBackState.setText(state);
-        holder.rentBackBtn.setText(stateBtn);
+        holder.mRentBackState.setText(state);
+        holder.mRentBackBtn.setText(stateBtn);
 
 
-        holder.rentBackShebeiName.setText(mOrderList.getEquipmentName());
-        holder.rentBackShebeiSpec.setText(mOrderList.getNorm());
-        holder.rentBackShebeiNum.setText(mOrderList.getCount() + "个");
+        holder.mRentBackShebeiName.setText(mOrderList.getEquipmentName());
+        holder.mRentBackShebeiSpec.setText(mOrderList.getNorm());
+        holder.mRentBackShebeiNum.setText(mOrderList.getCount() + "个");
 
         if (mOrderList.getTypeName().equals("托盘")) {
-            holder.rentBackLoad.setText("静载" + String.valueOf(mOrderList.getStaticLoad()) + "T；动载"
+            holder.mRentBackLoad.setText("静载" + String.valueOf(mOrderList.getStaticLoad()) + "T；动载"
                     + String.valueOf(mOrderList.getCarryingLoad()) + "T；架载" + String.valueOf(mOrderList.getOnLoad()) + "T");
         } else if (mOrderList.getTypeName().equals("保温箱")) {
-            holder.rentBackLoad.setText("容积" + mOrderList.getVolume() + "升；保温时长"
+            holder.mRentBackLoad.setText("容积" + mOrderList.getVolume() + "升；保温时长"
                     + mOrderList.getWarmLong() + "小时");
         } else if (mOrderList.getTypeName().equals("周转篱")) {
-            holder.rentBackLoad.setText("容积" + mOrderList.getVolume() + "升；载重"
+            holder.mRentBackLoad.setText("容积" + mOrderList.getVolume() + "升；载重"
                     + mOrderList.getSpecifiedLoad() + "公斤");
         }
 
@@ -129,32 +137,32 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
     }
 
     class LeaseViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.order_text)
-        TextView orderText;
-        @BindView(R.id.rent_back_orderId)
-        TextView rentBackOrderId;
-        @BindView(R.id.rent_back_state)
-        TextView rentBackState;
         @BindView(R.id.rent_back_img_photo)
-        ImageView rentBackImgPhoto;
+        ImageView mRentBackImgPhoto;
         @BindView(R.id.rent_back_shebei_name)
-        TextView rentBackShebeiName;
+        TextView mRentBackShebeiName;
+        @BindView(R.id.rent_back_state)
+        TextView mRentBackState;
         @BindView(R.id.rent_back_shebei_spec)
-        TextView rentBackShebeiSpec;
+        TextView mRentBackShebeiSpec;
         @BindView(R.id.rent_back_load)
-        TextView rentBackLoad;
+        TextView mRentBackLoad;
         @BindView(R.id.rent_back_type_name)
-        TextView rentBackTypeName;
+        TextView mRentBackTypeName;
         @BindView(R.id.rent_back_shebei_num)
-        TextView rentBackShebeiNum;
+        TextView mRentBackShebeiNum;
+        @BindView(R.id.order_text)
+        TextView mOrderText;
+        @BindView(R.id.rent_back_orderId)
+        TextView mRentBackOrderId;
         @BindView(R.id.rent_back_btn)
-        Button rentBackBtn;
+        Button mRentBackBtn;
 
         public LeaseViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            rentBackBtn.setOnClickListener(new View.OnClickListener() {
+            mRentBackBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     int status = mOrderListBean.get(getAdapterPosition()).getStatus();
@@ -166,12 +174,16 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
                         intent.putExtra("OrderId", mOrderListBean.get(getAdapterPosition()).getOrdersId());
                         intent.putExtra("Count", mOrderListBean.get(getAdapterPosition()).getCount());
                         intent.putExtra("Id", mOrderListBean.get(getAdapterPosition()).getId());
+                        intent.putExtra("RentOrderID", mOrderListBean.get(getAdapterPosition()).getRentOrderID());
                         mContext.startActivity(intent);
                     }
-
                 }
             });
+
         }
+
+
+
 
     }
 }

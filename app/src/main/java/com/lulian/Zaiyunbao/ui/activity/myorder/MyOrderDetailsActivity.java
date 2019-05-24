@@ -31,6 +31,7 @@ import com.lulian.Zaiyunbao.ui.activity.leaseorder.ReceiveLeaseInfoActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderEntryActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -197,43 +198,48 @@ public class MyOrderDetailsActivity extends BaseActivity {
 
     private void getDataInfo() {
         //根据仓库Id获取仓库与所属加盟商信息
-        if (myOrderDetailsBean.getFormType() != 3) {
-            mApi.getStorehouseInfo(GlobalParams.sToken, StoreId)
-                    .compose(RxHttpResponseCompat.<String>compatResult())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
-                            if (s.equals("[]")) {
-//                                RxToast.warning("当前供应商资料不全");
-                            } else {
-                                areaBean = JSONObject.parseArray(s, AreaBean.class);
-                                Area = areaBean.get(0).getArea();
-                                Name = areaBean.get(0).getName();
-                                ContactName = areaBean.get(0).getContactName();
-                                ContactPhone = areaBean.get(0).getContactPhone();
-                            }
-                            initView();
-                        }
-                    });
-        } else {
-            mApi.GetPersonalInfo(GlobalParams.sToken, ReceiveUserId)
-                    .compose(RxHttpResponseCompat.<String>compatResult())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
+//        if (myOrderDetailsBean.getFormType() != 3) {
+//            mApi.getStorehouseInfo(GlobalParams.sToken, StoreId)
+//                    .compose(RxHttpResponseCompat.<String>compatResult())
+//                    .subscribe(new Consumer<String>() {
+//                        @Override
+//                        public void accept(String s) throws Exception {
+//                            if (s.equals("[]")) {
+////                                RxToast.warning("当前供应商资料不全");
+//                            } else {
+//                                areaBean = JSONObject.parseArray(s, AreaBean.class);
+//                                Area = areaBean.get(0).getArea();
+//                                Name = areaBean.get(0).getName();
+//                                ContactName = areaBean.get(0).getContactName();
+//                                ContactPhone = areaBean.get(0).getContactPhone();
+//                            }
+//                            initView();
+//                        }
+//                    });
+//        } else {
+//            mApi.GetPersonalInfo(GlobalParams.sToken, ReceiveUserId)
+//                    .compose(RxHttpResponseCompat.<String>compatResult())
+//                    .subscribe(new Consumer<String>() {
+//                        @Override
+//                        public void accept(String s) throws Exception {
+//
+//                            if (s.equals("[]")) {
+////                                RxToast.warning("当前个人资料不全");
+//                            } else {
+//                                personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
+//                                ZZName = personalInfoBean.get(0).getContactAdress();
+//                                ZZContactName = personalInfoBean.get(0).getName();
+//                                ZZContactPhone = personalInfoBean.get(0).getPhone();
+//                            }
+//                            initView();
+//                        }
+//                    });
 
-                            if (s.equals("[]")) {
-//                                RxToast.warning("当前个人资料不全");
-                            } else {
-                                personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
-                                ZZName = personalInfoBean.get(0).getContactAdress();
-                                ZZContactName = personalInfoBean.get(0).getName();
-                                ZZContactPhone = personalInfoBean.get(0).getPhone();
-                            }
-                            initView();
-                        }
-                    });
-        }
+            ZZName = myOrderDetailsBean.getReceiveAddress();
+            ZZContactName = myOrderDetailsBean.getRelease();
+            ZZContactPhone = myOrderDetailsBean.getReleasePhone();
+            initView();
+//        }
     }
 
     private void getData() {
@@ -319,8 +325,15 @@ public class MyOrderDetailsActivity extends BaseActivity {
             if (myOrderDetailsBean.getFormType() == 3) { //转租单
                 fuwuZhandian.setVisibility(View.GONE);
                 myOrderServiceSite.setText("");//服务站点
-                myOrderSonghuo.setText(ZZContactName);//联系人
-                songhuoLianxiPhone.setText(ZZContactPhone);//联系电话
+
+                if (myOrderDetailsBean.getReceiveUserType() == 2){
+                    myOrderSonghuo.setText(GlobalParams.sUserName);//联系人
+                    songhuoLianxiPhone.setText(GlobalParams.sUserPhone);//联系电话
+                } else {
+                    myOrderSonghuo.setText(ZZContactName);//联系人
+                    songhuoLianxiPhone.setText(ZZContactPhone);//联系电话
+                }
+
 
             } else {
                 fuwuZhandian.setVisibility(View.VISIBLE);
@@ -329,6 +342,9 @@ public class MyOrderDetailsActivity extends BaseActivity {
                 myOrderSonghuo.setText(ContactName);//联系人
                 songhuoLianxiPhone.setText(ContactPhone);//联系电话
             }
+
+//            myOrderSonghuo.setText(ZZContactName);//联系人
+//            songhuoLianxiPhone.setText(ZZContactPhone);//联系电话
 
             myOrderConsignee.setText(myOrderDetailsBean.getContactName());//收货人
             myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//收货地址
@@ -344,14 +360,27 @@ public class MyOrderDetailsActivity extends BaseActivity {
             myOrderLianxiPhoneText.setText("取货联系电话");
 
             if (myOrderDetailsBean.getFormType() == 3) { //转租单
-                myOrderConsignee.setText(ZZContactName);//联系人
+
+                if (myOrderDetailsBean.getReceiveUserType() == 1){ // 1、加盟商  2、用户
+                    myOrderConsignee.setText(ZZContactName);//联系人
+                    myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
+                } else {
+                    myOrderConsignee.setText(GlobalParams.sUserName);//联系人
+                    myOrderLianxiPhone.setText(GlobalParams.sUserPhone);//联系电话
+                }
+
+//                myOrderConsignee.setText(ZZContactName);//联系人
+//                myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
                 myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
-                myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
             } else {
                 myOrderConsignee.setText(ContactName);//联系人
                 myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
                 myOrderLianxiPhone.setText(ContactPhone);//联系电话
             }
+
+//            myOrderConsignee.setText(ZZContactName);//联系人
+//            myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
+//            myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
         }
 
         leaseServiceRecommend.setText(myOrderDetailsBean.getRecommend());//推荐人
@@ -773,10 +802,4 @@ public class MyOrderDetailsActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

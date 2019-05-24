@@ -132,6 +132,31 @@
                     android:textColor="@color/text_info"
                     android:textSize="@dimen/text_size_trhee" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="服务点所属："
+                    android:textColor="@color/text_info"
+                    android:textSize="@dimen/text_size_trhee" />
+
+                <TextView
+                    android:id="@+id/retire_service_site_isManager"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="false"
+                    android:textColor="@color/text_info"
+                    android:textSize="@dimen/text_size_trhee" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -174,9 +199,9 @@
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@id/retire_service_site_back_btn"
             android:background="@drawable/button_bg_xuxin"
-            android:text="我要租赁"
             android:textColor="@color/text_hint_bule"
-            android:textSize="@dimen/text_size_trhee" />
+            android:textSize="@dimen/text_size_trhee"
+            android:text="我要租赁"/>
 
         <Button
             android:id="@+id/retire_service_site_back_btn"

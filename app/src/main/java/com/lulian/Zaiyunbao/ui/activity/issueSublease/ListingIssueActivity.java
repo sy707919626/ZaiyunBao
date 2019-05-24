@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -117,13 +119,13 @@ public class ListingIssueActivity extends BaseActivity {
         listingIssueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addressTextview.getText().toString().trim().equals("")){
+                if (TextUtils.isEmpty(addressTextview.getText().toString().trim())){
                     RxToast.warning("请输入设备所在地");
-                } else if (listingIssueCount.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(listingIssueCount.getText().toString().trim())) {
                     RxToast.warning("请输入转租数量");
                 } else if (Integer.valueOf(listingIssueCount.getText().toString().trim()) > issueListBean.getQuantity()) {
                     RxToast.warning("转租数量不能超过设备闲置库存数量");
-                } else if (listingIssueYajin.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(listingIssueYajin.getText().toString().trim())) {
                     RxToast.warning("请输入转租数量");
                 } else {
                     uploadData();
@@ -135,8 +137,29 @@ public class ListingIssueActivity extends BaseActivity {
 
     //获取押金
     private void getYajin() {
-        mApi.rentPriceListPoint(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
-                Integer.valueOf(listingIssueCount.getText().toString().trim()))
+//        mApi.rentPriceListPoint(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
+//                Integer.valueOf(listingIssueCount.getText().toString().trim()))
+//                .compose(RxHttpResponseCompat.<String>compatResult())
+//                .subscribe(new ErrorHandlerSubscriber<String>() {
+//                    @Override
+//                    public void onNext(String s) {
+//                        List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
+//                        if (list.size() > 0) {
+//                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+//                            float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
+//                            YaJin = list.get(0).getDeposit();
+//
+//                            listingIssueYajin.setText(YaJin *
+//                                    Integer.valueOf(listingIssueCount.getText().toString().trim()) + "元");
+//                        } else {
+//                            YaJin = 0;
+//                            listingIssueYajin.setText("0");
+//                        }
+//                    }
+//                });
+
+        mApi.rentPriceList(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
+                issueListBean.getQuantity(), 0)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override

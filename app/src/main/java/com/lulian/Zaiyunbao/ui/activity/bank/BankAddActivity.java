@@ -92,7 +92,7 @@ public class BankAddActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.bank_add_next_btn:
                 //下一步
-                if (bankAddCardCode.getText().toString().equals("")) {
+                if (TextUtils.isEmpty(bankAddCardCode.getText().toString())) {
                     RxToast.warning("请填写银行卡号");
                 } else if (!BankCode.checkBankCard(bankAddCardCode.getText().toString())) {
                     RxToast.warning("请填写正确的银行卡号");

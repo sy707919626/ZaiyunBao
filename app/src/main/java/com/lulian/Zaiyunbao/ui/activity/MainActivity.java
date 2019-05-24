@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,8 +21,12 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.content.LocalBroadcastManager;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -118,6 +123,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         return R.layout.activity_main;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void init() {
         ImmersionBar.with(this).init();
@@ -140,6 +146,7 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         radioGroup.setOnCheckedChangeListener(this);
         setSelectIndex(INDEX_HOME);
+
     }
 
     /**
@@ -148,6 +155,9 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     public void showFragment(Fragment fragment) {
         if (currentFragment != fragment) {
             FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            // 设置Fragment的切换动画
+            transaction.setCustomAnimations(R.anim.cu_push_right_in, R.anim.cu_push_left_out);
+
             transaction.hide(currentFragment);
             currentFragment = fragment;
             if (!fragment.isAdded()) {
@@ -161,7 +171,6 @@ public class MainActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
     }
 
     @Override

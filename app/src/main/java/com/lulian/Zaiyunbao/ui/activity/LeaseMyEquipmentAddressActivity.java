@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -34,7 +36,9 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.data.local.AddressData;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -209,7 +213,7 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
 //                        initView();
 //                    }
 //                });
-        if (UID == "" ||UID == null) {
+        if (TextUtils.isEmpty(UID)) {
             mApi.getStorehouseInfo(GlobalParams.sToken, StorehouseId)
                     .compose(RxHttpResponseCompat.<String>compatResult())
                     .subscribe(new Consumer<String>() {
@@ -230,6 +234,9 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
         } else {
             mApi.GetPersonalInfo(GlobalParams.sToken, UID)
                     .compose(RxHttpResponseCompat.<String>compatResult())
+                    .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                    .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                    .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                     .subscribe(new Consumer<String>() {
                         @Override
                         public void accept(String s) throws Exception {
@@ -274,10 +281,9 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                                     leaseMyDeliveryTimeText.setText("提货时间：");
                                     leaseMyAddressNameText.setText("提货地点：");
 
-                                    if (UID.equals("")) {
-                                        if (!Area.equals("") || !Name.equals("")) {
+                                    if (TextUtils.isEmpty(UID)) {
+                                        if (!TextUtils.isEmpty(Area) || !TextUtils.isEmpty(Name)) {
                                             leaseMyAddressName.setText(Area + Name);
-
                                             leaseMyName.setText(ContactName);
                                             leaseMyPhone.setText(ContactPhone);
                                         }
@@ -303,13 +309,13 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                 break;
 
             case R.id.lease_equipment_my_btn:
-                if (leaseMyDeliveryTime.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(leaseMyDeliveryTime.getText().toString().trim())) {
                     RxToast.warning("请选择提货时间");
-                } else if (leaseMyAddressName.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMyAddressName.getText().toString().trim())) {
                     RxToast.warning("请输入送/提货地址");
-                } else if (leaseMyName.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMyName.getText().toString().trim())) {
                     RxToast.warning("请输入联系人");
-                } else if (leaseMyPhone.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMyPhone.getText().toString().trim())) {
                     RxToast.warning("请输入联系号码");
                 } else {
                     Intent intent = new Intent(this, LeaseMyEquipmentSeeActivity.class);
@@ -371,13 +377,22 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                     intent.putExtra("ZDContactName", OperatorId);//供应商ID
                     intent.putExtra("ZDContactPhone", UID);//使用者ID
 
-                    if (UID == "" || UID == null) {
+                    if (TextUtils.isEmpty(UID)) {
                         intent.putExtra("Release", ContactName);//发布人
                         intent.putExtra("ReleasePhone", ContactPhone);//发布电话
+
+                        intent.putExtra("ReceiverName", ContactName );
+                        intent.putExtra("ReceiverPhone", ContactPhone);
+                        intent.putExtra("SendOutAddress", Area);
                     } else {
                         intent.putExtra("Release", ZZContactName);//发布人
                         intent.putExtra("ReleasePhone", ZZContactPhone);//发布电话
+
+                        intent.putExtra("ReceiverName", "" );
+                        intent.putExtra("ReceiverPhone", "");
+                        intent.putExtra("SendOutAddress", "");
                     }
+
                     intent.putExtra("TypeId", getIntent().getStringExtra("TypeId"));
                     intent.putExtra("TypeName", getIntent().getStringExtra("TypeName"));
                     intent.putExtra("DiscountAmount", getIntent().getStringExtra("DiscountAmount"));//折扣金额

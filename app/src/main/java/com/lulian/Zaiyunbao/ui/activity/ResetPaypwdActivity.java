@@ -1,6 +1,7 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,6 +16,7 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.VerificationCode;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -75,7 +77,7 @@ public class ResetPaypwdActivity extends BaseActivity {
 
                 if (PayPwdOne.length()<6 && PayPwdTwo.length()<6){
                     RxToast.warning("支付密码必须设置6位数字");
-                } else if (PayPwdOne.equals("") || PayPwdTwo.equals("")) {
+                } else if (TextUtils.isEmpty(PayPwdOne) || TextUtils.isEmpty(PayPwdTwo)) {
                     RxToast.warning("请输入支付密码");
                 } else if (!PayPwdOne.equals(PayPwdTwo)) {
                     RxToast.warning("两次输入的支付密码不一致");

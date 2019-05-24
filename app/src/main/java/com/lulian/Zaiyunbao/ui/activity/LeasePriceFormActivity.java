@@ -22,6 +22,7 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.adapter.LeasePriceFormAdapter;
 import com.lulian.Zaiyunbao.ui.adapter.LeasePriceFormSumAdapter;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +89,9 @@ public class LeasePriceFormActivity extends BaseActivity {
     private void getData() {
         mApi.rentPriceListAll(GlobalParams.sToken, "")
                 .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {

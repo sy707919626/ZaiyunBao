@@ -262,7 +262,8 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                                 ZuJin = 0;
                             }
                             YongJin = list.get(0).getCommisionValue();
-                            YaJin = list.get(0).getDeposit();
+                            YaJin = list.get(0).getDepositAmount();
+
                             leaseMyPValue.setText(list.get(0).getPrice() + "");  //租金单价
                             leaseMyRent.setText(decimalFormat.format(ZuJin) + "");//租金
                             leaseMyMianzu.setText(MianZuQi + ""); //免租天数
@@ -303,15 +304,27 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
 
-                String[] list = GlobalParams.ZLTypeList.toArray(new String[GlobalParams.ZLTypeList.size()]);
+                if (GlobalParams.ZLTypeList.size() > 0) {
+                    String[] list = GlobalParams.ZLTypeList.toArray(new String[GlobalParams.ZLTypeList.size()]);
+                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list,
+                            leaseMyModleSpinner.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    leaseMyModleSpinner.setText(data.get(position).getTitle());
+                                }
+                            });
+                } else {
+                    String[] list = {"分时租赁","分次租赁"};
+                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list,
+                            leaseMyModleSpinner.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    leaseMyModleSpinner.setText(data.get(position).getTitle());
+                                }
+                            });
+                }
 
-                BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list,
-                        leaseMyModleSpinner.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
-                            @Override
-                            public void onItemClickListener(int position, List<SaleEntity> data) {
-                                leaseMyModleSpinner.setText(data.get(position).getTitle());
-                            }
-                        });
+
 
             }
         });
@@ -322,16 +335,27 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);//处理背景图
+                if (GlobalParams.JSTypeList.size() > 0) {
+                    String[] list2 = GlobalParams.JSTypeList.toArray(new String[GlobalParams.JSTypeList.size()]);
 
-                String[] list2 = GlobalParams.JSTypeList.toArray(new String[GlobalParams.JSTypeList.size()]);
+                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list2,
+                            leaseMyBalanceMode.getText().toString(), "结算方式", mHandler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    leaseMyBalanceMode.setText(data.get(position).getTitle());
+                                }
+                            });
+                } else {
+                    String[] list2 = {"周结", "月结", "季结"};
 
-                BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list2,
-                        leaseMyBalanceMode.getText().toString(), "结算方式", mHandler, new OnItemClickListener() {
-                            @Override
-                            public void onItemClickListener(int position, List<SaleEntity> data) {
-                                leaseMyBalanceMode.setText(data.get(position).getTitle());
-                            }
-                        });
+                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list2,
+                            leaseMyBalanceMode.getText().toString(), "结算方式", mHandler, new OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    leaseMyBalanceMode.setText(data.get(position).getTitle());
+                                }
+                            });
+                }
             }
         });
 
@@ -341,12 +365,12 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
         leaseMoneyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (leaseMyStartTime.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())) {
                     RxToast.warning("请选择起租时间");
-                } else if (leaseMyEndTime.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
                     RxToast.warning("请选择退租时间");
 
-                } else if (leaseMySum.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
                     RxToast.warning("请输入租赁数量");
                 } else {
                     if (Integer.valueOf(leaseMySum.getText().toString().trim()) > Quantity) {
@@ -360,10 +384,6 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                         }
 
                         getYajin(); //押金
-
-
-
-
                     }
                 }
             }
@@ -458,13 +478,13 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                 break;
 
             case R.id.lease_equipment_my_next:
-                if (leaseMyStartTime.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())) {
                     RxToast.warning("请选择起租时间");
-                } else if (leaseMyEndTime.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
                     RxToast.warning("请选择退租时间");
-                } else if (leaseMySum.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
                     RxToast.warning("请输入租赁数量");
-                } else if (leaseMyRent.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(leaseMyRent.getText().toString().trim())) {
                     RxToast.warning("请先计算费用");
                 } else {
                     String load = "";
@@ -537,7 +557,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                     if (Id == R.id.lease_my_startTime) {
                         String dateEnd = leaseMyEndTime.getText().toString().trim();
 
-                        if (!dateEnd.equals("")) {
+                        if (!TextUtils.isEmpty(dateEnd)) {
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                             try {
                                 Date endDate = format.parse(dateEnd);
@@ -559,7 +579,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                     if (Id == R.id.lease_my_endTime) {
                         String dateStr = leaseMyStartTime.getText().toString().trim();
 
-                        if (!dateStr.equals("")) {
+                        if (!TextUtils.isEmpty(dateStr)) {
                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                             try {
                                 Date startDate = format.parse(dateStr);

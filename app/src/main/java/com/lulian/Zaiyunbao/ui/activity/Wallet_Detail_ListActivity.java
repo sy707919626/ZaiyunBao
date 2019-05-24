@@ -99,8 +99,11 @@ public class Wallet_Detail_ListActivity extends BaseActivity {
         textDetailRight.setVisibility(View.GONE);
 
         initView();
+//        getWalletData();
+//        walletSmartRefreshLayout.autoRefresh(); //触发自动刷新
+
+        isRefresh = true;
         getWalletData();
-        walletSmartRefreshLayout.autoRefresh(); //触发自动刷新
 
         walletSmartRefreshLayout.setOnRefreshLoadmoreListener(new OnRefreshLoadmoreListener() {
             @Override
@@ -149,6 +152,8 @@ public class Wallet_Detail_ListActivity extends BaseActivity {
         mApi.MyTradeFlowList(GlobalParams.sToken, body)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
+                .compose(this.<String>bindUntilEvent(ActivityEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -160,7 +165,7 @@ public class Wallet_Detail_ListActivity extends BaseActivity {
                         }
 
                         mWalletDetailList.addAll(walletDetailBean.getRows());
-                        sort();
+//                        sort();
 
                         if (mWalletDetailList.size() <= 0){
                             walletViewResultLayout.setVisibility(View.VISIBLE);

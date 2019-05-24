@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -181,6 +183,9 @@ public class RetireCreateActivity extends BaseActivity {
         retireCreateSiteAddress.setText(getIntent().getStringExtra("Area"));
         retireCreateServiceSite.setText(getIntent().getStringExtra("Name"));
         retireCreateSiteDistance.setText("距我约15KM");
+        retireCreateLixiName.setText(GlobalParams.sUserName);
+        retireCreatePhone.setText(GlobalParams.sUserPhone);
+
 
         retireCreateTypeName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -229,15 +234,15 @@ public class RetireCreateActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.retire_create_btn:
-                if (retireCreateTypeName.getText().toString().trim().equals("")) {
+                if (TextUtils.isEmpty(retireCreateTypeName.getText().toString().trim())) {
                     RxToast.warning("请选择设备！");
-                } else if (retireCreateDateTime.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(retireCreateDateTime.getText().toString().trim())) {
                     RxToast.warning("请退租时间！");
-                } else if (retireCreateLixiName.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(retireCreateLixiName.getText().toString().trim())) {
                     RxToast.warning("请输入联系人！");
-                } else if (retireCreatePhone.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(retireCreatePhone.getText().toString().trim())) {
                     RxToast.warning("请输入联系电话！");
-                } else if (retireCreateShebeiSum.getText().toString().trim().equals("")) {
+                } else if (TextUtils.isEmpty(retireCreateShebeiSum.getText().toString().trim())) {
                     RxToast.warning("请输入退租数量！");
                 } else {
 
