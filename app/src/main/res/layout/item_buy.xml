@@ -118,9 +118,10 @@
                     android:textSize="@dimen/text_size_trhee" />
 
                 <TextView
+                    android:id="@+id/buy_shebei_price_danwei"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="元/天"
+                    android:text="元/片(不含税)"
                     android:textColor="@color/text_hint_black2"
                     android:textSize="@dimen/text_size_trhee" />
             </LinearLayout>
@@ -149,6 +150,7 @@
                     android:textSize="@dimen/text_size_trhee" />
 
                 <TextView
+                    android:id="@+id/buy_shebei_num_danwei"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="个"

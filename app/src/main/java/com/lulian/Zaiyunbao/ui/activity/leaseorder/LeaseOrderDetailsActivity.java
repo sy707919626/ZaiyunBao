@@ -157,6 +157,7 @@ public class LeaseOrderDetailsActivity extends BaseActivity {
 
     private String ReceiveUserId;//租出方id
     private String StoreId;//仓库id
+    private String ZulinModel;
 
     @Override
     protected int setLayoutId() {
@@ -180,7 +181,7 @@ public class LeaseOrderDetailsActivity extends BaseActivity {
         Id = getIntent().getStringExtra("Id");
 
         StoreId = getIntent().getStringExtra("StoreId");
-
+        ZulinModel = getIntent().getStringExtra("ZulinModel");
         ReceiveUserId = getIntent().getStringExtra("ReceiveUserId");
         myOrderZulinSumText.setText("租赁数量");
         myOrderShebeiNumText.setText("租赁数量:");
@@ -269,7 +270,7 @@ public class LeaseOrderDetailsActivity extends BaseActivity {
         myOrderPhone.setText(myOrderDetailsBean.getContactPhone());//企业联系电话
 
         myOrderZulinSum.setText(myOrderDetailsBean.getCount() + "个");//租赁数量
-        myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元/天/片");
+        myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元/天/片(不含税)");
         myOrderZulinDay.setText(myOrderDetailsBean.getRentDates() + "天");
         myOrderRentFree.setText(myOrderDetailsBean.getFreeDates() + "天");//免租
         myOrderRent.setText(myOrderDetailsBean.getRentAmount() + "元");//租金
@@ -459,7 +460,7 @@ public class LeaseOrderDetailsActivity extends BaseActivity {
                     intentReserve.putExtra("OrdersId", OrdersId); //订单ID
                     intentReserve.putExtra("OrderNo", OrderNo); //订单号
                     intentReserve.putExtra("Id", Id); //设备ID
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel); //租赁模式
                     intentReserve.putExtra("AdapterPage", "LeaseOrderAdapter");
                     startActivity(intentReserve);
 //                    finish();

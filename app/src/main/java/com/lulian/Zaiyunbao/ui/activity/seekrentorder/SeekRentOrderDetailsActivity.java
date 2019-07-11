@@ -15,8 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.daimajia.androidanimations.library.zooming_entrances.ZoomInUpAnimator;
 import com.gyf.barlibrary.ImmersionBar;
-import com.lulian.Zaiyunbao.Bean.DicItemBean;
 import com.lulian.Zaiyunbao.Bean.MyOrderDetailsBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -27,7 +27,6 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,6 +127,7 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
     private String OrdersId = "";
     private String OrderNo = "";
     private String Id = ""; //设备ID
+    private String ZulinModel;
     private List<MyOrderDetailsBean> myOrderDetailsList = new ArrayList<>();
     private MyOrderDetailsBean myOrderDetailsBean;
 
@@ -151,7 +151,7 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
         OrdersId = getIntent().getStringExtra("OrdersId");
         OrderNo = getIntent().getStringExtra("OrderNo");
         Id = getIntent().getStringExtra("Id");
-
+        ZulinModel = getIntent().getStringExtra("ZulinModel");
         getData();
     }
 
@@ -207,19 +207,28 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
 
         myOrderUnpaidDeposit.setText(myOrderDetailsBean.getOrderDeposit() + "元");//押金
         myOrderZulinSum.setText(myOrderDetailsBean.getCount() + "个");//租赁数量
-        myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元/天/片");
+        myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元(不含税)");
         myOrderZulinDay.setText(myOrderDetailsBean.getRentDates() + "天");
         myOrderRentFree.setText(myOrderDetailsBean.getFreeDates() + "天");//免租
+
         myOrderRent.setText(myOrderDetailsBean.getRentAmount() + "元");//租金
         myOrderYunfei.setText(myOrderDetailsBean.getTrafficFee() + "元"); //运费
 
         //结算方式
-        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
-            if (dicItemBean.getDicTypeCode().equals("DT003") &&
-                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getHandRentWay()) {
+//        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
+//            if (dicItemBean.getDicTypeCode().equals("DT003") &&
+//                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getHandRentWay()) {
+//
+//                myOrderJiesuanMethod.setText(dicItemBean.getItemName());
+//            }
+//        }
 
-                myOrderJiesuanMethod.setText(dicItemBean.getItemName());
-            }
+        if (myOrderDetailsBean.getHandRentWay() == 1) {
+            myOrderJiesuanMethod.setText("周结");
+        } else if (myOrderDetailsBean.getHandRentWay() == 2) {
+            myOrderJiesuanMethod.setText("月结");
+        } else if (myOrderDetailsBean.getHandRentWay() == 3) {
+            myOrderJiesuanMethod.setText("季结");
         }
 
 //        if (myOrderDetailsBean.getHandRentWay() == 1) {//租金结算方式
@@ -236,11 +245,17 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
 //            myOrderJiesuanMethod.setText("季结");
 //        }
         //送货方式
-        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
-            if (dicItemBean.getDicTypeCode().equals("DT002") &&
-                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getTransferWay()) {
-                myOrderTransferWay.setText(dicItemBean.getItemName());
-            }
+//        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
+//            if (dicItemBean.getDicTypeCode().equals("DT002") &&
+//                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getTransferWay()) {
+//                myOrderTransferWay.setText(dicItemBean.getItemName());
+//            }
+//        }
+
+        if (myOrderDetailsBean.getTransferWay() == 1) {
+            myOrderTransferWay.setText("送货上门");
+        } else if (myOrderDetailsBean.getTransferWay() == 2) {
+            myOrderTransferWay.setText("用户自提");
         }
 
         if (myOrderTransferWay.getText().toString().trim().equals("送货上门")) {//送货方式
@@ -464,7 +479,7 @@ public class SeekRentOrderDetailsActivity extends BaseActivity {
                     intentReserve.putExtra("OrdersId", OrdersId); //订单ID
                     intentReserve.putExtra("OrderNo", OrderNo); //订单号
                     intentReserve.putExtra("Id", Id); //设备ID
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel); //设备ID
                     intentReserve.putExtra("AdapterPage", "SeekRentOrderAdapter");
                     startActivity(intentReserve);
 //                    finish();

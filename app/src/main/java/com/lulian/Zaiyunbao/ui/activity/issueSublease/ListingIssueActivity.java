@@ -3,7 +3,11 @@ package com.lulian.Zaiyunbao.ui.activity.issueSublease;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
@@ -16,6 +20,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.IssueListBean;
 import com.lulian.Zaiyunbao.Bean.LeasePriceFromBean;
+import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
@@ -23,7 +28,6 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -84,8 +88,11 @@ public class ListingIssueActivity extends BaseActivity {
     TextView listingIssueYajin;
     @BindView(R.id.listing_issue_btn)
     Button listingIssueBtn;
+
+
     private IssueListBean issueListBean;
     private int YaJin = 0;
+    private Handler mHandler;
 
     public IssueListBean getIssueListBean() {
         return issueListBean;
@@ -100,6 +107,7 @@ public class ListingIssueActivity extends BaseActivity {
         return R.layout.activity_listing_issue;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void init() {
         ImmersionBar.with(this)
@@ -113,13 +121,14 @@ public class ListingIssueActivity extends BaseActivity {
         textDetailContent.setText("挂牌转租");
         textDetailRight.setVisibility(View.GONE);
         issueListBean = (IssueListBean) getIntent().getSerializableExtra("issueListBean");
+
         initView();
 
 
         listingIssueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(addressTextview.getText().toString().trim())){
+                if (TextUtils.isEmpty(addressTextview.getText().toString().trim())) {
                     RxToast.warning("请输入设备所在地");
                 } else if (TextUtils.isEmpty(listingIssueCount.getText().toString().trim())) {
                     RxToast.warning("请输入转租数量");
@@ -158,41 +167,34 @@ public class ListingIssueActivity extends BaseActivity {
 //                    }
 //                });
 
-        mApi.rentPriceList(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
-                issueListBean.getQuantity(), 0)
-                .compose(RxHttpResponseCompat.<String>compatResult())
-                .subscribe(new ErrorHandlerSubscriber<String>() {
-                    @Override
-                    public void onNext(String s) {
-                        List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
-                        if (list.size() > 0) {
-                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
-                            float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
-                            YaJin = list.get(0).getDeposit();
+      if (Integer.valueOf(listingIssueCount.getText().toString().trim()) <= 0){
+            RxToast.warning("转租数量不能小于或等于0");
+        } else {
+            mApi.rentPriceList(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
+                    Integer.valueOf(listingIssueCount.getText().toString().trim()), 0)
+                    .compose(RxHttpResponseCompat.<String>compatResult())
+                    .subscribe(new ErrorHandlerSubscriber<String>() {
+                        @Override
+                        public void onNext(String s) {
+                            List<LeasePriceFromBean> list = parseArray(s, LeasePriceFromBean.class);
+                            if (list.size() > 0) {
+                                DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                                float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
+                                YaJin = list.get(0).getDeposit();
 
-                            listingIssueYajin.setText(YaJin *
-                                    Integer.valueOf(listingIssueCount.getText().toString().trim()) + "元");
-                        } else {
-                            YaJin = 0;
-                            listingIssueYajin.setText("0");
+                                listingIssueYajin.setText(YaJin *
+                                        Integer.valueOf(listingIssueCount.getText().toString().trim()) + "元");
+                            } else {
+                                YaJin = 0;
+                                listingIssueYajin.setText("0");
+                            }
                         }
-                    }
-                });
+                    });
+        }
     }
 
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == ADDRESS_LOCATION && resultCode == 11) { //选择地点返回值
-//            if (data != null) {
-//                addressTextview.setText(data.getStringExtra("addressAll"));
-//            }
-//        }
-//    }
-
     private void initView() {
-        getDeposit();
+        listingIssueCount.setText(issueListBean.getQuantity()+"");
 
         try {
             byte[] bitmapArray;
@@ -222,7 +224,7 @@ public class ListingIssueActivity extends BaseActivity {
         Date curDate = new Date(System.currentTimeMillis());
         listingIssueTime.setText(formatter.format(curDate));
 
-
+        getDeposit();
     }
 
     private void uploadData() {
@@ -253,7 +255,7 @@ public class ListingIssueActivity extends BaseActivity {
             @Override
             public void accept(@NonNull CharSequence charSequence) throws Exception {
 
-               getYajin();
+                getYajin();
 
             }
         });

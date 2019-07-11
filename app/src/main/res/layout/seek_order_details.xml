@@ -157,7 +157,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="元/天"
+                            android:text="元/天(不含税)"
                             android:textColor="@color/text_black"
                             android:textSize="@dimen/text_size_trhee" />
                     </LinearLayout>
@@ -373,6 +373,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/color_9c" />
+
 
                 <RelativeLayout
                     android:id="@+id/my_order_zulin_price_layout"

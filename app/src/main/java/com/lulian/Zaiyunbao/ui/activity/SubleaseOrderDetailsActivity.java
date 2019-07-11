@@ -118,6 +118,10 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
     TextView subleaseSHOrderPhone;
     @BindView(R.id.sublease_SH_order_phone_layout)
     RelativeLayout subleaseSHOrderPhoneLayout;
+    @BindView(R.id.order_price_text)
+    TextView mOrderPriceText;
+    @BindView(R.id.sublease_order_Zulinmodel)
+    TextView mSubleaseOrderZulinmodel;
 
     private String OrdersId = "";
     private String OrderNo = "";
@@ -131,6 +135,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
     private String ZZName = ""; //转租地址
     private String ZZContactName = ""; //转租联系人
     private String ZZContactPhone = ""; //转租联系电话
+    private String ZulinModel;
     private List<PersonalInfoBean> personalInfoBean = new ArrayList<>();
 
     private String ReceiveUserId;//租出方id
@@ -157,6 +162,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
         Id = getIntent().getStringExtra("Id"); //设备id
         IsRendIn = getIntent().getIntExtra("IsRendIn", 0);
         ReceiveUserId = getIntent().getStringExtra("ReceiveUserId");
+        ZulinModel = getIntent().getStringExtra("ZulinModel");
         getData();
     }
 
@@ -211,6 +217,8 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
         } catch (Exception e) {
         }
 
+        mSubleaseOrderZulinmodel.setText(ZulinModel);
+
         orderShebeiName.setText(myOrderDetailsBean.getEquipmentName());
         orderShebeiSpec.setText(myOrderDetailsBean.getNorm());
         orderPrice.setText(myOrderDetailsBean.getPrice() + "");
@@ -232,7 +240,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
             subleaseOrderPhoneText.setText("收货人联系电话");
 
             //1、加盟商  2、用户
-            if (myOrderDetailsBean.getReceiveUserType()==2){
+            if (myOrderDetailsBean.getReceiveUserType() == 2) {
                 subleaseSHOrderName.setText(GlobalParams.sUserName);
                 subleaseSHOrderPhone.setText(GlobalParams.sUserPhone);
             } else {
@@ -504,7 +512,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
                     intent2.putExtra("OrderId", OrdersId);
                     intent2.putExtra("Count", myOrderDetailsBean.getCount());
                     intent2.putExtra("EquipmentId", Id);
-
+                    intent2.putExtra("FormType", 3);
                     intent2.putExtra("AdapterPage", "SubleaseOrderAdapter");
                     startActivity(intent2);
 
@@ -523,7 +531,7 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
                     intentReserve.putExtra("OrdersId", OrdersId);
                     intentReserve.putExtra("OrderNo", OrderNo);
                     intentReserve.putExtra("Id", Id); //设备ID
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel);
                     intentReserve.putExtra("AdapterPage", "SubleaseOrderAdapter");
                     mContext.startActivity(intentReserve);
                 }
@@ -539,4 +547,10 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

@@ -56,22 +56,26 @@ public class BuyListAdapter extends RecyclerView.Adapter<BuyListAdapter.BuyViewH
             bitmapArray = Base64.decode(mBuyList.getPicture(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
                     bitmapArray.length);
-            holder.buyImgPhoto.setImageBitmap(bitmap);
+            holder.mBuyImgPhoto.setImageBitmap(bitmap);
         } catch (Exception e) {
         }
 
 //        Glide.with(mContext).load(Constants.BASE_URL + mEquipmentList.getPicture()).into(holder.leaseImgPhoto);
-        holder.buyShebeiName.setText(mBuyList.getEquipmentName());
-        holder.buyShebeiSpec.setText(mBuyList.getNorm());
+        holder.mBuyShebeiName.setText(mBuyList.getEquipmentName());
+        holder.mBuyShebeiSpec.setText(mBuyList.getNorm());
         if (mBuyList.getTypeName().equals("保温箱")) {
-            holder.buyShebeiLoad.setText("容积" + String.valueOf(mBuyList.getVolume()) + "升T；保温时长"
+            holder.mBuyShebeiPriceDanwei.setText("元/个(不含税)");
+            holder.mBuyShebeiNumDanwei.setText("个");
+            holder.mBuyShebeiLoad.setText("容积" + String.valueOf(mBuyList.getVolume()) + "升T；保温时长"
                     + String.valueOf(mBuyList.getWarmLong()) + "小时");
         } else {
-            holder.buyShebeiLoad.setText("静载" + String.valueOf(mBuyList.getStaticLoad()) + "T；动载"
+            holder.mBuyShebeiPriceDanwei.setText("元/片(不含税)");
+            holder.mBuyShebeiNumDanwei.setText("片");
+            holder.mBuyShebeiLoad.setText("静载" + String.valueOf(mBuyList.getStaticLoad()) + "T；动载"
                     + String.valueOf(mBuyList.getCarryingLoad()) + "T；架载" + String.valueOf(mBuyList.getOnLoad()) + "T");
         }
-        holder.buyShebeiPrice.setText(String.valueOf(mBuyList.getPriceNow()) + "");
-        holder.buyShebeiNum.setText(String.valueOf(mBuyList.getQuantity()) + "");
+        holder.mBuyShebeiPrice.setText(String.valueOf(mBuyList.getPriceNow()) + "");
+        holder.mBuyShebeiNum.setText(String.valueOf(mBuyList.getQuantity()) + "");
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +85,7 @@ public class BuyListAdapter extends RecyclerView.Adapter<BuyListAdapter.BuyViewH
             }
         });
 
-        holder.buyBtn.setOnClickListener(new View.OnClickListener() {
+        holder.mBuyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intentMy = new Intent();
@@ -123,22 +127,25 @@ public class BuyListAdapter extends RecyclerView.Adapter<BuyListAdapter.BuyViewH
 
     class BuyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.buy_img_photo)
-        ImageView buyImgPhoto;
+        ImageView mBuyImgPhoto;
         @BindView(R.id.buy_shebei_name)
-        TextView buyShebeiName;
+        TextView mBuyShebeiName;
         @BindView(R.id.buy_shebei_spec)
-        TextView buyShebeiSpec;
+        TextView mBuyShebeiSpec;
         @BindView(R.id.buy_shebei_load)
-        TextView buyShebeiLoad;
+        TextView mBuyShebeiLoad;
         @BindView(R.id.buy_shebei_price)
-        TextView buyShebeiPrice;
+        TextView mBuyShebeiPrice;
+        @BindView(R.id.buy_shebei_price_danwei)
+        TextView mBuyShebeiPriceDanwei;
         @BindView(R.id.buy_shebei_num)
-        TextView buyShebeiNum;
+        TextView mBuyShebeiNum;
+        @BindView(R.id.buy_shebei_num_danwei)
+        TextView mBuyShebeiNumDanwei;
         @BindView(R.id.buy_distance)
-        TextView buyDistance;
+        TextView mBuyDistance;
         @BindView(R.id.buy_btn)
-        Button buyBtn;
-
+        Button mBuyBtn;
         public BuyViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

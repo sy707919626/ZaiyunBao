@@ -63,6 +63,7 @@ public class RentBackAllFragment extends BaseLazyFragment {
                 intent.putExtra("OrdersId", orderListBean.get(position).getOrdersId());
                 intent.putExtra("Id", orderListBean.get(position).getId());
                 intent.putExtra("OrderNo", orderListBean.get(position).getOrderNo());
+                intent.putExtra("RentWay", orderListBean.get(position).getRentWay());
                 getContext().startActivity(intent);
             }
         });

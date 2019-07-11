@@ -168,7 +168,9 @@
                         android:id="@+id/lease_my_modle_spinner"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="11dp"
                         android:layout_toRightOf="@id/lease_my_modle_text"
                         android:drawableRight="@drawable/next"
                         android:gravity="right"
@@ -223,6 +225,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:id="@+id/time_reLayout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
@@ -352,7 +355,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="20dp"
                             android:gravity="center_vertical"
-                            android:text="元/天/片"
+                            android:text="元/天/片(不含税)"
                             android:textColor="@color/text_black"
                             android:textSize="14dp" />
                     </RelativeLayout>
@@ -409,11 +412,13 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/lease_my_freeDayAmount_view"
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/color_9c" />
 
                 <LinearLayout
+                    android:id="@+id/lease_my_freeDayAmount_reLayout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
@@ -658,6 +663,7 @@
                     android:background="@color/color_9c" />
 
                 <LinearLayout
+                    android:id="@+id/lease_my_mianzu_reLayout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
@@ -808,6 +814,7 @@
 
     <!-- 这里的FrameLayout用于承载对话框的背景 -->
     <FrameLayout
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

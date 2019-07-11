@@ -85,7 +85,7 @@ public class MyApplication extends Application {
         initActivityLifecycle();
         registerWxAppId();
 
-        CrashHandler.getInstance().init(this, this);
+//        CrashHandler.getInstance().init(this, this);
 
         //****************************************百度地图***********************************
         SDKInitializer.initialize(this);

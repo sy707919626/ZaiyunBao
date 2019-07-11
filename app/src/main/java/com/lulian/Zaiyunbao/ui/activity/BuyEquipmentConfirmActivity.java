@@ -169,7 +169,7 @@ public class BuyEquipmentConfirmActivity extends BaseActivity {
         }
 
         buySum.setText(Quantity + "个");
-        buyPriceDJ.setText(Price + "/个/片");
+        buyPriceDJ.setText(Price + "/个/片(不含税)");
         buyMoney.setText(getIntent().getFloatExtra("money", 0) + "元");
         buyPayModle.setText(getIntent().getStringExtra("payModel"));
         buyZhekouMoney.setText("0元");

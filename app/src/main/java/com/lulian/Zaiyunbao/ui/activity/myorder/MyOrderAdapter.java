@@ -374,7 +374,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
                         intent.putExtra("OrderId", mOrderListBean.get(position).getOrdersId());
                         intent.putExtra("Count", mOrderListBean.get(position).getCount());
                         intent.putExtra("EquipmentId", mOrderListBean.get(position).getId());
-
+                        intent.putExtra("FormType", 3);
                         intent.putExtra("AdapterPage", "MyOrderAdapter");
 
                         mContext.startActivity(intent);
@@ -395,7 +395,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
                     intentReserve.putExtra("OrdersId", mOrderListBean.get(position).getOrdersId());
                     intentReserve.putExtra("OrderNo", mOrderListBean.get(position).getOrderNo());
                     intentReserve.putExtra("Id", mOrderListBean.get(position).getId());
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel);
                     intentReserve.putExtra("AdapterPage", "MyOrderAdapter");
                     mContext.startActivity(intentReserve);
                 }

@@ -392,7 +392,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="租赁单价"
+                            android:text="单价"
                             android:textColor="@color/text_black"
                             android:textSize="14dp" />
 
@@ -407,12 +407,13 @@
                             android:textSize="@dimen/text_size_trhee" />
 
                         <TextView
+                            android:id="@+id/buy_my_PValue_danwei"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="10dp"
                             android:gravity="center_vertical"
-                            android:text="元/天/片"
+                            android:text="元/天/片(不含税)"
                             android:textColor="@color/text_black"
                             android:textSize="14dp" />
                     </RelativeLayout>

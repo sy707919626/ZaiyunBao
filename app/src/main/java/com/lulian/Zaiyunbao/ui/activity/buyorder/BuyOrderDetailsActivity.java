@@ -157,7 +157,7 @@ public class BuyOrderDetailsActivity extends BaseActivity {
         buyOrderSupplierContactPhone.setText(myOrderDetailsBean.getSupplierContactPhone());
 
         buyOrderAddress.setText(myOrderDetailsBean.getReceiveAddress());
-        buyOrderGoumaiPrice.setText(myOrderDetailsBean.getPrice() + "元/个/片");
+        buyOrderGoumaiPrice.setText(myOrderDetailsBean.getPrice() + "元(不含税)");
 
 
         if (myOrderDetailsBean.getOrderStatus() == 2) {

@@ -101,6 +101,7 @@ public class BuyFragment extends BaseLazyFragment {
             @Override
             public void onItemClickListener(int position, BuyListBean.RowsBean buyListBean) {
                 Intent intent = new Intent(getContext(), BuyDetailActivity.class);
+                buyListBean.setPicture(""); //图片太大无法传递
                 intent.putExtra("buyDetail", buyListBean);
                 startActivity(intent);
                 hashCode();

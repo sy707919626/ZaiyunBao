@@ -77,6 +77,13 @@ public class SeekRentOrderFragment extends BaseLazyFragment {
                 intent.putExtra("OrderNo", orderListBean.get(position).getOrderNo());
                 intent.putExtra("OrdersId", orderListBean.get(position).getOrdersId());
                 intent.putExtra("Id", orderListBean.get(position).getId()); //设备ID
+
+                if (orderListBean.get(position).getZulinModel() == 1) {
+                    intent.putExtra("ZulinModel", "分时租赁");
+                } else {
+                    intent.putExtra("ZulinModel", "分次租赁");
+                }
+
                 getContext().startActivity(intent);
             }
         });

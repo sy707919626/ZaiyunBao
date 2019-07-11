@@ -261,8 +261,8 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
 
-                String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
-
+//                String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
+                String[] list = {"送货上门", "用户自提"};
                 BaseDialog(LeaseMyEquipmentAddressActivity.this, dialogBg, list,
                         leaseMyDeliveryMode.getText().toString(), "送货方式", mHandler, new OnItemClickListener() {
                             @Override
@@ -338,6 +338,14 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                         }
                     }
 
+                    if (MyBalanceMode.equals("周结")){
+                        intent.putExtra("MyBalanceModeCode", "1");
+                    }else if (MyBalanceMode.equals("月结")){
+                        intent.putExtra("MyBalanceModeCode", "2");
+                    }else if (MyBalanceMode.equals("季结")){
+                        intent.putExtra("MyBalanceModeCode", "3");
+                    }
+
 
                     intent.putExtra("MyBalanceMode", MyBalanceMode);
 
@@ -347,11 +355,17 @@ public class LeaseMyEquipmentAddressActivity extends BaseActivity {
                     intent.putExtra("MyDeposit", MyDeposit); //押金
 
                     //送货方式
-                    for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
-                        if (dicItemBean.getDicTypeCode().equals("DT002") &&
-                                dicItemBean.getItemName().equals(leaseMyDeliveryMode.getText().toString().trim())) {
-                            intent.putExtra("deliveryModesCode", dicItemBean.getItemCode());
-                        }
+//                    for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
+//                        if (dicItemBean.getDicTypeCode().equals("DT002") &&
+//                                dicItemBean.getItemName().equals(leaseMyDeliveryMode.getText().toString().trim())) {
+//                            intent.putExtra("deliveryModesCode", dicItemBean.getItemCode());
+//                        }
+//                    }
+
+                    if (leaseMyDeliveryMode.getText().toString().trim().equals("送货上门")){
+                        intent.putExtra("deliveryModesCode", "1");
+                    }else if (leaseMyDeliveryMode.getText().toString().trim().equals("用户自提")){
+                        intent.putExtra("deliveryModesCode", "2");
                     }
 
                     intent.putExtra("deliveryModes", leaseMyDeliveryMode.getText().toString().trim());

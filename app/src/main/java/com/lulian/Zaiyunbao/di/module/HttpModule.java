@@ -54,6 +54,7 @@ public class HttpModule {
                 .sslSocketFactory(SSLSocketClient.getSSLSocketFactory())
                 .hostnameVerifier(SSLSocketClient.getHostnameVerifier());
 
+
         return okClient.build();
     }
 
@@ -67,6 +68,7 @@ public class HttpModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(okHttpClient);
+
         return builder.build();
     }
 

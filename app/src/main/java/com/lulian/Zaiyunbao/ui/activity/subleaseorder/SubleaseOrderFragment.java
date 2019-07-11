@@ -14,6 +14,7 @@ import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.SubleaseOrderDetailsActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseLazyFragment;
@@ -82,6 +83,12 @@ public class SubleaseOrderFragment extends BaseLazyFragment {
                 intent.putExtra("Id", orderListBean.get(position).getId());
                 intent.putExtra("IsRendIn", orderListBean.get(position).getIsRendIn()); //租入方
                 intent.putExtra("ReceiveUserId", orderListBean.get(position).getReceiveUserId()); //租出方ID
+
+                if (orderListBean.get(position).getZulinModel() == 1) {
+                    intent.putExtra("ZulinModel", "分时租赁");
+                } else {
+                    intent.putExtra("ZulinModel", "分次租赁");
+                }
                 getContext().startActivity(intent);
             }
         });
@@ -155,30 +162,36 @@ public class SubleaseOrderFragment extends BaseLazyFragment {
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        MyOrderLisetBean myOrderLisetBean = MyApplication.get().getAppComponent().getGson().fromJson(s, MyOrderLisetBean.class);
+                        if (!TextUtils.isEmpty(s)) {
+                            MyOrderLisetBean myOrderLisetBean = MyApplication.get().getAppComponent().getGson().fromJson(s, MyOrderLisetBean.class);
 
-                        if (isRefresh) {
-                            mOrderListBean.clear();
+                            if (isRefresh) {
+                                mOrderListBean.clear();
+                            }
+
+                            mOrderListBean.addAll(myOrderLisetBean.getRows());
+                            sort();
+                            if (mAdapter != null) {
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            if (myOrderLisetBean.getRows().size() < pageSize) {
+                                smartRefreshLayout.finishLoadmoreWithNoMoreData(); //将不会再次触发加载更多事件
+                            }
+                            } else {
+                            RxToast.warning("暂无数据");
+                        }
                         }
 
-                        mOrderListBean.addAll(myOrderLisetBean.getRows());
-                        sort();
-                        if (mAdapter != null) {
-                            mAdapter.notifyDataSetChanged();
+                        @Override
+                        protected void onAfter () {
+                            super.onAfter();
+                            smartRefreshLayout.finishRefresh();
+                            smartRefreshLayout.finishLoadmore();
                         }
 
-                        if (myOrderLisetBean.getRows().size() < pageSize) {
-                            smartRefreshLayout.finishLoadmoreWithNoMoreData(); //将不会再次触发加载更多事件
-                        }
-                    }
-
-                    @Override
-                    protected void onAfter() {
-                        super.onAfter();
-                        smartRefreshLayout.finishRefresh();
-                        smartRefreshLayout.finishLoadmore();
-                    }
                 });
+
     }
 
     @Override

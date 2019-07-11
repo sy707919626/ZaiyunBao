@@ -97,7 +97,7 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
         holder.leaseShebeiSpec.setText(mEquipmentList.getNorm());
         if (mEquipmentList.getTypeName().equals("保温箱")) {
             holder.leaseShebeiLoad.setText("容积" + String.valueOf(mEquipmentList.getVolume()) + "升；保温时长"
-                    + String.valueOf(mEquipmentList.getWarmLong()) + "小时");
+                     + String.valueOf(mEquipmentList.getWarmLong()) + "小时");
         } else {
             holder.leaseShebeiLoad.setText("静载" + String.valueOf(mEquipmentList.getStaticLoad()) + "T；动载"
                     + String.valueOf(mEquipmentList.getCarryingLoad()) + "T；架载" + String.valueOf(mEquipmentList.getOnLoad()) + "T");

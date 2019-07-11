@@ -25,7 +25,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="租期/单位月" />
+            android:text="租期/天" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="数量/个" />
 
         <TextView
             android:layout_width="wrap_content"

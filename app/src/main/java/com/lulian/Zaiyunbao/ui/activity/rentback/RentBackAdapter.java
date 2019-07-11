@@ -175,6 +175,7 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
                         intent.putExtra("Count", mOrderListBean.get(getAdapterPosition()).getCount());
                         intent.putExtra("Id", mOrderListBean.get(getAdapterPosition()).getId());
                         intent.putExtra("RentOrderID", mOrderListBean.get(getAdapterPosition()).getRentOrderID());
+                        intent.putExtra("RentWay", mOrderListBean.get(getAdapterPosition()).getRentWay());
                         mContext.startActivity(intent);
                     }
                 }

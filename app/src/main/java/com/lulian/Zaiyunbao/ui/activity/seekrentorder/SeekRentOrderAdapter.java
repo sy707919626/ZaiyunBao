@@ -239,7 +239,7 @@ public class SeekRentOrderAdapter extends RecyclerView.Adapter<SeekRentOrderAdap
                     intentReserve.putExtra("OrdersId", mOrderListBean.get(position).getOrdersId());
                     intentReserve.putExtra("OrderNo", mOrderListBean.get(position).getOrderNo());
                     intentReserve.putExtra("Id", mOrderListBean.get(position).getId()); //设备ID
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel); //租赁模式
                     intentReserve.putExtra("AdapterPage", "SeekRentOrderAdapter");
                     mContext.startActivity(intentReserve);
 

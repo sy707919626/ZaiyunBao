@@ -34,7 +34,6 @@ import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.DownloadRunnable;
 import com.lulian.Zaiyunbao.ui.LevelDialog;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.taobao.sophix.SophixManager;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.io.File;
@@ -130,29 +129,31 @@ public class WeclcomeActivity extends BaseActivity {
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        GlobalParams.setsDicItemBean(parseArray(s, DicItemBean.class));
+                        if (!TextUtils.isEmpty(s)) {
+                            GlobalParams.setsDicItemBean(parseArray(s, DicItemBean.class));
 
-                        //DT001/用户类型、DT002/发货方式、DT003/结算方式、DT004/租赁方式
-                        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
-                            if (dicItemBean.getDicTypeCode().equals("DT001")) {
-                                userTypeList.add(dicItemBean.getItemName());
+                            //DT001/用户类型、DT002/发货方式、DT003/结算方式、DT004/租赁方式
+                            for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
+                                if (dicItemBean.getDicTypeCode().equals("DT001")) {
+                                    userTypeList.add(dicItemBean.getItemName());
 
-                            } else if (dicItemBean.getDicTypeCode().equals("DT002")) {
-                                FHTypeList.add(dicItemBean.getItemName());
-                            } else if (dicItemBean.getDicTypeCode().equals("DT003")) {
-                                JSTypeList.add(dicItemBean.getItemName());
-                            } else if (dicItemBean.getDicTypeCode().equals("DT004")) {
-                                ZLTypeList.add(dicItemBean.getItemName());
-                            } else if (dicItemBean.getDicTypeCode().equals("DT005")) {
-                                ZFTypeList.add(dicItemBean.getItemName());
+                                } else if (dicItemBean.getDicTypeCode().equals("DT002")) {
+                                    FHTypeList.add(dicItemBean.getItemName());
+                                } else if (dicItemBean.getDicTypeCode().equals("DT003")) {
+                                    JSTypeList.add(dicItemBean.getItemName());
+                                } else if (dicItemBean.getDicTypeCode().equals("DT004")) {
+                                    ZLTypeList.add(dicItemBean.getItemName());
+                                } else if (dicItemBean.getDicTypeCode().equals("DT005")) {
+                                    ZFTypeList.add(dicItemBean.getItemName());
+                                }
                             }
-                        }
 
-                        GlobalParams.setUserTypeList(userTypeList);
-                        GlobalParams.setFHTypeList(FHTypeList);
-                        GlobalParams.setJSTypeList(JSTypeList);
-                        GlobalParams.setZLTypeList(ZLTypeList);
-                        GlobalParams.setZFTypeList(ZFTypeList);
+                            GlobalParams.setUserTypeList(userTypeList);
+                            GlobalParams.setFHTypeList(FHTypeList);
+                            GlobalParams.setJSTypeList(JSTypeList);
+                            GlobalParams.setZLTypeList(ZLTypeList);
+                            GlobalParams.setZFTypeList(ZFTypeList);
+                        }
                     }
                 });
     }

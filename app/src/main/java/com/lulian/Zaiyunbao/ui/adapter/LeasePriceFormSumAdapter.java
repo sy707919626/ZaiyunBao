@@ -61,18 +61,17 @@ public class LeasePriceFormSumAdapter extends RecyclerView.Adapter {
         if (holder instanceof HeadHolder) { // 头部
 
         } else if (holder instanceof ContentHolder) { // 内容
-            ((ContentHolder) holder).EName.setText(mLeasePriceFromBean.get(position).getEName());
-            ((ContentHolder) holder).FreeDays.setText(String.valueOf(mLeasePriceFromBean.get(position).getFreeDays()));
-            ((ContentHolder) holder).TopLimit.setText(String.valueOf(mLeasePriceFromBean.get(position).getDowLimit()
-                    + " - " + String.valueOf(mLeasePriceFromBean.get(position).getTopLimit())));
-            ((ContentHolder) holder).Rent.setText(String.valueOf(mLeasePriceFromBean.get(position).getPrice()));
-            ((ContentHolder) holder).Discount.setText(String.valueOf(mLeasePriceFromBean.get(position).getDiscount()));
+            ((ContentHolder) holder).EName.setText(mLeasePriceFromBean.get(position-1).getEName());
+            ((ContentHolder) holder).TopLimit.setText(String.valueOf(mLeasePriceFromBean.get(position-1).getCountDowLimit()
+                    + "～" + String.valueOf(mLeasePriceFromBean.get(position-1).getCountTopLimit())));
+            ((ContentHolder) holder).Rent.setText(String.valueOf(mLeasePriceFromBean.get(position-1).getPrice()));
+            ((ContentHolder) holder).Discount.setText(String.valueOf(mLeasePriceFromBean.get(position-1).getDiscount()));
         }
     }
 
     @Override
     public int getItemCount() {
-        return mLeasePriceFromBean.size();
+        return mLeasePriceFromBean.size() + 1;
     }
 
     // 头部
@@ -87,7 +86,6 @@ public class LeasePriceFormSumAdapter extends RecyclerView.Adapter {
         private TextView EName;
         private TextView TopLimit;
         private TextView Rent;
-        private TextView FreeDays;
         private TextView Discount;
 
         public ContentHolder(View itemView) {
@@ -95,7 +93,6 @@ public class LeasePriceFormSumAdapter extends RecyclerView.Adapter {
             EName = itemView.findViewById(R.id.EName);
             TopLimit = itemView.findViewById(R.id.TopLimit);
             Rent = itemView.findViewById(R.id.Rent);
-            FreeDays = itemView.findViewById(R.id.FreeDays);
             Discount = itemView.findViewById(R.id.Discount);
         }
     }

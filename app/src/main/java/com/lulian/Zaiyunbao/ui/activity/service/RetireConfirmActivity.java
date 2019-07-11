@@ -1,6 +1,7 @@
 package com.lulian.Zaiyunbao.ui.activity.service;
 
 import android.graphics.Color;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,9 +16,9 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -58,6 +59,8 @@ public class RetireConfirmActivity extends BaseActivity {
     TextView retireConfirmPhone;
     @BindView(R.id.retire_btn)
     Button retireBtn;
+    @BindView(R.id.retire_confirm_modle_spinner)
+    TextView mRetireConfirmModleSpinner;
     private int Quantity;
     private int Count;
 
@@ -82,6 +85,7 @@ public class RetireConfirmActivity extends BaseActivity {
         Quantity = getIntent().getIntExtra("Quantity", 0);
         Count = getIntent().getIntExtra("Count", 0);
         retireConfirmSeeMap.setVisibility(View.GONE);
+
         initView();
     }
 
@@ -95,6 +99,8 @@ public class RetireConfirmActivity extends BaseActivity {
         retireConfirmShebeiSum.setText(Count + "个");
         retireConfirmLixiName.setText(getIntent().getStringExtra("BackLink"));
         retireConfirmPhone.setText(getIntent().getStringExtra("BackLinkPhone"));
+
+        mRetireConfirmModleSpinner.setText(getIntent().getStringExtra("ModleSpinner"));
     }
 
     @OnClick({R.id.retire_btn, R.id.text_detail_right})
@@ -134,6 +140,12 @@ public class RetireConfirmActivity extends BaseActivity {
         obj.put("BelongMember", getIntent().getStringExtra("BelongMember"));
         obj.put("CreateUserId", GlobalParams.sUserId);
         obj.put("CanRentCount", Quantity); //可退租数量
+
+        if (mRetireConfirmModleSpinner.getText().toString().equals("分次租赁")) {
+            obj.put("RentWay", 2);
+        } else if (mRetireConfirmModleSpinner.getText().toString().equals("分时租赁")) {
+            obj.put("RentWay", 1);
+        }
 
         String args = obj.toString();
         RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),

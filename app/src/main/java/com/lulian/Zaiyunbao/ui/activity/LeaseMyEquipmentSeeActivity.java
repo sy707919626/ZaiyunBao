@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -28,7 +27,6 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -111,6 +109,16 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
     TextView leaseContactsText;
     @BindView(R.id.lease_contact_phone_text)
     TextView leaseContactPhoneText;
+    @BindView(R.id.lease_delivery_time_text)
+    TextView mLeaseDeliveryTimeText;
+    @BindView(R.id.lease_zulin_Modles)
+    TextView mLeaseZulinModles;
+    @BindView(R.id.lease_term_layout)
+    LinearLayout mLeaseTermLayout;
+    @BindView(R.id.lease_FreeDays_View)
+    View mLeaseFreeDaysView;
+    @BindView(R.id.lease_FreeDays_layout)
+    LinearLayout mLeaseFreeDaysLayout;
     private String UID = "";
 
     private String Id = "";
@@ -173,6 +181,17 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (getIntent().getStringExtra("MyModle").equals("分时租赁")){
+            mLeaseTermLayout.setVisibility(View.VISIBLE);
+            mLeaseFreeDaysView.setVisibility(View.VISIBLE);
+            mLeaseFreeDaysLayout.setVisibility(View.VISIBLE);
+
+        } else if (getIntent().getStringExtra("MyModle").equals("分次租赁")){
+            mLeaseTermLayout.setVisibility(View.GONE);
+            mLeaseFreeDaysView.setVisibility(View.GONE);
+            mLeaseFreeDaysLayout.setVisibility(View.GONE);
+        }
+
         leaseDetailsShebeiName.setText(getIntent().getStringExtra("MyEquipmentName"));
         leaseDetailsShebeiSpec.setText(getIntent().getStringExtra("MyNorm"));
         leaseDetailsShebeiLoad.setText(getIntent().getStringExtra("myLoad"));
@@ -186,12 +205,12 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
         } catch (Exception e) {
         }
 
-
+        mLeaseZulinModles.setText(getIntent().getStringExtra("MyModle"));
         leaseRentModles.setText(getIntent().getStringExtra("MyBalanceMode"));
 
 
         leaseSum.setText(String.valueOf(getIntent().getIntExtra("leaseSum", 0)) + "片"); //租赁数量
-        leasePriceDJ.setText(getIntent().getStringExtra("MyPValue") + "元/天/片"); //单价
+        leasePriceDJ.setText(getIntent().getStringExtra("MyPValue") + "元/天/片(不含税)"); //单价
         leaseTerm.setText(String.valueOf(getIntent().getIntExtra("Datasums", 0)) + "天"); //租期
 
         leaseFreeDays.setText(getIntent().getIntExtra("MianzuQI", 0) + "天");
@@ -212,12 +231,14 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
         if (leaseDeliveryModle.getText().toString().equals("送货上门")) {
             leaseConsigneeLayout.setVisibility(View.GONE);
             leaseCollectAddressText.setText("送货地址：");
+            mLeaseDeliveryTimeText.setText("送货时间：");
             leaseContactsText.setText("收货人：");
             leaseContactPhoneText.setText("收货人联系电话：");
 
         } else if (leaseDeliveryModle.getText().toString().equals("用户自提")) {
             leaseConsigneeLayout.setVisibility(View.VISIBLE);
             leaseCollectAddressText.setText("提货地址：");
+            mLeaseDeliveryTimeText.setText("提货时间：");
             leaseConsigneeText.setText("提货人：");
             leaseContactsText.setText("取货联系人：");
             leaseContactPhoneText.setText("取货联系电话：");
@@ -268,8 +289,11 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
 
                 obj.put("FormType", 3);//转租
 
-                obj.put("TargetDeliveryTime", getIntent().getStringExtra("MyStartTime")); //租赁开始时间
-                obj.put("ReturnBakcTime", getIntent().getStringExtra("MyEndTime")); //退租日期(归还时间)
+                if (getIntent().getStringExtra("MyModle").equals("分时租赁")){
+                    obj.put("TargetDeliveryTime", getIntent().getStringExtra("MyStartTime")); //租赁开始时间
+                    obj.put("ReturnBakcTime", getIntent().getStringExtra("MyEndTime")); //退租日期(归还时间)
+                }
+
                 obj.put("ArrivalTime", "");
 
                 obj.put("Price", Float.valueOf(getIntent().getStringExtra("MyPValue")));
@@ -321,7 +345,7 @@ public class LeaseMyEquipmentSeeActivity extends BaseActivity {
                 obj.put("Deposit", Float.valueOf(getIntent().getStringExtra("MyDeposit"))); //押金
 
 
-                obj.put("Recommend",  getIntent().getStringExtra("leaseMyPhoneNumble") +
+                obj.put("Recommend", getIntent().getStringExtra("leaseMyPhoneNumble") +
                         getIntent().getStringExtra("leaseMyRefereeName")); //推荐人
                 obj.put("RecommendPhone", getIntent().getStringExtra("leaseMyPhoneNumble")); //推荐人电话
 

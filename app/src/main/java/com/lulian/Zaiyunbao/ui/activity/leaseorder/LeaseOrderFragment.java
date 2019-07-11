@@ -76,6 +76,13 @@ public class LeaseOrderFragment extends BaseLazyFragment {
                 intent.putExtra("ReceiveUserId", orderListBean.get(position).getReceiveUserId()); //租出方ID
                 intent.putExtra("StoreId", orderListBean.get(position).getStoreId()); //租出方ID
 
+                if (orderListBean.get(position).getZulinModel() == 1) {
+                    intent.putExtra("ZulinModel", "分时租赁");
+                } else {
+                    intent.putExtra("ZulinModel", "分次租赁");
+                }
+
+
                 getContext().startActivity(intent);
             }
         });

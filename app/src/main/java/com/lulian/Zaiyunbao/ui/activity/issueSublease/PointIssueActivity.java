@@ -23,6 +23,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.IssueListBean;
 import com.lulian.Zaiyunbao.Bean.LeasePriceFromBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
@@ -39,9 +40,14 @@ import com.trello.rxlifecycle2.android.ActivityEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -143,7 +149,7 @@ public class PointIssueActivity extends BaseActivity {
         textDetailRight.setVisibility(View.GONE);
         issueListBean = (IssueListBean) getIntent().getSerializableExtra("issueListBean");
         pointCanSum.setText(issueListBean.getQuantity() + "个/片");
-        getYajin();
+
         initView();
     }
 
@@ -169,9 +175,17 @@ public class PointIssueActivity extends BaseActivity {
 //                    }
 //                });
 
+        int RenyWay = 0;
+        String ZulinMode = pointZLmodle.getText().toString().trim();
 
-        mApi.rentPriceList(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), 1,
-                issueListBean.getQuantity(), 0)
+        if (ZulinMode.equals("分时租赁")){
+            RenyWay = 1;
+        } else {
+            RenyWay = 2;
+        }
+
+        mApi.rentPriceList(GlobalParams.sToken, issueListBean.getId(), issueListBean.getOperator(), RenyWay,
+                Integer.valueOf(pointSum.getText().toString().trim()), 0)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
@@ -203,6 +217,7 @@ public class PointIssueActivity extends BaseActivity {
 
     private void initView() {
 
+
         pointIssueName.setText(issueListBean.getEquipmentName());
 
         pointZLmodle.setOnClickListener(new View.OnClickListener() {
@@ -210,8 +225,8 @@ public class PointIssueActivity extends BaseActivity {
             public void onClick(View v) {
                 handleBlur(issueDialogBg, mHandler);
 
-                String[] list = GlobalParams.ZLTypeList.toArray(new String[GlobalParams.ZLTypeList.size()]);
-
+//                String[] list = GlobalParams.ZLTypeList.toArray(new String[GlobalParams.ZLTypeList.size()]);
+                String[] list = {"分时租赁","分次租赁"};
                 BaseDialog(PointIssueActivity.this, issueDialogBg, list,
                         pointZLmodle.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
                             @Override
@@ -223,11 +238,16 @@ public class PointIssueActivity extends BaseActivity {
             }
         });
 
+        pointZLmodle.setText("分时租赁");
+        pointSum.setText(issueListBean.getQuantity()+"");
+
         pointSHMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
             handleBlur(issueDialogBg, mHandler);
-            String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
+//            String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
+
+            String[] list = {"送货上门", "用户自提"};
             BaseDialog(PointIssueActivity.this, issueDialogBg, list,
                     pointSHMode.getText().toString(), "送货方式", mHandler, new OnItemClickListener() {
                         @Override
@@ -295,6 +315,8 @@ public class PointIssueActivity extends BaseActivity {
                     RxToast.warning("请输入手机号码");
                 } else if (TextUtils.isEmpty(pointSum.getText().toString().trim())) {
                     RxToast.warning("请输入转租数量");
+                }else if (Integer.valueOf(pointSum.getText().toString().trim()) <= 0) {
+                    RxToast.warning("转租数量不能小于或等于0");
                 } else if (Integer.valueOf(pointSum.getText().toString().trim()) > issueListBean.getQuantity()) {
                     RxToast.warning("转租数量不能大于可转租数量");
                 } else if (TextUtils.isEmpty(pointZLmodle.getText().toString().trim())) {
@@ -370,6 +392,8 @@ public class PointIssueActivity extends BaseActivity {
                 }
             }
         });
+
+        getDeposit();
     }
 
     //发布租赁
@@ -517,5 +541,44 @@ public class PointIssueActivity extends BaseActivity {
             pointIssuePhone.setText(phoneNumber.toString().replaceAll(" ", ""));
 
         }
+    }
+
+    private void getDeposit() {
+        RxTextView.textChanges(pointSum)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.toString().trim().length() > 0;
+                    }
+                }).subscribe(new Consumer<CharSequence>() {
+            @Override
+            public void accept(@NonNull CharSequence charSequence) throws Exception {
+
+                getYajin();
+
+            }
+        });
+
+        RxTextView.textChanges(pointZLmodle)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.toString().trim().length() > 0;
+                    }
+                }).subscribe(new Consumer<CharSequence>() {
+            @Override
+            public void accept(@NonNull CharSequence charSequence) throws Exception {
+
+                getYajin();
+
+            }
+        });
+
     }
 }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
@@ -23,6 +24,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gyf.barlibrary.ImmersionBar;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.CanRetireEquipmentListBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
@@ -32,16 +34,22 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/11/20.
@@ -99,6 +107,10 @@ public class RetireCreateActivity extends BaseActivity {
     Button retireCreateBtn;
     @BindView(R.id.dialog_bg)
     ImageView dialogBg;
+    @BindView(R.id.retire_zulin_Mode_text)
+    TextView mRetireZulinModeText;
+    @BindView(R.id.retire_zulin_Mode)
+    TextView mRetireZulinMode;
 
 
     private List<CanRetireEquipmentListBean> EtypeList = new ArrayList<>();
@@ -160,6 +172,8 @@ public class RetireCreateActivity extends BaseActivity {
 
         textDetailContent.setText("退租预约");
         textDetailRight.setVisibility(View.GONE);
+        mRetireZulinMode.setText("分时租赁");
+
         getCanRent();
 
         dialogBg.setImageAlpha(0);
@@ -180,6 +194,7 @@ public class RetireCreateActivity extends BaseActivity {
     }
 
     private void initView() {
+        getDeposit();
         retireCreateSiteAddress.setText(getIntent().getStringExtra("Area"));
         retireCreateServiceSite.setText(getIntent().getStringExtra("Name"));
         retireCreateSiteDistance.setText("距我约15KM");
@@ -223,6 +238,22 @@ public class RetireCreateActivity extends BaseActivity {
                             public void onItemClickListener(int position, List<SaleEntity> data) {
                                 retireCreateMode.setText(data.get(position).getTitle());
 
+                            }
+                        });
+            }
+        });
+
+        mRetireZulinMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleBlur(dialogBg, mHandler);
+                String[] list = {"分时租赁", "分次租赁"};
+
+                BaseDialog(RetireCreateActivity.this, dialogBg, list,
+                        mRetireZulinMode.getText().toString(), "租赁方式", mHandler, new OnItemClickListener() {
+                            @Override
+                            public void onItemClickListener(int position, List<SaleEntity> data) {
+                                mRetireZulinMode.setText(data.get(position).getTitle());
                             }
                         });
             }
@@ -273,6 +304,7 @@ public class RetireCreateActivity extends BaseActivity {
                     intent.putExtra("TakeAddress", retireCreateSiteAddress.getText().toString().trim());
                     intent.putExtra("ReserveMode", retireCreateMode.getText().toString().trim());
                     intent.putExtra("BelongMember", getIntent().getStringExtra("BelongMember"));
+                    intent.putExtra("ModleSpinner", mRetireZulinMode.getText().toString().trim());
                     startActivity(intent);
                     finish();
                 }
@@ -292,11 +324,21 @@ public class RetireCreateActivity extends BaseActivity {
 
     //获取可退租设备
     private void getCanRent() {
-        mApi.canRentEquipmentList(GlobalParams.sToken, GlobalParams.sUserId)
+        int RentWay = 0;
+        if (mRetireZulinMode.getText().toString().trim().equals("分时租赁")){
+            RentWay = 1;
+        } else {
+            RentWay = 2;
+        }
+
+        mApi.canRentEquipmentList(GlobalParams.sToken, GlobalParams.sUserId, RentWay)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
+                        EtypeList.clear();
+                        EType.clear();
+
                         EtypeList = JSONObject.parseArray(s, CanRetireEquipmentListBean.class);
 
                         for (int i = 0; i < EtypeList.size(); i++) {
@@ -356,4 +398,25 @@ public class RetireCreateActivity extends BaseActivity {
         return format.format(date);
     }
 
+    private void getDeposit() {
+        RxTextView.textChanges(mRetireZulinMode)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.toString().trim().length() > 0;
+                    }
+                }).subscribe(new Consumer<CharSequence>() {
+            @Override
+            public void accept(@NonNull CharSequence charSequence) throws Exception {
+                retireCreateTypeName.setText("");
+                rentCanSum.setText("");
+                retireCreateShebeiCansum.setText("");
+                retireCreateShebeiSum.setText("");
+                getCanRent();
+            }
+        });
+    }
 }

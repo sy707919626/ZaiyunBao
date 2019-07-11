@@ -243,7 +243,7 @@ public class LeaseOrderAdapter extends RecyclerView.Adapter<LeaseOrderAdapter.Le
                     intentReserve.putExtra("OrdersId", mOrderListBean.get(position).getOrdersId());
                     intentReserve.putExtra("OrderNo", mOrderListBean.get(position).getOrderNo());
                     intentReserve.putExtra("Id", mOrderListBean.get(position).getId()); //设备ID
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel); //租赁模式
                     intentReserve.putExtra("AdapterPage", "LeaseOrderAdapter");
                     mContext.startActivity(intentReserve);
 

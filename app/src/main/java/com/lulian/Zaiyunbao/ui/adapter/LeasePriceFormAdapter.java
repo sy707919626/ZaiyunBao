@@ -52,27 +52,30 @@ public class LeasePriceFormAdapter extends RecyclerView.Adapter {
             View itemView = LayoutInflater.from(mContext).inflate(R.layout.lease_priceform_content, parent, false);
             return new ContentHolder(itemView);
         }
-
     }
 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        int mPostition  = position;
         if (holder instanceof HeadHolder) { // 头部
 
         } else if (holder instanceof ContentHolder) { // 内容
-            ((ContentHolder) holder).EName.setText(mLeasePriceFromBean.get(position).getEName());
-            ((ContentHolder) holder).FreeDays.setText(String.valueOf(mLeasePriceFromBean.get(position).getFreeDays()));
-            ((ContentHolder) holder).Rent.setText(String.valueOf(mLeasePriceFromBean.get(position).getPrice()));
+            ((ContentHolder) holder).EName.setText(mLeasePriceFromBean.get(mPostition -1).getEName());
+            ((ContentHolder) holder).FreeDays.setText(String.valueOf(mLeasePriceFromBean.get(mPostition -1).getFreeDays()));
+            ((ContentHolder) holder).Rent.setText(String.valueOf(mLeasePriceFromBean.get(mPostition -1).getPrice()));
 
-            ((ContentHolder) holder).TopLimit.setText(String.valueOf(mLeasePriceFromBean.get(position).getDowLimit() + " ≤ 天数 ≤" +
-                    String.valueOf(mLeasePriceFromBean.get(position).getTopLimit())));
+            ((ContentHolder) holder).TopLimit.setText(String.valueOf(mLeasePriceFromBean.get(mPostition -1).getDowLimit() + "～" +
+                    String.valueOf(mLeasePriceFromBean.get(mPostition -1).getTopLimit())));
+
+            ((ContentHolder) holder).CountLimit.setText(String.valueOf(mLeasePriceFromBean.get(mPostition -1).getCountDowLimit() + "～" +
+                    String.valueOf(mLeasePriceFromBean.get(mPostition -1).getCountTopLimit())));
         }
     }
 
     @Override
     public int getItemCount() {
-        return mLeasePriceFromBean.size();
+        return mLeasePriceFromBean.size() + 1;
     }
 
     // 头部
@@ -88,6 +91,7 @@ public class LeasePriceFormAdapter extends RecyclerView.Adapter {
         private TextView TopLimit;
         private TextView Rent;
         private TextView FreeDays;
+        private TextView CountLimit;
 
         public ContentHolder(View itemView) {
             super(itemView);
@@ -95,6 +99,8 @@ public class LeasePriceFormAdapter extends RecyclerView.Adapter {
             TopLimit = itemView.findViewById(R.id.TopLimit);
             Rent = itemView.findViewById(R.id.Rent);
             FreeDays = itemView.findViewById(R.id.FreeDays);
+            CountLimit = itemView.findViewById(R.id.CountLimit);
+
         }
     }
 

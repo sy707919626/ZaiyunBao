@@ -49,6 +49,8 @@ import java.io.IOException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.SingleObserver;
+import io.reactivex.disposables.Disposable;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;

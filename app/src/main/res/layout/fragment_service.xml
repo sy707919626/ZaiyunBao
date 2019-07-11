@@ -60,6 +60,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:id="@+id/seekRent_time_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
@@ -334,14 +335,12 @@
 
                         <com.lulian.Zaiyunbao.common.widget.ClearEditText
                             android:id="@+id/seekRent_depositPrice"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_centerInParent="true"
-                            android:layout_marginLeft="15dp"
-                            android:layout_toLeftOf="@+id/seekRent_depositPrice_text2"
-                            android:layout_toRightOf="@+id/seekRent_depositPrice_text"
-                            android:background="@null"
                             android:gravity="center"
+                            android:layout_marginLeft="15dp"
+                            android:background="@null"
                             android:hint="请输入押金单价"
                             android:textColor="@color/text_sum"
                             android:textColorHint="@color/color_99"
@@ -354,7 +353,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="20dp"
                             android:gravity="center_vertical"
-                            android:text="元/个/片"
+                            android:text="元/个/片(不含税)"
                             android:textColor="@color/text_black"
                             android:textSize="14dp" />
                     </RelativeLayout>

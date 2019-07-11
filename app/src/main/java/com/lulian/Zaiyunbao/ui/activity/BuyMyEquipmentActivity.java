@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.BuyDetailBean;
-import com.lulian.Zaiyunbao.Bean.BuyListBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
@@ -96,6 +95,8 @@ public class BuyMyEquipmentActivity extends BaseActivity {
     Button buyEquipmentMyNext;
     @BindView(R.id.dialog_bg)
     ImageView dialogBg;
+    @BindView(R.id.buy_my_PValue_danwei)
+    TextView mBuyMyPValueDanwei;
     private String EquipmentName;
     private String Norm;
     private float Price;
@@ -155,22 +156,20 @@ public class BuyMyEquipmentActivity extends BaseActivity {
         Norm = getIntent().getStringExtra("Norm");
         Price = getIntent().getFloatExtra("Price", 0);
         Quantity = getIntent().getIntExtra("Quantity", 0);
-        StaticLoad = getIntent().getDoubleExtra("StaticLoad", 0);
-        CarryingLoad = getIntent().getDoubleExtra("CarryingLoad", 0);
-        OnLoad = getIntent().getDoubleExtra("OnLoad", 0);
-        Volume = getIntent().getDoubleExtra("Volume", 0);
-        WarmLong = getIntent().getDoubleExtra("WarmLong", 0);
-        SpecifiedLoad = getIntent().getDoubleExtra("SpecifiedLoad", 0);
+        StaticLoad = getIntent().getFloatExtra("StaticLoad", 0);
+        CarryingLoad = getIntent().getFloatExtra("CarryingLoad", 0);
+        OnLoad = getIntent().getFloatExtra("OnLoad", 0);
+        Volume = getIntent().getFloatExtra("Volume", 0);
+        WarmLong = getIntent().getFloatExtra("WarmLong", 0);
+        SpecifiedLoad = getIntent().getFloatExtra("SpecifiedLoad", 0);
         TypeName = getIntent().getStringExtra("TypeName");
-//        Picture = getIntent().getStringExtra("Picture");
         Id = getIntent().getStringExtra("Id");
         SupplierContactName = getIntent().getStringExtra("SupplierContactName");
         SupplierContactPhone = getIntent().getStringExtra("SupplierContactPhone");
         TypeId = getIntent().getStringExtra("TypeId");
         StorehouseId = getIntent().getStringExtra("StorehouseId");
 
-
-       getData();
+        getData();
     }
 
     //单纯获取图片
@@ -192,28 +191,29 @@ public class BuyMyEquipmentActivity extends BaseActivity {
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
 
-                if (GlobalParams.ZFTypeList.size() > 0) {
-                    String[] list = GlobalParams.ZFTypeList.toArray(new String[GlobalParams.ZFTypeList.size()]);
-
-                    BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
-                            buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
-                                @Override
-                                public void onItemClickListener(int position, List<SaleEntity> data) {
-                                    buyMyPayModleSpinner.setText(data.get(position).getTitle());
-                                }
-                            });
-                } else {
-                    String[] list ={"全款自提", "全款送货", "预付30%送货，货到结清"};
-                    BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
-                            buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
-                                @Override
-                                public void onItemClickListener(int position, List<SaleEntity> data) {
-                                    buyMyPayModleSpinner.setText(data.get(position).getTitle());
-                                }
-                            });
-                }
-
+//                if (GlobalParams.ZFTypeList.size() > 0) {
+//                    String[] list = GlobalParams.ZFTypeList.toArray(new String[GlobalParams.ZFTypeList.size()]);
+//
+//                    BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
+//                            buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
+//                                @Override
+//                                public void onItemClickListener(int position, List<SaleEntity> data) {
+//                                    buyMyPayModleSpinner.setText(data.get(position).getTitle());
+//                                }
+//                            });
+//                } else {
+//                String[] list = {"全款自提", "全款送货", "预付30%送货，货到结清"};
+                String[] list = {"全款自提", "全款送货"};
+                BaseDialog(BuyMyEquipmentActivity.this, dialogBg, list,
+                        buyMyPayModleSpinner.getText().toString(), "货款以及交付方式", mHandler, new OnItemClickListener() {
+                            @Override
+                            public void onItemClickListener(int position, List<SaleEntity> data) {
+                                buyMyPayModleSpinner.setText(data.get(position).getTitle());
+                            }
+                        });
             }
+
+//            }
         });
 
         buyMyEquipmentName.setText(EquipmentName);
@@ -230,9 +230,11 @@ public class BuyMyEquipmentActivity extends BaseActivity {
         }
 
         if (TypeName.equals("保温箱")) {
+            mBuyMyPValueDanwei.setText("元/个(不含税)");
             buyMyLoad.setText("容积" + String.valueOf(Volume) + "升T；保温时长"
                     + String.valueOf(WarmLong) + "小时");
         } else {
+            mBuyMyPValueDanwei.setText("元/片(不含税)");
             buyMyLoad.setText("静载" + String.valueOf(StaticLoad) + "T；动载"
                     + String.valueOf(CarryingLoad) + "T；架载" + String.valueOf(OnLoad) + "T");
         }
@@ -258,7 +260,7 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                 break;
 
             case R.id.buy_equipment_my_next:
-                if (TextUtils.isEmpty(buyMyPayModleSpinner.getText().toString().trim())){
+                if (TextUtils.isEmpty(buyMyPayModleSpinner.getText().toString().trim())) {
                     RxToast.warning("请选择货款以及交付方式");
                 } else if (TextUtils.isEmpty(myAddressQuxian.getText().toString().trim())) {
                     RxToast.warning("请选择收货区县地址");
@@ -283,7 +285,6 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                     intent.putExtra("WarmLong", WarmLong);
                     intent.putExtra("SpecifiedLoad", SpecifiedLoad);
                     intent.putExtra("TypeName", TypeName);
-//                    intent.putExtra("Picture", Picture);
                     intent.putExtra("TypeId", TypeId);
                     intent.putExtra("SupplierContactName", SupplierContactName);//出售方名称
                     intent.putExtra("SupplierContactPhone", SupplierContactPhone);//出售方电话
@@ -350,5 +351,12 @@ public class BuyMyEquipmentActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

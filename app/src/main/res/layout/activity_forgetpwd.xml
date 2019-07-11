@@ -7,6 +7,7 @@
     <!--<include layout="@layout/details_title_basic_bar" />-->
 
     <RelativeLayout
+        android:id="@+id/detail_bar_title"
         android:layout_width="match_parent"
         android:layout_height="50dp">
 

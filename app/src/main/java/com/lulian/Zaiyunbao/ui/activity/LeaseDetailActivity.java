@@ -131,15 +131,23 @@ public class LeaseDetailActivity extends BaseActivity {
         leaseDetailsShebeiName.setText(equipmentDetailBean.get(0).getEquipmentName());
         leaseDetailsShebeiSpec.setText(equipmentDetailBean.get(0).getNorm());
 
-        if (equipmentDetailBean.get(0).getTypeName().equals("托盘")) {
+//        if (equipmentDetailBean.get(0).getTypeName().equals("托盘")) {
+//            leaseDetailsShebeiLoad.setText("静载" + String.valueOf(equipmentDetailBean.get(0).getStaticLoad()) + "T；动载"
+//                    + String.valueOf(equipmentDetailBean.get(0).getCarryingLoad()) + "T；架载" + String.valueOf(equipmentDetailBean.get(0).getOnLoad()) + "T");
+//        } else if (equipmentDetailBean.get(0).getTypeName().equals("保温箱")) {
+//            leaseDetailsShebeiLoad.setText("容积" + equipmentDetailBean.get(0).getVolume() + "升；保温时长"
+//                    + equipmentDetailBean.get(0).getWarmLong() + "小时");
+//        } else if (equipmentDetailBean.get(0).getTypeName().equals("周转篱")) {
+//            leaseDetailsShebeiLoad.setText("容积" + equipmentDetailBean.get(0).getVolume() + "升；载重"
+//                    + equipmentDetailBean.get(0).getSpecifiedLoad() + "公斤");
+//        }
+
+        if (equipmentDetailBean.get(0).getTypeName().equals("保温箱")) {
+            leaseDetailsShebeiLoad.setText("容积" + String.valueOf(equipmentDetailBean.get(0).getVolume()) + "升；保温时长"
+                    + String.valueOf(equipmentDetailBean.get(0).getWarmLong()) + "小时");
+        } else {
             leaseDetailsShebeiLoad.setText("静载" + String.valueOf(equipmentDetailBean.get(0).getStaticLoad()) + "T；动载"
                     + String.valueOf(equipmentDetailBean.get(0).getCarryingLoad()) + "T；架载" + String.valueOf(equipmentDetailBean.get(0).getOnLoad()) + "T");
-        } else if (equipmentDetailBean.get(0).getTypeName().equals("保温箱")) {
-            leaseDetailsShebeiLoad.setText("容积" + equipmentDetailBean.get(0).getVolume() + "升；保温时长"
-                    + equipmentDetailBean.get(0).getWarmLong() + "小时");
-        } else if (equipmentDetailBean.get(0).getTypeName().equals("周转篱")) {
-            leaseDetailsShebeiLoad.setText("容积" + equipmentDetailBean.get(0).getVolume() + "升；载重"
-                    + equipmentDetailBean.get(0).getSpecifiedLoad() + "公斤");
         }
 
         leaseDetailsShebeiPrice.setText(String.valueOf(equipmentDetailBean.get(0).getPrice()) + "");

@@ -24,6 +24,7 @@ import com.lulian.Zaiyunbao.common.event.PayEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.CircleImageView;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.item_view;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.AboutActivity;
@@ -109,9 +110,6 @@ public class MeFragment extends BaseFragment {
     private void getMessageNumber() {
         mApi.GetMessagesCount(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
-                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
-                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
-                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
@@ -171,23 +169,24 @@ public class MeFragment extends BaseFragment {
     private void getData() {
         mApi.myMoneyInfo(GlobalParams.sToken, GlobalParams.sUserId)
                 .compose(RxHttpResponseCompat.<String>compatResult())
-                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
-                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
-                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
                     public void onNext(String s) {
-                        JSONObject jsonObject = JSONObject.parseObject(s);
-                        if (TextUtils.isEmpty(jsonObject.getString("Balance"))){
-                            meTxtYuer.setText("0元");
-                        } else {
-                            meTxtYuer.setText(jsonObject.getString("Balance") + "元");
-                        }
+                        if(!TextUtils.isEmpty(s)) {
+                            JSONObject jsonObject = JSONObject.parseObject(s);
+                            if (TextUtils.isEmpty(jsonObject.getString("Balance"))) {
+                                meTxtYuer.setText("0元");
+                            } else {
+                                meTxtYuer.setText(jsonObject.getString("Balance") + "元");
+                            }
 
-                        if (TextUtils.isEmpty(jsonObject.getString("Deposit"))){
-                            meTxtYajin.setText("0元");
+                            if (TextUtils.isEmpty(jsonObject.getString("Deposit"))) {
+                                meTxtYajin.setText("0元");
+                            } else {
+                                meTxtYajin.setText(jsonObject.getString("Deposit") + "元");
+                            }
                         } else {
-                            meTxtYajin.setText(jsonObject.getString("Deposit") + "元");
+                            RxToast.warning("暂无数据");
                         }
                     }
                 });

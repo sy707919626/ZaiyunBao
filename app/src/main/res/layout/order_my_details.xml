@@ -161,7 +161,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="元/天"
+                            android:text="元/天(不含税)"
                             android:textColor="@color/text_black"
                             android:textSize="@dimen/text_size_four" />
                     </LinearLayout>
@@ -343,7 +343,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/color_9c" />
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp">
 
+                    <TextView
+                        android:id="@+id/my_order_zulin_model_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="租赁模式"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/my_order_zulin_model"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:text="分时租赁"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
@@ -372,6 +404,7 @@
                         android:textColor="@color/text_color_black"
                         android:textSize="@dimen/text_size_trhee" />
                 </RelativeLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -446,6 +479,7 @@
                     android:background="@color/color_9c" />
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/my_order_Rent_free_layout"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"

@@ -81,10 +81,11 @@ public class RentBackEntryActivity extends BaseActivity {
 
     private List<ECodeBean> mEcodeListBean = new ArrayList<>();
     private String EquipmentId; //设备ID
+    private int RentWay;
 
     @Override
     protected int setLayoutId() {
-        return R.layout.activity_sublease_entry_order;
+        return R.layout.activity_rentback_entry_order;
     }
 
     @Override
@@ -107,6 +108,7 @@ public class RentBackEntryActivity extends BaseActivity {
         RentOrderID = getIntent().getStringExtra("RentOrderID");
         Count = getIntent().getIntExtra("Count", 0); //可租数量
         EquipmentId = getIntent().getStringExtra("Id");
+        RentWay = getIntent().getIntExtra("RentWay", 0); //租赁模式 1分时， 2分次
 
         subleaseEntryRecycler.setItemAnimator(new DefaultItemAnimator());
         subleaseEntryRecycler.setLayoutManager(new LinearLayoutManager(this));
@@ -135,8 +137,10 @@ public class RentBackEntryActivity extends BaseActivity {
                         orderList.clear();
                         mAdapter.notifyDataSetChanged();
                         ecodeAddBtn.setEnabled(false);
-                        RxToast.warning("请输入设备数量");
+
                     }
+                } else {
+                    getEquimentCode(Integer.valueOf(subleaseEntrySum.getText().toString().trim()));
                 }
             }
         });
@@ -144,9 +148,11 @@ public class RentBackEntryActivity extends BaseActivity {
         ecodeAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (TextUtils.isEmpty(subleaseEntrySum.getText().toString().trim())) {
                     RxToast.warning("请输入设备数量");
+
+                } else if (Integer.valueOf(subleaseEntrySum.getText().toString().trim()) <= 0) {
+                    RxToast.warning("录入设备总数不能小于或等于0");
 
                 } else if (Integer.valueOf(subleaseEntrySum.getText().toString().trim()) + orderList.size() > Count) {
                     RxToast.warning("录入设备总数不能大于可退租数量");
@@ -166,7 +172,7 @@ public class RentBackEntryActivity extends BaseActivity {
                     subleaseEntryCount.setText(orderList.size() + "");
 
                 } else {
-                    RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                    RxToast.warning("获取无码设备ECode失败!");
                 }
             }
         });
@@ -176,9 +182,9 @@ public class RentBackEntryActivity extends BaseActivity {
         Observable<String> observable;
 
         if (TextUtils.isEmpty(RentOrderID)){
-            observable =  mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum);
+            observable =  mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum, RentWay);
         } else {
-            observable =  mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum, RentOrderID);
+            observable =  mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum, RentOrderID, RentWay);
         }
 
         observable.compose(RxHttpResponseCompat.<String>compatResult())
@@ -207,7 +213,7 @@ public class RentBackEntryActivity extends BaseActivity {
                             ecodeAddBtn.setEnabled(true);
                             subleaseEntrySum.setEnabled(true);
                         } else {
-                            RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                            RxToast.warning("获取无码设备ECode失败!");
                             ecodeAddBtn.setEnabled(false);
                             subleaseEntrySum.setEnabled(false);
                         }
@@ -216,10 +222,10 @@ public class RentBackEntryActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable t) {
-                        RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                        RxToast.warning("获取无码设备ECode失败!");
                         ecodeAddBtn.setEnabled(false);
                         subleaseEntrySum.setEnabled(false);
-                        super.onError(t);
+//                        super.onError(t);
                     }
                 });
 

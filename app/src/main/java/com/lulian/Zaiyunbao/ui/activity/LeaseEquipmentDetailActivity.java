@@ -153,28 +153,40 @@ public class LeaseEquipmentDetailActivity extends BaseActivity {
         leaseEquipmentModel.setText(leaseEquipmentDetailBean.getModel());
         leaseEquipmentNorm.setText(leaseEquipmentDetailBean.getNorm());
 
-        if (leaseEquipmentDetailBean.getTypeName().equals("托盘")) {
-            carryingLoadText.setText("动载");
-            staticLoadText.setText("静载");
-            leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getCarryingLoad() + "吨");
-            leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getStaticLoad() + "吨");
-        } else if (leaseEquipmentDetailBean.getTypeName().equals("保温箱")) {
+//        if (leaseEquipmentDetailBean.getTypeName().equals("托盘")) {
+//            carryingLoadText.setText("动载");
+//            staticLoadText.setText("静载");
+//            leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getCarryingLoad() + "吨");
+//            leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getStaticLoad() + "吨");
+//        } else if (leaseEquipmentDetailBean.getTypeName().equals("保温箱")) {
+//            carryingLoadText.setText("容积");
+//            staticLoadText.setText("保温时长");
+//            leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getVolume() + "升");
+//            leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getWarmLong() + "小时");
+//        } else if (leaseEquipmentDetailBean.getTypeName().equals("周转篱")) {
+//            carryingLoadText.setText("容积");
+//            staticLoadText.setText("载重");
+//            leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getVolume() + "升");
+//            leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getSpecifiedLoad() + "公斤");
+//        }
+
+        if (leaseEquipmentDetailBean.getTypeName().equals("保温箱")) {
             carryingLoadText.setText("容积");
             staticLoadText.setText("保温时长");
             leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getVolume() + "升");
             leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getWarmLong() + "小时");
-        } else if (leaseEquipmentDetailBean.getTypeName().equals("周转篱")) {
-            carryingLoadText.setText("容积");
-            staticLoadText.setText("载重");
-            leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getVolume() + "升");
-            leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getSpecifiedLoad() + "公斤");
+        } else {
+            carryingLoadText.setText("动载");
+            staticLoadText.setText("静载");
+            leaseEquipmentCarryingLoad.setText(leaseEquipmentDetailBean.getCarryingLoad() + "吨");
+            leaseEquipmentStaticLoad.setText(leaseEquipmentDetailBean.getStaticLoad() + "吨");
         }
 
         leaseEquipmentBaseMaterial.setText(leaseEquipmentDetailBean.getBaseMaterial());
         leaseEquipmentRemark.setText(leaseEquipmentDetailBean.getRemark());
 
         leaseEquipmentEquipmentBaseNo.setText(leaseEquipmentDetailBean.getEquipmentBaseNo());
-        leaseEquipmentPValue.setText(leaseEquipmentDetailBean.getPValue() + "元/天");
+        leaseEquipmentPValue.setText(leaseEquipmentDetailBean.getPValue() + "元/天(不含税)");
     }
 
     @OnClick({R.id.lease_equipment_my_btn, R.id.lease_equipment_my_btn_cannot})

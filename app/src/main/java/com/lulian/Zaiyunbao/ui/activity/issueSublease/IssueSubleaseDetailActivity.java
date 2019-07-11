@@ -138,7 +138,7 @@ public class IssueSubleaseDetailActivity extends BaseActivity {
         leaseEquipmentRemark.setText(issueDeatilsBean.getRemark());
 
         leaseEquipmentEquipmentBaseNo.setText(issueDeatilsBean.getEquipmentBaseNo());
-        leaseEquipmentPValue.setText(issueDeatilsBean.getPrice() + "元/天");
+        leaseEquipmentPValue.setText(issueDeatilsBean.getPrice() + "元/天(不含税)");
     }
 
 }

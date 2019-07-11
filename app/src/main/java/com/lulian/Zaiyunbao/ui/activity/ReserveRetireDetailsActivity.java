@@ -35,7 +35,6 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -111,6 +110,10 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
     Button reserveRetireSubmissionBtn;
     @BindView(R.id.dialog_bg)
     ImageView dialogBg;
+    @BindView(R.id.reserve_zulin_mode_text)
+    TextView mReserveZulinModeText;
+    @BindView(R.id.reserve_zulin_mode)
+    TextView mReserveZulinMode;
 
 
     private String OrdersId = "";
@@ -123,6 +126,7 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
     private String AdapterPage;//区分适配器来源
 
     private int StockSum; //库存数量
+    private String ZulinModel; //租赁模式
 
     private Handler mHandler;
 
@@ -164,13 +168,21 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
 
         FragmentPage = getIntent().getStringExtra("FragmentPage");
         AdapterPage = getIntent().getStringExtra("AdapterPage");
-
+        ZulinModel  = getIntent().getStringExtra("ZulinModel");
         getOrderDatails();
 
     }
 
     private void getStockSum() {
-        mApi.GetEquipmentCount(GlobalParams.sToken, Id, GlobalParams.sUserId)
+        int RentWay;
+
+        if (ZulinModel.equals("分时租赁")){
+            RentWay = 1;
+        } else {
+            RentWay = 2;
+        }
+
+        mApi.GetEquipmentCount(GlobalParams.sToken, Id, GlobalParams.sUserId, RentWay)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
                     @Override
@@ -230,8 +242,8 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
 
-                String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
-
+//                String[] list = GlobalParams.FHTypeList.toArray(new String[GlobalParams.FHTypeList.size()]);
+                String[] list = {"送货上门", "用户自提"};
                 BaseDialog(ReserveRetireDetailsActivity.this, dialogBg, list,
                         reserveRetireMode.getText().toString(), "退租方式", mHandler, new OnItemClickListener() {
                             @Override
@@ -241,6 +253,8 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
                         });
             }
         });
+
+        mReserveZulinMode.setText(ZulinModel);
     }
 
     @OnClick({R.id.reserve_retire_data, R.id.reserve_retire_submission_btn})
@@ -289,10 +303,16 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
         obj.put("CreateUserId", GlobalParams.sUserId);
 
 
-        if (reserveRetireMode.getText().toString().equals("送货上门")){
+        if (reserveRetireMode.getText().toString().equals("送货上门")) {
             obj.put("TransferWay", 1);
         } else {
             obj.put("TransferWay", 2);
+        }
+
+        if (mReserveZulinMode.getText().toString().equals("分时租赁")) {
+            obj.put("RentWay", 1);
+        } else if (mReserveZulinMode.getText().toString().equals("分次租赁")) {
+            obj.put("RentWay", 2);
         }
 
         String args = obj.toString();

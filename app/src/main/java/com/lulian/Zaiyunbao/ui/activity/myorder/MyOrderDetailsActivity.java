@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.AreaBean;
-import com.lulian.Zaiyunbao.Bean.DicItemBean;
 import com.lulian.Zaiyunbao.Bean.MyOrderDetailsBean;
 import com.lulian.Zaiyunbao.Bean.PersonalInfoBean;
 import com.lulian.Zaiyunbao.R;
@@ -31,14 +31,15 @@ import com.lulian.Zaiyunbao.ui.activity.leaseorder.ReceiveLeaseInfoActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderEntryActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.functions.Consumer;
 
 import static com.lulian.Zaiyunbao.di.component.Constants.isAutoRefresh;
 
@@ -149,6 +150,10 @@ public class MyOrderDetailsActivity extends BaseActivity {
     RelativeLayout myOrderRentLayout;
     @BindView(R.id.my_order_yunfei_layout)
     RelativeLayout myOrderYunfeiLayout;
+    @BindView(R.id.my_order_zulin_model_text)
+    TextView mMyOrderZulinModelText;
+    @BindView(R.id.my_order_zulin_model)
+    TextView mMyOrderZulinModel;
 
     private String OrdersId = "";
     private String OrderNo = "";
@@ -169,6 +174,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
 
     private String ReceiveUserId;//租出方id
     private String StoreId;//仓库id
+    private String ZulinModel;
 
     @Override
     protected int setLayoutId() {
@@ -193,53 +199,15 @@ public class MyOrderDetailsActivity extends BaseActivity {
         IsRendIn = getIntent().getIntExtra("IsRendIn", 0);
         ReceiveUserId = getIntent().getStringExtra("ReceiveUserId");
         StoreId = getIntent().getStringExtra("StoreId");
+        ZulinModel = getIntent().getStringExtra("ZulinModel");
         getData();
     }
 
     private void getDataInfo() {
-        //根据仓库Id获取仓库与所属加盟商信息
-//        if (myOrderDetailsBean.getFormType() != 3) {
-//            mApi.getStorehouseInfo(GlobalParams.sToken, StoreId)
-//                    .compose(RxHttpResponseCompat.<String>compatResult())
-//                    .subscribe(new Consumer<String>() {
-//                        @Override
-//                        public void accept(String s) throws Exception {
-//                            if (s.equals("[]")) {
-////                                RxToast.warning("当前供应商资料不全");
-//                            } else {
-//                                areaBean = JSONObject.parseArray(s, AreaBean.class);
-//                                Area = areaBean.get(0).getArea();
-//                                Name = areaBean.get(0).getName();
-//                                ContactName = areaBean.get(0).getContactName();
-//                                ContactPhone = areaBean.get(0).getContactPhone();
-//                            }
-//                            initView();
-//                        }
-//                    });
-//        } else {
-//            mApi.GetPersonalInfo(GlobalParams.sToken, ReceiveUserId)
-//                    .compose(RxHttpResponseCompat.<String>compatResult())
-//                    .subscribe(new Consumer<String>() {
-//                        @Override
-//                        public void accept(String s) throws Exception {
-//
-//                            if (s.equals("[]")) {
-////                                RxToast.warning("当前个人资料不全");
-//                            } else {
-//                                personalInfoBean = JSONObject.parseArray(s, PersonalInfoBean.class);
-//                                ZZName = personalInfoBean.get(0).getContactAdress();
-//                                ZZContactName = personalInfoBean.get(0).getName();
-//                                ZZContactPhone = personalInfoBean.get(0).getPhone();
-//                            }
-//                            initView();
-//                        }
-//                    });
-
-            ZZName = myOrderDetailsBean.getReceiveAddress();
-            ZZContactName = myOrderDetailsBean.getRelease();
-            ZZContactPhone = myOrderDetailsBean.getReleasePhone();
-            initView();
-//        }
+        ZZName = myOrderDetailsBean.getReceiveAddress();
+        ZZContactName = myOrderDetailsBean.getRelease();
+        ZZContactPhone = myOrderDetailsBean.getReleasePhone();
+        initView();
     }
 
     private void getData() {
@@ -257,6 +225,9 @@ public class MyOrderDetailsActivity extends BaseActivity {
 
     private void initView() {
         myOrderNo.setText(OrderNo);
+        mMyOrderZulinModel.setText(ZulinModel);
+
+
         try {
             byte[] bitmapArray;
             bitmapArray = Base64.decode(myOrderDetailsBean.getPicture(), Base64.DEFAULT);
@@ -271,25 +242,45 @@ public class MyOrderDetailsActivity extends BaseActivity {
         myOrderShebeiPrice.setText(myOrderDetailsBean.getPrice() + "");
         myOrderShebeiNum.setText(myOrderDetailsBean.getCount() + "");
 
-        myOrderTakeTime.setText(myOrderDetailsBean.getTargetDeliveryTime());//取托时间
+        if (!TextUtils.isEmpty(myOrderDetailsBean.getTargetDeliveryTime())) {
+            Date date = null;
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                date = format.parse(myOrderDetailsBean.getTargetDeliveryTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            myOrderTakeTime.setText(format.format(date));//取托时间
+        } else {
+            myOrderTakeTime.setText("");
+        }
+
         myOrderContacts.setText(myOrderDetailsBean.getContactName());//企业联系人
         myOrderUnpaidDeposit.setText(myOrderDetailsBean.getOrderDeposit() + "元");//押金
         myOrderPhone.setText(myOrderDetailsBean.getContactPhone());//企业联系电话
 
         myOrderZulinSum.setText(myOrderDetailsBean.getCount() + "个");//租赁数量
-        myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元/天/片");
+        myOrderZulinPrice.setText(myOrderDetailsBean.getPrice() + "元/天/片(不含税)");
         myOrderZulinDay.setText(myOrderDetailsBean.getRentDates() + "天");
         myOrderRentFree.setText(myOrderDetailsBean.getFreeDates() + "天");//免租
         myOrderRent.setText(myOrderDetailsBean.getRentAmount() + "元");//租金
         myOrderYunfei.setText(myOrderDetailsBean.getTrafficFee() + "元");//运费
 
         //结算方式
-        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
-            if (dicItemBean.getDicTypeCode().equals("DT003") &&
-                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getHandRentWay()) {
+//        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
+//            if (dicItemBean.getDicTypeCode().equals("DT003") &&
+//                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getHandRentWay()) {
+//
+//                myOrderJiesuanMethod.setText(dicItemBean.getItemName());
+//            }
+//        }
 
-                myOrderJiesuanMethod.setText(dicItemBean.getItemName());
-            }
+        if (myOrderDetailsBean.getHandRentWay() == 1) {
+            myOrderJiesuanMethod.setText("周结");
+        } else if (myOrderDetailsBean.getHandRentWay() == 2) {
+            myOrderJiesuanMethod.setText("月结");
+        } else if (myOrderDetailsBean.getHandRentWay() == 3) {
+            myOrderJiesuanMethod.setText("季结");
         }
 
 //        if (myOrderDetailsBean.getHandRentWay() == 1) {//租金结算方式
@@ -307,11 +298,17 @@ public class MyOrderDetailsActivity extends BaseActivity {
 //        }
 
         //送货方式
-        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
-            if (dicItemBean.getDicTypeCode().equals("DT002") &&
-                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getTransferWay()) {
-                myOrderTransferWay.setText(dicItemBean.getItemName());
-            }
+//        for (DicItemBean dicItemBean : GlobalParams.sDicItemBean) {
+//            if (dicItemBean.getDicTypeCode().equals("DT002") &&
+//                    Integer.valueOf(dicItemBean.getItemCode()) == myOrderDetailsBean.getTransferWay()) {
+//                myOrderTransferWay.setText(dicItemBean.getItemName());
+//            }
+//        }
+
+        if (myOrderDetailsBean.getTransferWay() == 1) {
+            myOrderTransferWay.setText("送货上门");
+        } else if (myOrderDetailsBean.getTransferWay() == 2) {
+            myOrderTransferWay.setText("用户自提");
         }
 
         if (myOrderTransferWay.getText().toString().trim().equals("送货上门")) {//送货方式
@@ -326,7 +323,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
                 fuwuZhandian.setVisibility(View.GONE);
                 myOrderServiceSite.setText("");//服务站点
 
-                if (myOrderDetailsBean.getReceiveUserType() == 2){
+                if (myOrderDetailsBean.getReceiveUserType() == 2) {
                     myOrderSonghuo.setText(GlobalParams.sUserName);//联系人
                     songhuoLianxiPhone.setText(GlobalParams.sUserPhone);//联系电话
                 } else {
@@ -361,7 +358,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
 
             if (myOrderDetailsBean.getFormType() == 3) { //转租单
 
-                if (myOrderDetailsBean.getReceiveUserType() == 1){ // 1、加盟商  2、用户
+                if (myOrderDetailsBean.getReceiveUserType() == 1) { // 1、加盟商  2、用户
                     myOrderConsignee.setText(ZZContactName);//联系人
                     myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
                 } else {
@@ -373,9 +370,9 @@ public class MyOrderDetailsActivity extends BaseActivity {
 //                myOrderLianxiPhone.setText(ZZContactPhone);//联系电话
                 myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
             } else {
-                myOrderConsignee.setText(ContactName);//联系人
+                myOrderConsignee.setText(myOrderDetailsBean.getContactName());//联系人
                 myOrderAddress.setText(myOrderDetailsBean.getTakeAddress());//提货地址
-                myOrderLianxiPhone.setText(ContactPhone);//联系电话
+                myOrderLianxiPhone.setText(myOrderDetailsBean.getContactPhone());//联系电话
             }
 
 //            myOrderConsignee.setText(ZZContactName);//联系人
@@ -399,13 +396,23 @@ public class MyOrderDetailsActivity extends BaseActivity {
                 myOrderYunfeiLayout.setVisibility(View.GONE);
             } else {
                 myOrderZulinPriceLayout.setVisibility(View.VISIBLE);
-                myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+                if (ZulinModel.equals("分时租赁")) {
+                    myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+                } else{
+                    myOrderRentFreeLayout.setVisibility(View.GONE);
+                }
                 myOrderRentLayout.setVisibility(View.VISIBLE);
                 myOrderYunfeiLayout.setVisibility(View.VISIBLE);
             }
         } else {
             myOrderZulinPriceLayout.setVisibility(View.VISIBLE);
-            myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+
+            if (ZulinModel.equals("分时租赁")) {
+                myOrderRentFreeLayout.setVisibility(View.VISIBLE);
+            } else{
+                myOrderRentFreeLayout.setVisibility(View.GONE);
+            }
+
             myOrderRentLayout.setVisibility(View.VISIBLE);
             myOrderYunfeiLayout.setVisibility(View.VISIBLE);
         }
@@ -763,7 +770,7 @@ public class MyOrderDetailsActivity extends BaseActivity {
                             intent.putExtra("OrderId", OrdersId);
                             intent.putExtra("Count", myOrderDetailsBean.getCount());
                             intent.putExtra("EquipmentId", Id);
-
+                            intent.putExtra("FormType", 3);
                             intent.putExtra("AdapterPage", "MyOrderAdapter");
                             mContext.startActivity(intent);
 //                        finish();
@@ -784,6 +791,8 @@ public class MyOrderDetailsActivity extends BaseActivity {
                         intentReserve.putExtra("OrdersId", OrdersId);
                         intentReserve.putExtra("OrderNo", OrderNo);
                         intentReserve.putExtra("Id", Id); //设备Id
+                        intentReserve.putExtra("ZulinModel", ZulinModel); //租赁模式
+
                         intentReserve.putExtra("AdapterPage", "MyOrderAdapter");
                         startActivity(intentReserve);
 
@@ -802,4 +811,10 @@ public class MyOrderDetailsActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

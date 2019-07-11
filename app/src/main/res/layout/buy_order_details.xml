@@ -127,9 +127,10 @@
                         android:textSize="@dimen/text_size_trhee" />
 
                     <TextView
+                        android:id="@+id/buyDetails_shebei_price_danwei"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="元"
+                        android:text="元(不含税)"
                         android:textColor="@color/text_hint_black2"
                         android:textSize="@dimen/text_size_trhee" />
                 </LinearLayout>
@@ -158,6 +159,7 @@
                         android:textSize="@dimen/text_size_trhee" />
 
                     <TextView
+                        android:id="@+id/buyDetails_shebei_num_danwei"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="个"
@@ -258,7 +260,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="10dp"
                     android:gravity="center"
-                    android:text="长沙路联科技托盘租赁服务点"
+                    android:text=""
                     android:textColor="@color/text_color_black"
                     android:textSize="@dimen/text_size_trhee" />
             </LinearLayout>

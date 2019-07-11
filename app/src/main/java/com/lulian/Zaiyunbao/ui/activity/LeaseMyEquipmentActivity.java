@@ -4,12 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,6 +26,7 @@ import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.gyf.barlibrary.ImmersionBar;
+import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.LeasePriceFromBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
@@ -41,9 +43,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 import static com.alibaba.fastjson.JSON.parseArray;
 
@@ -117,6 +126,17 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     Button leaseEquipmentMyNext;
     @BindView(R.id.dialog_bg)
     ImageView dialogBg;
+    @BindView(R.id.lease_my_line)
+    ImageView mLeaseMyLine;
+    @BindView(R.id.time_reLayout)
+    RelativeLayout mTimeReLayout;
+    @BindView(R.id.lease_my_freeDayAmount_view)
+    View mLeaseMyFreeDayAmountView;
+    @BindView(R.id.lease_my_freeDayAmount_reLayout)
+    LinearLayout mLeaseMyFreeDayAmountReLayout;
+    @BindView(R.id.lease_my_mianzu_reLayout)
+    LinearLayout mLeaseMyMianzuReLayout;
+
     private TimePickerView pvTime;
     private int leaseSum = 0;
     private int Datasums = 0;
@@ -136,7 +156,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     private double WarmLong;
     private double SpecifiedLoad;
     private String TypeName;
-//    private String Picture;
+    //    private String Picture;
     private String Id; //设备ID
     private int UserType; //发布人类型a
     private String CreateId; //创建人
@@ -145,6 +165,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     private String UID; //使用者ID
 
     private Handler mHandler;
+    private boolean isFenci;
 
     public static int differentDays(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();
@@ -243,7 +264,13 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
     //获取押金
     private void getYajin() {
-        mApi.rentPriceList(GlobalParams.sToken, Id, OperatorId, 1,
+        int RentWay = 0;
+        if (leaseMyModleSpinner.getText().toString().trim().equals("分时租赁")){
+            RentWay = 1;
+        } else {
+            RentWay = 2;
+        }
+        mApi.rentPriceList(GlobalParams.sToken, Id, OperatorId, RentWay,
                 Integer.valueOf(leaseMySum.getText().toString().trim()), Datasums)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .subscribe(new ErrorHandlerSubscriber<String>() {
@@ -256,7 +283,11 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                             float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
                             MianZuQi = list.get(0).getFreeDays();
 
-                            ZuJin = list.get(0).getAllAmount() - freeDayMoney - list.get(0).getDiscountAmount();
+                            if (isFenci){
+                                ZuJin = list.get(0).getAllAmount()  - list.get(0).getDiscountAmount();
+                            } else {
+                                ZuJin = list.get(0).getAllAmount() - freeDayMoney - list.get(0).getDiscountAmount();
+                            }
 
                             if (ZuJin <= 0f) {
                                 ZuJin = 0;
@@ -304,58 +335,34 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);
 
-                if (GlobalParams.ZLTypeList.size() > 0) {
-                    String[] list = GlobalParams.ZLTypeList.toArray(new String[GlobalParams.ZLTypeList.size()]);
-                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list,
-                            leaseMyModleSpinner.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
-                                @Override
-                                public void onItemClickListener(int position, List<SaleEntity> data) {
-                                    leaseMyModleSpinner.setText(data.get(position).getTitle());
-                                }
-                            });
-                } else {
-                    String[] list = {"分时租赁","分次租赁"};
-                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list,
-                            leaseMyModleSpinner.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
-                                @Override
-                                public void onItemClickListener(int position, List<SaleEntity> data) {
-                                    leaseMyModleSpinner.setText(data.get(position).getTitle());
-                                }
-                            });
-                }
-
+                String[] list = {"分时租赁", "分次租赁"};
+                BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list,
+                        leaseMyModleSpinner.getText().toString(), "租赁模式", mHandler, new OnItemClickListener() {
+                            @Override
+                            public void onItemClickListener(int position, List<SaleEntity> data) {
+                                leaseMyModleSpinner.setText(data.get(position).getTitle());
+                            }
+                        });
+//                }
 
 
             }
         });
-
-//        leaseMyBalanceMode.setItems(GlobalParams.JSTypeList); //结算类型
+        leaseMyModleSpinner.setText("分时租赁");
 
         leaseMyBalanceMode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 handleBlur(dialogBg, mHandler);//处理背景图
-                if (GlobalParams.JSTypeList.size() > 0) {
-                    String[] list2 = GlobalParams.JSTypeList.toArray(new String[GlobalParams.JSTypeList.size()]);
+                String[] list2 = {"周结", "月结", "季结"};
 
-                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list2,
-                            leaseMyBalanceMode.getText().toString(), "结算方式", mHandler, new OnItemClickListener() {
-                                @Override
-                                public void onItemClickListener(int position, List<SaleEntity> data) {
-                                    leaseMyBalanceMode.setText(data.get(position).getTitle());
-                                }
-                            });
-                } else {
-                    String[] list2 = {"周结", "月结", "季结"};
-
-                    BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list2,
-                            leaseMyBalanceMode.getText().toString(), "结算方式", mHandler, new OnItemClickListener() {
-                                @Override
-                                public void onItemClickListener(int position, List<SaleEntity> data) {
-                                    leaseMyBalanceMode.setText(data.get(position).getTitle());
-                                }
-                            });
-                }
+                BaseDialog(LeaseMyEquipmentActivity.this, dialogBg, list2,
+                        leaseMyBalanceMode.getText().toString(), "结算方式", mHandler, new OnItemClickListener() {
+                            @Override
+                            public void onItemClickListener(int position, List<SaleEntity> data) {
+                                leaseMyBalanceMode.setText(data.get(position).getTitle());
+                            }
+                        });
             }
         });
 
@@ -365,13 +372,19 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
         leaseMoneyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())) {
-                    RxToast.warning("请选择起租时间");
-                } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
-                    RxToast.warning("请选择退租时间");
+                if (!isFenci) {
+                    if (TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())) {
+                        RxToast.warning("请选择起租时间");
+                        return;
+                    } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
+                        RxToast.warning("请选择退租时间");
+                        return;
+                    }
+                }
 
-                } else if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
+                if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
                     RxToast.warning("请输入租赁数量");
+                    return;
                 } else {
                     if (Integer.valueOf(leaseMySum.getText().toString().trim()) > Quantity) {
                         RxToast.warning("租赁数量不能大于可租数量");
@@ -389,6 +402,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
             }
         });
 
+
         leaseMyStartTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -402,7 +416,6 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
@@ -426,7 +439,6 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
@@ -434,8 +446,10 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                 } else {
                     leaseMoneyBtn.setEnabled(false);
                 }
+
             }
         });
+
 
         leaseMySum.addTextChangedListener(new TextWatcher() {
             @Override
@@ -450,16 +464,25 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
-                if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
-                        && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())
-                        && !TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
-                    leaseMoneyBtn.setEnabled(true);
+                if (!isFenci) {
+                    if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
+                            && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())
+                            && !TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
+                        leaseMoneyBtn.setEnabled(true);
+                    } else {
+                        leaseMoneyBtn.setEnabled(false);
+                    }
                 } else {
-                    leaseMoneyBtn.setEnabled(false);
+                    if (!TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
+                        leaseMoneyBtn.setEnabled(true);
+                    } else {
+                        leaseMoneyBtn.setEnabled(false);
+                    }
                 }
             }
         });
+
+        getDeposit();
     }
 
     @OnClick({R.id.lease_my_startTime, R.id.lease_my_endTime, R.id.lease_equipment_my_next, R.id.lease_my_PriceList})
@@ -478,66 +501,82 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                 break;
 
             case R.id.lease_equipment_my_next:
-                if (TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())) {
-                    RxToast.warning("请选择起租时间");
-                } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
-                    RxToast.warning("请选择退租时间");
-                } else if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
+                if (!isFenci) {
+                    if (TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())) {
+                        RxToast.warning("请选择起租时间");
+                        return;
+                    } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
+                        RxToast.warning("请选择退租时间");
+                        return;
+                    }
+                }
+
+                if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
                     RxToast.warning("请输入租赁数量");
+                    return;
                 } else if (TextUtils.isEmpty(leaseMyRent.getText().toString().trim())) {
                     RxToast.warning("请先计算费用");
-                } else {
-                    String load = "";
+                    return;
+                }
 
-                    Intent intent = new Intent(this, LeaseMyEquipmentAddressActivity.class);
-                    intent.putExtra("MyEquipmentName", leaseMyEquipmentName.getText().toString().trim());
+                String load = "";
+
+                Intent intent = new Intent(this, LeaseMyEquipmentAddressActivity.class);
+                intent.putExtra("MyEquipmentName", leaseMyEquipmentName.getText().toString().trim());
 //                    intent.putExtra("MyEquipmentImage", Picture);
 
-                    if (TypeName.equals("托盘")) {
-                        load = "静载" + StaticLoad + "T；动载" + CarryingLoad + "T；架载" + OnLoad + "T";
+                if (TypeName.equals("托盘")) {
+                    load = "静载" + StaticLoad + "T；动载" + CarryingLoad + "T；架载" + OnLoad + "T";
 
-                    } else if (TypeName.equals("保温箱")) {
-                        load = "容积" + Volume + "升；保温时长" + WarmLong + "小时";
+                } else if (TypeName.equals("保温箱")) {
+                    load = "容积" + Volume + "升；保温时长" + WarmLong + "小时";
 
-                    } else if (TypeName.equals("周转篱")) {
-                        load = "容积" + Volume + "升；载重" + SpecifiedLoad + "公斤";
-                    }
+                } else if (TypeName.equals("周转篱")) {
+                    load = "容积" + Volume + "升；载重" + SpecifiedLoad + "公斤";
+                }
 
-                    intent.putExtra("myLoad", load);
-                    intent.putExtra("MyNorm", leaseMyNorm.getText().toString().trim());
-                    intent.putExtra("MyModle", leaseMyModleSpinner.getText().toString().trim());
+                intent.putExtra("myLoad", load);
+                intent.putExtra("MyNorm", leaseMyNorm.getText().toString().trim());
+                intent.putExtra("MyModle", leaseMyModleSpinner.getText().toString().trim());
+                if (isFenci) {
+                    intent.putExtra("MyStartTime", "");
+                    intent.putExtra("MyEndTime", "");
+                    intent.putExtra("mainzuDay", 0);
+                } else {
                     intent.putExtra("MyStartTime", leaseMyStartTime.getText().toString().trim());
                     intent.putExtra("MyEndTime", leaseMyEndTime.getText().toString().trim());
-
-                    intent.putExtra("Datasums", Datasums);
-                    intent.putExtra("leaseSum", Integer.valueOf(leaseMySum.getText().toString().trim()));
-                    intent.putExtra("MyBalanceMode", leaseMyBalanceMode.getText().toString().trim());
-                    intent.putExtra("MyPValue", leaseMyPValue.getText().toString().trim());
-                    intent.putExtra("MyRent", leaseMyRent.getText().toString().trim());
-                    intent.putExtra("MyDepositPrice", leaseMyDepositPrice.getText().toString().trim());
-                    intent.putExtra("MyDeposit", leaseMyDeposit.getText().toString().trim());
-                    intent.putExtra("Id", Id);
-                    intent.putExtra("UserType", UserType);
-                    intent.putExtra("CreateId", CreateId);
-                    intent.putExtra("CreateUser", CreateUser);
                     intent.putExtra("mainzuDay", MianZuQi);
-                    intent.putExtra("StorehouseId", getIntent().getStringExtra("StorehouseId")); //仓库ID
+                }
 
-                    intent.putExtra("OperatorId", OperatorId);//供应商ID
+                intent.putExtra("Datasums", Datasums);
+                intent.putExtra("leaseSum", Integer.valueOf(leaseMySum.getText().toString().trim()));
+                intent.putExtra("MyBalanceMode", leaseMyBalanceMode.getText().toString().trim());
+                intent.putExtra("MyPValue", leaseMyPValue.getText().toString().trim());
+                intent.putExtra("MyRent", leaseMyRent.getText().toString().trim());
+                intent.putExtra("MyDepositPrice", leaseMyDepositPrice.getText().toString().trim());
+                intent.putExtra("MyDeposit", leaseMyDeposit.getText().toString().trim());
+                intent.putExtra("Id", Id);
+                intent.putExtra("UserType", UserType);
+                intent.putExtra("CreateId", CreateId);
+                intent.putExtra("CreateUser", CreateUser);
+
+                intent.putExtra("StorehouseId", getIntent().getStringExtra("StorehouseId")); //仓库ID
+
+                intent.putExtra("OperatorId", OperatorId);//供应商ID
 //                    intent.putExtra("UID", getIntent().getStringExtra("UID"));//使用者ID
 
-                    intent.putExtra("TypeId", getIntent().getStringExtra("TypeId"));
-                    intent.putExtra("TypeName", TypeName);
+                intent.putExtra("TypeId", getIntent().getStringExtra("TypeId"));
+                intent.putExtra("TypeName", TypeName);
 
-                    intent.putExtra("DiscountAmount", leaseMyDiscountAmount.getText().toString().trim()); //折扣金额
+                intent.putExtra("DiscountAmount", leaseMyDiscountAmount.getText().toString().trim()); //折扣金额
 
-                    intent.putExtra("UID", UID); //使用者ID
-                    intent.putExtra("YongJin", YongJin); //佣金
+                intent.putExtra("UID", UID); //使用者ID
+                intent.putExtra("YongJin", YongJin); //佣金
 
 
-                    startActivity(intent);
+                startActivity(intent);
 //                    finish();
-                }
+
                 break;
             default:
                 break;
@@ -658,6 +697,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
     private void clearPriceView() {
         leaseMyPValue.setText("");
+        leaseMyDepositPrice.setText("");
         leaseMyRentAll.setText("");
         leaseMyFreeDayAmount.setText("");
         leaseMyDiscountAmount.setText("");
@@ -665,4 +705,37 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
         leaseMyDeposit.setText("");
         leaseMyMianzu.setText("");
     }
+
+
+    private void getDeposit() {
+        RxTextView.textChanges(leaseMyModleSpinner)
+                .debounce(400, TimeUnit.MILLISECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Predicate<CharSequence>() {
+                    @Override
+                    public boolean test(@NonNull CharSequence charSequence) throws Exception {
+                        return charSequence.toString().trim().length() > 0;
+                    }
+                }).subscribe(new Consumer<CharSequence>() {
+            @Override
+            public void accept(@NonNull CharSequence charSequence) throws Exception {
+                if (charSequence.toString().trim().equals("分次租赁")) {
+                    isFenci = true;
+                    mTimeReLayout.setVisibility(View.GONE);
+                    mLeaseMyFreeDayAmountReLayout.setVisibility(View.GONE);
+                    mLeaseMyMianzuReLayout.setVisibility(View.GONE);
+                    mLeaseMyFreeDayAmountView.setVisibility(View.GONE);
+                } else {
+                    isFenci = false;
+                    mTimeReLayout.setVisibility(View.VISIBLE);
+                    mLeaseMyFreeDayAmountReLayout.setVisibility(View.VISIBLE);
+                    mLeaseMyMianzuReLayout.setVisibility(View.VISIBLE);
+                    mLeaseMyFreeDayAmountView.setVisibility(View.VISIBLE);
+                }
+                clearPriceView();
+            }
+        });
+    }
+
 }

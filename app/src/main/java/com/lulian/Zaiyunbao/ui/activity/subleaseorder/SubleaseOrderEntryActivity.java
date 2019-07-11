@@ -2,10 +2,17 @@ package com.lulian.Zaiyunbao.ui.activity.subleaseorder;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,6 +23,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.ECodeBean;
+import com.lulian.Zaiyunbao.Bean.SaleEntity;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxBus;
@@ -34,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -66,6 +75,12 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
     RecyclerView subleaseEntryRecycler;
     @BindView(R.id.sublease_entry_btn)
     Button subleaseEntryBtn;
+    @BindView(R.id.sublease_entry_zulin_mode_text)
+    TextView mSubleaseEntryZulinModeText;
+    @BindView(R.id.sublease_entry_zulin_mode)
+    TextView mSubleaseEntryZulinMode;
+    @BindView(R.id.dialog_bg)
+    ImageView dialogBg;
 
     private String EquipmentName;
     private String EquipmentNorm;
@@ -80,12 +95,15 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
 
     private String AdapterPage;//区分来源
     private String EquipmentId; //设备ID
+    private int FormType;
+    private Handler mHandler;
 
     @Override
     protected int setLayoutId() {
         return R.layout.activity_sublease_entry_order;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void init() {
         ImmersionBar.with(this)
@@ -100,49 +118,113 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
         textDetailContent.setText("录入设备");
         textDetailRight.setText("导出发货单");
 
+        dialogBg.setImageAlpha(0);
+        dialogBg.setVisibility(View.GONE);
+
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if (msg.what == 0) {
+                    dialogBg.setVisibility(View.GONE);
+                }
+            }
+        };
+
+
         EquipmentName = getIntent().getStringExtra("EquipmentName");
         EquipmentNorm = getIntent().getStringExtra("EquipmentNorm");
         OrderId = getIntent().getStringExtra("OrderId");
         Count = getIntent().getIntExtra("Count", 0); //可租数量
         EquipmentId = getIntent().getStringExtra("EquipmentId");
 
-
+        FormType = getIntent().getIntExtra("FormType", 0);
         AdapterPage = getIntent().getStringExtra("AdapterPage");
 
+
+        mSubleaseEntryZulinMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleBlur(dialogBg, mHandler);
+                String[] list = {"全部","分时租赁","分次租赁"};
+                BaseDialog(SubleaseOrderEntryActivity.this, dialogBg, list,
+                        mSubleaseEntryZulinMode.getText().toString(), "租赁方式", mHandler, new OnItemClickListener() {
+                            @Override
+                            public void onItemClickListener(int position, List<SaleEntity> data) {
+                                mSubleaseEntryZulinMode.setText(data.get(position).getTitle());
+                            }
+                        });
+            }
+        });
+        mSubleaseEntryZulinMode.setText("全部");
 
         subleaseEntryRecycler.setItemAnimator(new DefaultItemAnimator());
         subleaseEntryRecycler.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new SubleaseEntryOrderAdapter(this, orderList, EquipmentName, EquipmentNorm);
         subleaseEntryRecycler.setAdapter(mAdapter);
 
-        getEquimentCode(Count);
 
 
         ecodeAddBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String zulinModel = mSubleaseEntryZulinMode.getText().toString().trim();
                 if (TextUtils.isEmpty(subleaseEntrySum.getText().toString().trim())) {
                     RxToast.warning("请输入设备数量");
 
                 } else if (Integer.valueOf(subleaseEntrySum.getText().toString().trim()) + orderList.size() > Count) {
                     RxToast.warning("录入设备总数不能大于可转租数量");
 
-                } else if (mEcodeListBean.size() > 0){
-                    for (int i = 0; i < Integer.valueOf(subleaseEntrySum.getText().toString().trim()); i++) {
-                        orderList.add(mEcodeListBean.get(i).getECode());
+                } else if (TextUtils.isEmpty(mSubleaseEntryZulinMode.getText().toString().trim())){
+                    RxToast.warning("请选择租赁方式");
+
+                } else{
+
+                    if (zulinModel.equals("全部")){
+                        getEquimentCode(Count, 0);
+
+                    } else if (zulinModel.equals("分时租赁")){
+                        getEquimentCode(Count, 1);
+
+                    } else if (zulinModel.equals("分次租赁")){
+                        getEquimentCode(Count, 2);
                     }
 
-                    if (mAdapter != null) {
-                        mAdapter.notifyDataSetChanged();
-                    } else {
-                        mAdapter = new SubleaseEntryOrderAdapter(SubleaseOrderEntryActivity.this, orderList, EquipmentName, EquipmentNorm);
-                        subleaseEntryRecycler.setAdapter(mAdapter);
-                    }
-
-                    subleaseEntryCount.setText(orderList.size() + "");
-                } else {
-                    RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
                 }
+            }
+        });
+
+        mSubleaseEntryZulinMode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                orderList.clear();
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+
+        subleaseEntrySum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                orderList.clear();
+                mAdapter.notifyDataSetChanged();
             }
         });
     }
@@ -151,8 +233,6 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.sublease_entry_RFID:
-                orderList.add("000000000000");
-
                 if (orderList.size() > Count) {
                     RxToast.warning("录入设备数量不能大于可转租数量");
                 } else {
@@ -180,7 +260,7 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
                 if (orderList.size() <= 0) {
                     RxToast.warning("请导入转租设备");
                 }
-                if (orderList.size() < Count) {
+                 if (orderList.size() < Count) {
                     RxToast.warning("当前录入设备数量不足，无法进行发货");
                 } else {
                     String[] strArrayTrue = orderList.toArray(new String[orderList.size()]);
@@ -229,8 +309,8 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
 
     }
 
-    private void getEquimentCode(int Sum) {
-        mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum)
+    private void getEquimentCode(int Sum, final int RentWay) {
+        mApi.GetECodeForSend(GlobalParams.sToken, EquipmentId, GlobalParams.sUserId, Sum, RentWay)
                 .compose(RxHttpResponseCompat.<String>compatResult())
                 .compose(this.<String>bindUntilEvent(ActivityEvent.DESTROY))
                 .compose(this.<String>bindUntilEvent(ActivityEvent.STOP))
@@ -239,21 +319,51 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
                     @Override
                     public void onNext(String s) {
                         mEcodeListBean = JSONObject.parseArray(s, ECodeBean.class);
-                        if (mEcodeListBean.size() <= 0 ){
-                            RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
-                            ecodeAddBtn.setEnabled(false);
-                            subleaseEntrySum.setEnabled(false);
+//                        if (mEcodeListBean.size() <= 0) {
+//                            RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+//                            ecodeAddBtn.setEnabled(false);
+//                            subleaseEntrySum.setEnabled(false);
+//                        } else {
+//                            ecodeAddBtn.setEnabled(true);
+//                            subleaseEntrySum.setEnabled(true);
+//                        }
+                        if (mEcodeListBean.size() > 0) {
+                            for (int i = 0; i < Integer.valueOf(subleaseEntrySum.getText().toString().trim()); i++) {
+                                orderList.add(mEcodeListBean.get(i).getECode());
+                            }
+
+                            if (mAdapter != null) {
+                                mAdapter.notifyDataSetChanged();
+                            } else {
+                                mAdapter = new SubleaseEntryOrderAdapter(SubleaseOrderEntryActivity.this, orderList, EquipmentName, EquipmentNorm);
+                                subleaseEntryRecycler.setAdapter(mAdapter);
+                            }
+
+                            subleaseEntryCount.setText(orderList.size() + "");
                         } else {
-                            ecodeAddBtn.setEnabled(true);
-                            subleaseEntrySum.setEnabled(true);
+                            if (RentWay == 1){
+                                RxToast.warning("获取分时租赁的无码设备ECode失败！");
+                            } else if (RentWay == 2){
+                                RxToast.warning("获取分次租赁的无码设备ECode失败！");
+                            } else if (RentWay == 0){
+                                RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                            }
                         }
                     }
 
                     @Override
                     public void onError(Throwable t) {
-                        ecodeAddBtn.setEnabled(false);
-                        subleaseEntrySum.setEnabled(false);
-                        super.onError(t);
+//                        ecodeAddBtn.setEnabled(false);
+//                        subleaseEntrySum.setEnabled(false);
+                        if (RentWay == 1){
+                            RxToast.warning("获取分时租赁的无码设备ECode失败！");
+                        } else if (RentWay == 2){
+                            RxToast.warning("获取分次租赁的无码设备ECode失败！");
+                        } else if (RentWay == 0){
+                            RxToast.warning("获取无码设备ECode失败！找不到适用的设备！");
+                        }
+
+//                        super.onError(t);
                     }
                 });
     }
@@ -284,5 +394,4 @@ public class SubleaseOrderEntryActivity extends BaseActivity {
             }
         });
     }
-
 }

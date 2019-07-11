@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
@@ -75,7 +78,6 @@ public class OrderFragment extends BaseLazyFragment {
         OrderRecyclerView.setAdapter(mAdapter);
 
         mAdapter.setOnItemClickListener(new MyOrderAdapter.OnItemClickListener() {
-
             @Override
             public void onItemClickListener(int position, ArrayList<MyOrderLisetBean.RowsBean> orderListBean) {
                 Intent intent = new Intent(getContext(), MyOrderDetailsActivity.class);
@@ -85,6 +87,13 @@ public class OrderFragment extends BaseLazyFragment {
                 intent.putExtra("IsRendIn", orderListBean.get(position).getIsRendIn()); //租入方
                 intent.putExtra("ReceiveUserId", orderListBean.get(position).getReceiveUserId()); //租出方ID
                 intent.putExtra("StoreId", orderListBean.get(position).getStoreId()); //仓库ID
+
+                if (orderListBean.get(position).getZulinModel() == 1) {
+                    intent.putExtra("ZulinModel", "分时租赁");
+                } else {
+                    intent.putExtra("ZulinModel", "分次租赁");
+                }
+
                 getContext().startActivity(intent);
             }
         });
@@ -163,6 +172,12 @@ public class OrderFragment extends BaseLazyFragment {
                         sort();
 
                         if (mAdapter != null) {
+//                            LayoutAnimationController lac = new LayoutAnimationController(AnimationUtils.loadAnimation(getContext(), R.anim.test));
+//                            lac.setDelay(0.5f);
+//                            lac.setOrder(LayoutAnimationController.ORDER_RANDOM);
+//                            OrderRecyclerView.setLayoutAnimation(lac);
+//                            OrderRecyclerView.startLayoutAnimation();
+
                             mAdapter.notifyDataSetChanged();
                         }
 

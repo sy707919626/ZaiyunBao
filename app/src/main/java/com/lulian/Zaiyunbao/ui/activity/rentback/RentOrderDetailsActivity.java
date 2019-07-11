@@ -94,6 +94,7 @@ public class RentOrderDetailsActivity extends BaseActivity {
     private String OrdersId = "";
     private String OrderNo = "";
     private String Id = "";
+    private int RentWay;
     private List<RentOrderDetailBean> mOrderDetailsList = new ArrayList<>();
     private RentOrderDetailBean mRentOrderDetailBean;
 
@@ -117,6 +118,7 @@ public class RentOrderDetailsActivity extends BaseActivity {
         OrdersId = getIntent().getStringExtra("OrdersId");
         OrderNo = getIntent().getStringExtra("OrderNo");
         Id = getIntent().getStringExtra("Id");
+        RentWay = getIntent().getIntExtra("RentWay", 0);
         getData();
     }
 
@@ -200,6 +202,7 @@ public class RentOrderDetailsActivity extends BaseActivity {
                 intent.putExtra("OrderId", OrdersId);
                 intent.putExtra("Count", mRentOrderDetailBean.getCount());
                 intent.putExtra("Id", Id);
+                intent.putExtra("RentWay", RentWay);
                 intent.putExtra("RentOrderID", mRentOrderDetailBean.getRentOrderID());
                 mContext.startActivity(intent);
             }

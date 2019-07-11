@@ -265,9 +265,9 @@ public class LeaseFragment extends BaseLazyFragment {
             list.add(useTypeId);
 
         } else if (zulinUserType.getText().toString().trim().equals("出租信息")) {
-            useTypeId.put("name", "len(UID)");
-            useTypeId.put("type", "!>");
-            useTypeId.put("value", 0);
+            useTypeId.put("name", "isnull(UID,'u')");
+            useTypeId.put("type", "=");
+            useTypeId.put("value", "u");
             list.add(useTypeId);
         } else if (zulinUserType.getText().toString().trim().equals("我的发布")) {
             useTypeId.put("name", "UID");

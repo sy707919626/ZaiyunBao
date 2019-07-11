@@ -184,7 +184,7 @@ public interface ApiService {
 
     //获取可退租的设备信息
     @POST(" /api/AppManage/CanRentEquipmentList")
-    Observable<String> canRentEquipmentList(@Header("Authorization") String authorization, @Query("UserId") String UserId);
+    Observable<String> canRentEquipmentList(@Header("Authorization") String authorization, @Query("UserId") String UserId, @Query("RentWay") int RentWay);
 
     /*******************************设备管理**********************************************************************************************/
     //我的设备列表 过滤条件 : BeforePagingFilters(用户Id,必传)EquipmentBaseNo(设备编号)UseStatus(使用状态：1=闲置 2=载物 3=报修 4= 报废).
@@ -238,11 +238,12 @@ public interface ApiService {
     //发货无码设备台账获取
     @POST("/api/AppMy/GetECodeForSend")
     Observable<String> GetECodeForSend(@Header("Authorization") String authorization, @Query("EquipmentId") String EquipmentId,
-                                       @Query("UserId") String UserId, @Query("Quantity") int Quantity, @Query("OrderId") String OrderId);
+                                       @Query("UserId") String UserId, @Query("Quantity") int Quantity, @Query("OrderId") String OrderId,
+                                       @Query("RentWay") int RentWay);
     //发货无码设备台账获取
     @POST("/api/AppMy/GetECodeForSend")
     Observable<String> GetECodeForSend(@Header("Authorization") String authorization, @Query("EquipmentId") String EquipmentId,
-                                       @Query("UserId") String UserId, @Query("Quantity") int Quantity);
+                                       @Query("UserId") String UserId, @Query("Quantity") int Quantity, @Query("RentWay") int RentWay);
 
     ////////////////////////////////////////////////////////////////////购买.////////////////////////////////////////
     //可购买设备列表
@@ -307,7 +308,7 @@ public interface ApiService {
 
     @POST("/api/AppMy/GetEquipmentCount")
     Observable<String> GetEquipmentCount(@Header("authorization") String authorization, @Query("EquipmentId") String EquipmentId,
-                                         @Query("UserId") String UserId);
+                                         @Query("UserId") String UserId, @Query("RentWay") int RentWay);
 
 
     @POST("/api/AppMy/CancelOrder")

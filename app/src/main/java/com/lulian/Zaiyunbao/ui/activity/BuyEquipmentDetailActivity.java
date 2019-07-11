@@ -124,28 +124,45 @@ public class BuyEquipmentDetailActivity extends BaseActivity {
         buyEquipmentModel.setText(buyDetailBean.getModel());
         buyEquipmentNorm.setText(buyDetailBean.getNorm());
 
-        if (buyDetailBean.getTypeName().equals("托盘")) {
-            carryingLoadText.setText("动载");
-            staticLoadText.setText("静载");
-            buyEquipmentCarryingLoad.setText(buyDetailBean.getCarryingLoad() + "吨");
-            buyEquipmentStaticLoad.setText(buyDetailBean.getStaticLoad() + "吨");
-        } else if (buyDetailBean.getTypeName().equals("保温箱")) {
+        if (buyDetailBean.getTypeName().equals("保温箱")) {
             carryingLoadText.setText("容积");
             staticLoadText.setText("保温时长");
             buyEquipmentCarryingLoad.setText(buyDetailBean.getVolume() + "升");
             buyEquipmentStaticLoad.setText(buyDetailBean.getWarmLong() + "小时");
-        } else if (buyDetailBean.getTypeName().equals("周转篱")) {
-            carryingLoadText.setText("容积");
-            staticLoadText.setText("载重");
-            buyEquipmentCarryingLoad.setText(buyDetailBean.getVolume() + "升");
-            buyEquipmentStaticLoad.setText(buyDetailBean.getSpecifiedLoad() + "公斤");
+//            carryingLoadText.setText("动载");
+//            staticLoadText.setText("静载");
+//            buyEquipmentCarryingLoad.setText(buyDetailBean.getCarryingLoad() + "吨");
+//            buyEquipmentStaticLoad.setText(buyDetailBean.getStaticLoad() + "吨");
+        } else {
+//            carryingLoadText.setText("容积");
+//            staticLoadText.setText("保温时长");
+//            buyEquipmentCarryingLoad.setText(buyDetailBean.getVolume() + "升");
+//            buyEquipmentStaticLoad.setText(buyDetailBean.getWarmLong() + "小时");
+
+            carryingLoadText.setText("动载");
+            staticLoadText.setText("静载");
+            buyEquipmentCarryingLoad.setText(buyDetailBean.getCarryingLoad() + "吨");
+            buyEquipmentStaticLoad.setText(buyDetailBean.getStaticLoad() + "吨");
         }
+
+
+//            if (buyDetailBean.getTypeName().equals("保温箱")) {
+//            carryingLoadText.setText("容积");
+//            staticLoadText.setText("保温时长");
+//            buyEquipmentCarryingLoad.setText(buyDetailBean.getVolume() + "升");
+//            buyEquipmentStaticLoad.setText(buyDetailBean.getWarmLong() + "小时");
+//        } else if (buyDetailBean.getTypeName().equals("周转篱")) {
+//            carryingLoadText.setText("容积");
+//            staticLoadText.setText("载重");
+//            buyEquipmentCarryingLoad.setText(buyDetailBean.getVolume() + "升");
+//            buyEquipmentStaticLoad.setText(buyDetailBean.getSpecifiedLoad() + "公斤");
+//        }
 
         buyEquipmentBaseMaterial.setText(buyDetailBean.getBaseMaterial());
         buyEquipmentRemark.setText(buyDetailBean.getRemark());
 
         buyEquipmentEquipmentBaseNo.setText(buyDetailBean.getEquipmentBaseNo());
-        buyEquipmentPValue.setText(buyDetailBean.getPriceNow() + "元");
+        buyEquipmentPValue.setText(buyDetailBean.getPriceNow() + "元(不含税)");
         buyEquipmentOther.setText("");
     }
 

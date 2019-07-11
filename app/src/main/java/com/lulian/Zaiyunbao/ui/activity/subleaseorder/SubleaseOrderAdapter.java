@@ -41,7 +41,7 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
     private ApiService mApi;
     private boolean isAllFragment = false;
     private OnItemClickListener mOnItemClickListener;
-
+    private String ZulinModel = "";
     private Context mContext;
     private ArrayList<MyOrderLisetBean.RowsBean> mOrderListBean = new ArrayList<>();
 
@@ -78,6 +78,13 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
             holder.orderState.setBackgroundResource(R.drawable.order_background);
         } else {
             holder.orderState.setBackgroundResource(R.drawable.status_bj);
+        }
+
+        if (mOrderList.getZulinModel() == 1) {
+            //分时租赁
+            ZulinModel = "分时租赁";
+        } else {
+            ZulinModel = "分次租赁";
         }
 
         //未接单 = 0, 已接单 = 1,订单确认待支付 = 2,
@@ -152,7 +159,7 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
         holder.orderState.setText(state);
         holder.orderStateBtn.setText(stateBtn);
 
-        holder.subleaseLeasePrice.setText(mOrderList.getPrice() + "元");
+        holder.subleaseLeasePrice.setText(mOrderList.getPrice() + "元(不含税)");
 
         try {
             byte[] bitmapArray;
@@ -221,7 +228,7 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
                     intent.putExtra("OrderId", mOrderListBean.get(position).getOrdersId());
                     intent.putExtra("Count", mOrderListBean.get(position).getCount());
                     intent.putExtra("EquipmentId", mOrderListBean.get(position).getId());
-
+                    intent.putExtra("FormType", 3);
                     intent.putExtra("AdapterPage", "SubleaseOrderAdapter");
 
                     mContext.startActivity(intent);
@@ -240,7 +247,7 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
                     intentReserve.putExtra("OrdersId", mOrderListBean.get(position).getOrdersId());
                     intentReserve.putExtra("OrderNo", mOrderListBean.get(position).getOrderNo());
                     intentReserve.putExtra("Id", mOrderListBean.get(position).getId());
-
+                    intentReserve.putExtra("ZulinModel", ZulinModel);
                     intentReserve.putExtra("AdapterPage", "SubleaseOrderAdapter");
                     mContext.startActivity(intentReserve);
                 }

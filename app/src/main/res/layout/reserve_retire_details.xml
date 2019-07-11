@@ -537,6 +537,35 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/reserve_zulin_mode_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="租赁方式"
+                        android:textColor="@color/text_black"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/reserve_zulin_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:gravity="center_vertical"
+                        android:textColor="@color/text_color_black"
+                        android:textSize="@dimen/text_size_trhee" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
                         android:id="@+id/reserve_retire_mode_text"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -553,7 +582,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="10dp"
-                        android:layout_toRightOf="@id/lease_my_modle_text"
+                        android:layout_toRightOf="@id/reserve_retire_mode_text"
                         android:drawableRight="@drawable/next"
                         android:gravity="right"
                         android:hint="请选择退租方式"
@@ -592,7 +621,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginLeft="10dp"
                         android:layout_marginRight="20dp"
-                        android:layout_toRightOf="@id/lease_my_DeliveryTime_text"
+                        android:layout_toRightOf="@id/reserve_retire_data_text"
                         android:gravity="right"
                         android:hint="请选择日期"
                         android:textColor="@color/text_color_black"
@@ -639,8 +668,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/dialog_bg"

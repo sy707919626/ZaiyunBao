@@ -42,6 +42,24 @@ public class LeasePriceFromBean {
     private int Deposit; //押金
     private float CommisionValue ; //佣金
     private int DepositAmount; //实际押金单价
+    private int CountTopLimit;//数量上限
+    private int CountDowLimit;//数量下限
+
+    public int getCountTopLimit() {
+        return CountTopLimit;
+    }
+
+    public void setCountTopLimit(int countTopLimit) {
+        CountTopLimit = countTopLimit;
+    }
+
+    public int getCountDowLimit() {
+        return CountDowLimit;
+    }
+
+    public void setCountDowLimit(int countDowLimit) {
+        CountDowLimit = countDowLimit;
+    }
 
     public int getDepositAmount() {
         return DepositAmount;
