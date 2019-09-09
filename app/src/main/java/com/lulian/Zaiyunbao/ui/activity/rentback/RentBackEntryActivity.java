@@ -41,6 +41,8 @@ import butterknife.OnClick;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.Observable;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by Administrator on 2018/11/15.
@@ -267,7 +269,15 @@ public class RentBackEntryActivity extends BaseActivity {
                     RxToast.warning("当前录入设备数量不足，无法进行发货");
                 } else {
                     String[] strArrayTrue = orderList.toArray(new String[orderList.size()]);
-                    mApi.SendGood_BackRent(GlobalParams.sToken, OrderId, strArrayTrue, Count)
+                    JSONObject obj = new JSONObject();
+                    obj.put("OrderId", OrderId);
+                    obj.put("EquipmentBaseNo", strArrayTrue);
+                    obj.put("Count", Count);
+                    String user = obj.toString();
+                    RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
+                            user);
+
+                    mApi.SendGood_BackRent(GlobalParams.sToken, body)
                             .compose(RxHttpResponseCompat.<String>compatResult())
                             .subscribe(new ErrorHandlerSubscriber<String>() {
                                 @Override

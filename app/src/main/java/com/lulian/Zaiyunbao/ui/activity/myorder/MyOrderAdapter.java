@@ -8,9 +8,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -27,13 +29,14 @@ import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.FastBlur;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.leaseorder.ReceiveLeaseInfoActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderEntryActivity;
-import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,19 +77,23 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
         return viewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(EquipmentViewHolder holder, final int position) {
         final MyOrderLisetBean.RowsBean mOrderList = mOrderListBean.get(position);
 
         holder.myOrderId.setText(mOrderList.getOrderNo());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.leaseImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mOrderList.getPicture())
+                .into(holder.leaseImgPhoto);
 
         if (mOrderList.getStatus() == 2) {
             holder.orderState.setBackgroundResource(R.drawable.order_background);
@@ -225,15 +232,6 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.Equipmen
 
         holder.orderState.setText(state);
         holder.orderStateBtn.setText(stateBtn);
-
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
 
         holder.leaseShebeiName.setText(mOrderList.getEquipmentName());
         holder.leaseShebeiSpec.setText(mOrderList.getNorm());

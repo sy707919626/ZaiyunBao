@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.DeviceDetailsBean;
 import com.lulian.Zaiyunbao.R;
@@ -119,14 +120,16 @@ public class DeviceManageDetailsActivity extends BaseActivity {
         }
 
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(deviceDetailsBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            deviceDetailsImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(deviceDetailsBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            deviceDetailsImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + deviceDetailsBean.getPicture()).into(deviceDetailsImgPhoto);
 
         deviceDetailsName.setText(deviceDetailsBean.getEquipmentName());
         deviceDetailsSpec.setText(deviceDetailsBean.getNorm());

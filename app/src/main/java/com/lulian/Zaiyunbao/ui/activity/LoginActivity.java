@@ -226,9 +226,9 @@ public class LoginActivity extends CheckPermissionsActivity {
                 startActivity(new Intent(this, UserAgreementActivity.class));
                 break;
 
-            case R.id.login_bottom_text:
-                startActivityForResult(new Intent(this, ProtocolActivity.class), 11);
-                break;
+//            case R.id.login_bottom_text:
+//                startActivityForResult(new Intent(this, ProtocolActivity.class), 11);
+//                break;
 
             case R.id.text_forgetpwd:
                 Intent intent = new Intent(this, Updae_pwd_Activity.class);
@@ -294,6 +294,7 @@ public class LoginActivity extends CheckPermissionsActivity {
                         GlobalParams.setuserName(jsonObject.getString("Name"));
                         GlobalParams.setuserType(jsonObject.getString("UserType"));
                         GlobalParams.setuserPhone(jsonObject.getString("Phone"));
+                        GlobalParams.setUserClass(jsonObject.getInteger("UserClass"));
 
                         //验证是否有支付密码
                         PayPwdIsSet(jsonObject.getString("UserId"));

@@ -179,14 +179,17 @@ public class RepairItemDetailActivity extends BaseActivity {
         Glide.with(RepairItemDetailActivity.this).load(Constants.BASE_URL + result[1]).into(repairItemRepairTypeImage2);
         Glide.with(RepairItemDetailActivity.this).load(Constants.BASE_URL + result[2]).into(repairItemRepairTypeImage3);
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mRepairItemDetail.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            leaseEquipmentImageview.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mRepairItemDetail.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            leaseEquipmentImageview.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mRepairItemDetail.getPicture()).into(leaseEquipmentImageview);
+
 
         leaseEquipmentTypeName.setText(mRepairItemDetail.getETypeName());
         leaseEquipmentEquipmentName.setText(mRepairItemDetail.getEquipmentName());

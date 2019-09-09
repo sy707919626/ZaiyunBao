@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.EquipmentListBean;
 import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
@@ -25,7 +26,10 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.LeaseMyEquipmentActivity;
+import com.lulian.Zaiyunbao.ui.activity.UploadDataActivity;
+import com.yzq.zxinglibrary.common.Constant;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -83,14 +87,16 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
             holder.leaseBtnCannot.setVisibility(View.GONE);
         }
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mEquipmentList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mEquipmentList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.leaseImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mEquipmentList.getPicture()).into(holder.leaseImgPhoto);
+
 
 //        Glide.with(mContext).load(Constants.BASE_URL + mEquipmentList.getPicture()).into(holder.leaseImgPhoto);
         holder.leaseShebeiName.setText(mEquipmentList.getEquipmentName());
@@ -113,42 +119,48 @@ public class EquipmentListAdapter extends RecyclerView.Adapter<EquipmentListAdap
             }
         });
 
-        holder.leaseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intentMy = new Intent();
-                intentMy.setClass(mContext, LeaseMyEquipmentActivity.class);
-                intentMy.putExtra("EquipmentName", mEquipmentList.getEquipmentName());
-                intentMy.putExtra("Norm", mEquipmentList.getNorm());
-                intentMy.putExtra("Price", mEquipmentList.getPValue());
-                intentMy.putExtra("Quantity", mEquipmentList.getQuantity());
-                intentMy.putExtra("StaticLoad", mEquipmentList.getStaticLoad());
-                intentMy.putExtra("CarryingLoad", mEquipmentList.getCarryingLoad());
-                intentMy.putExtra("OnLoad", mEquipmentList.getOnLoad());
-                intentMy.putExtra("Volume", mEquipmentList.getVolume());
-                intentMy.putExtra("WarmLong", mEquipmentList.getWarmLong());
-                intentMy.putExtra("SpecifiedLoad", mEquipmentList.getSpecifiedLoad());
-                intentMy.putExtra("TypeName", mEquipmentList.getTypeName());
-//                intentMy.putExtra("Picture", mEquipmentList.getPicture());
-                intentMy.putExtra("TypeId", mEquipmentList.getTypeId());
-                intentMy.putExtra("UserType", mEquipmentList.getUserType());
-                intentMy.putExtra("CreateId", mEquipmentList.getCreateId());
-                intentMy.putExtra("CreateUser", mEquipmentList.getCreateUser());
-                intentMy.putExtra("OperatorId", mEquipmentList.getOperator()); //加盟商id
-                intentMy.putExtra("Id", mEquipmentList.getId());//设备ID
-                intentMy.putExtra("StorehouseId", mEquipmentList.getStorehouseId());//仓库ID
 
-//                if (TextUtils.isEmpty(mEquipmentList.getUID())){
-//                    intentMy.putExtra("UID", "");//使用者Id
-//                } else {
-                    intentMy.putExtra("UID", mEquipmentList.getUID());//使用者Id
-//                }
+            holder.leaseBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!TextUtils.isEmpty(mEquipmentList.getOperator())&& mEquipmentList.getQuantity()!= 0) {
+                        Intent intentMy = new Intent();
+                        intentMy.setClass(mContext, LeaseMyEquipmentActivity.class);
+                        intentMy.putExtra("EquipmentName", mEquipmentList.getEquipmentName());
+                        intentMy.putExtra("Norm", mEquipmentList.getNorm());
+                        intentMy.putExtra("Price", mEquipmentList.getPValue());
+                        intentMy.putExtra("Quantity", mEquipmentList.getQuantity());
+                        intentMy.putExtra("StaticLoad", mEquipmentList.getStaticLoad());
+                        intentMy.putExtra("CarryingLoad", mEquipmentList.getCarryingLoad());
+                        intentMy.putExtra("OnLoad", mEquipmentList.getOnLoad());
+                        intentMy.putExtra("Volume", mEquipmentList.getVolume());
+                        intentMy.putExtra("WarmLong", mEquipmentList.getWarmLong());
+                        intentMy.putExtra("SpecifiedLoad", mEquipmentList.getSpecifiedLoad());
+                        intentMy.putExtra("TypeName", mEquipmentList.getTypeName());
+    //                intentMy.putExtra("Picture", mEquipmentList.getPicture());
+                        intentMy.putExtra("TypeId", mEquipmentList.getTypeId());
+                        intentMy.putExtra("UserType", mEquipmentList.getUserType());
+                        intentMy.putExtra("CreateId", mEquipmentList.getCreateId());
+                        intentMy.putExtra("CreateUser", mEquipmentList.getCreateUser());
+                        intentMy.putExtra("OperatorId", mEquipmentList.getOperator()); //加盟商id
+                        intentMy.putExtra("Id", mEquipmentList.getId());//设备ID
+                        intentMy.putExtra("StorehouseId", mEquipmentList.getStorehouseId());//仓库ID
+
+    //                if (TextUtils.isEmpty(mEquipmentList.getUID())){
+    //                    intentMy.putExtra("UID", "");//使用者Id
+    //                } else {
+                        intentMy.putExtra("UID", mEquipmentList.getUID());//使用者Id
+    //                }
 
 
-                intentMy.putExtra("Deposit", mEquipmentList.getDeposit());//押金
-                mContext.startActivity(intentMy);
-            }
-        });
+                        intentMy.putExtra("Deposit", mEquipmentList.getDeposit());//押金
+                        mContext.startActivity(intentMy);
+                    } else {
+                        RxToast.warning("当前设备缺货，无法进行租赁操作");
+                    }
+                }
+            });
+
 
         holder.leaseBtnCannot.setOnClickListener(new View.OnClickListener() {
             @Override

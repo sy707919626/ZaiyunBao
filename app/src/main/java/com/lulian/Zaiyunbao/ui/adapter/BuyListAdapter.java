@@ -13,8 +13,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.BuyListBean;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.BuyMyEquipmentActivity;
 
 import java.util.ArrayList;
@@ -51,15 +53,16 @@ public class BuyListAdapter extends RecyclerView.Adapter<BuyListAdapter.BuyViewH
     public void onBindViewHolder(BuyViewHolder holder, final int position) {
         final BuyListBean.RowsBean mBuyList = mBuyListBean.get(position);
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mBuyList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.mBuyImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mBuyList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.mBuyImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
 
+        Glide.with(mContext).load(Constants.BASE_URL +"/" +  mBuyList.getPicture()).into(holder.mBuyImgPhoto);
 //        Glide.with(mContext).load(Constants.BASE_URL + mEquipmentList.getPicture()).into(holder.leaseImgPhoto);
         holder.mBuyShebeiName.setText(mBuyList.getEquipmentName());
         holder.mBuyShebeiSpec.setText(mBuyList.getNorm());

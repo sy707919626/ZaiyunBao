@@ -31,13 +31,7 @@ import java.util.List;
 
 public class CheckPermissionsActivity extends BaseActivity implements
         ActivityCompat.OnRequestPermissionsResultCallback {
-    private String phoneNum;
-    ResultPhone resultPhone;
-    public static int takephoto=0;
-
-    public void setResultPhoneListener(ResultPhone resultPhone) {
-        this.resultPhone = resultPhone;
-    }
+    public int takephoto=0;
 
     /**
      * 需要进行检测的权限数组
@@ -48,11 +42,14 @@ public class CheckPermissionsActivity extends BaseActivity implements
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.READ_PHONE_STATE,
-//            Manifest.permission.DISABLE_KEYGUARD,
-//            Manifest.permission.RECEIVE_BOOT_COMPLETED,
+            Manifest.permission.CAMERA,
+//            Manifest.permission.REQUEST_INSTALL_PACKAGES,
             Manifest.permission.READ_CONTACTS,
             Manifest.permission.CALL_PHONE,
+
     };
+
+
 
     private static final int PERMISSON_REQUESTCODE = 0;
 
@@ -70,12 +67,12 @@ public class CheckPermissionsActivity extends BaseActivity implements
     }
 
     private void checkPermissions(String... permissions) {
-        List<String> needRequestPermissionList = findDeniedPermissions(permissions);
-        if (null != needRequestPermissionList
-                && needRequestPermissionList.size() > 0) {
+        List<String> needRequestPermissonList = findDeniedPermissions(permissions);
+        if (null != needRequestPermissonList
+                && needRequestPermissonList.size() > 0) {
             ActivityCompat.requestPermissions(this,
-                    needRequestPermissionList.toArray(
-                            new String[needRequestPermissionList.size()]),
+                    needRequestPermissonList.toArray(
+                            new String[needRequestPermissonList.size()]),
                     PERMISSON_REQUESTCODE);
         }
     }
@@ -88,7 +85,7 @@ public class CheckPermissionsActivity extends BaseActivity implements
      * @since 2.5.0
      */
     private List<String> findDeniedPermissions(String[] permissions) {
-        List<String> needRequestPermissonList = new ArrayList<>();
+        List<String> needRequestPermissonList = new ArrayList<String>();
         for (String perm : permissions) {
             if (ContextCompat.checkSelfPermission(this,
                     perm) != PackageManager.PERMISSION_GRANTED
@@ -180,43 +177,6 @@ public class CheckPermissionsActivity extends BaseActivity implements
         return super.onKeyDown(keyCode, event);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if(takephoto==1){
-
-            }else {
-//                ContentResolver contentResolver = getContentResolver();
-//                Uri contactData = data.getData();
-//                // 获取联系人姓名，id
-//                Cursor cursor = getContentResolver().query(contactData, null, null, null, null);
-//                cursor.moveToFirst();
-//                String username = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//                String contactId = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-//                cursor.close();
-//                // 根据id获取联系人电话
-//                Cursor phoneCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                        null,
-//                        "_id = " + contactId,
-//                        null,
-//                        null,
-//                        null);
-//                String usernumber1 = null;
-//                while (phoneCursor.moveToNext()) {
-//                    usernumber1 = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                }
-//                phoneCursor.close();
-//                ProjectUtil.show(this, username + "----" + usernumber1);
-//                phoneNum = usernumber1;
-//                resultPhone.success(phoneNum);
-            }
-        }
-    }
-
-    public String getPhoneNum() {
-        return phoneNum;
-    }
 
     @Override
     protected int setLayoutId() {
@@ -226,9 +186,5 @@ public class CheckPermissionsActivity extends BaseActivity implements
     @Override
     protected void init() {
 
-    }
-
-    public interface ResultPhone {
-        void success(String phoneNum);
     }
 }

@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.RentOrderDetailBean;
 import com.lulian.Zaiyunbao.R;
@@ -22,6 +23,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompatTest;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -137,14 +139,17 @@ public class RentOrderDetailsActivity extends BaseActivity {
 
     private void initView() {
         myOrderNo.setText(OrderNo);
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mRentOrderDetailBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            myOrderImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mRentOrderDetailBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            myOrderImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mRentOrderDetailBean.getPicture()).into(myOrderImgPhoto);
+
 
         if (mRentOrderDetailBean.getTransferWay() == 1) {
             myOrderTransferWay.setText("送货上门");

@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.MyOrderDetailsBean;
 import com.lulian.Zaiyunbao.Bean.PersonalInfoBean;
@@ -208,14 +209,16 @@ public class SubleaseOrderDetailsActivity extends BaseActivity {
 
     private void initView() {
         subleaseOrderNo.setText(OrderNo);
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(myOrderDetailsBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            orderImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(myOrderDetailsBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            orderImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + myOrderDetailsBean.getPicture()).into(orderImgPhoto);
 
         mSubleaseOrderZulinmodel.setText(ZulinModel);
 

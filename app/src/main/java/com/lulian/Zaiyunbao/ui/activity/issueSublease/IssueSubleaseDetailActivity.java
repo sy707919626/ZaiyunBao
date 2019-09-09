@@ -11,12 +11,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.IssueDeatilsBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -103,14 +105,16 @@ public class IssueSubleaseDetailActivity extends BaseActivity {
     private void initView() {
         leaseEquipmentMyBtn.setVisibility(View.GONE);
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(issueDeatilsBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            leaseEquipmentImageview.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(issueDeatilsBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            leaseEquipmentImageview.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + issueDeatilsBean.getPicture()).into(leaseEquipmentImageview);
 
         leaseEquipmentTypeName.setText(issueDeatilsBean.getTypeName());
         leaseEquipmentEquipmentName.setText(issueDeatilsBean.getEquipmentName());

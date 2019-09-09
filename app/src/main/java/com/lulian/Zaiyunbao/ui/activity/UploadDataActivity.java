@@ -1,10 +1,12 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +14,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
-import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +25,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.alibaba.fastjson.JSONObject;
 import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
@@ -52,14 +52,11 @@ import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.lulian.Zaiyunbao.ui.dialog.PhotoDialog;
 import com.lulian.Zaiyunbao.ui.photoview.PhotoDisplayDialog;
 import com.trello.rxlifecycle2.android.ActivityEvent;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.annotations.Nullable;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -68,7 +65,7 @@ import okhttp3.RequestBody;
  * Created by Administrator on 2018/9/19.
  */
 
-public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeResultListener, InvokeListener{
+public class UploadDataActivity extends BaseActivity implements AdapterView.OnItemClickListener, TakePhoto.TakeResultListener, InvokeListener{
     @BindView(R.id.image_back_login_bar)
     ImageView imageBackLoginBar;
     @BindView(R.id.text_login_content)
@@ -167,11 +164,6 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     private int ActivityType = 0;
 
     private Handler mHandler;
-    private PhotoDisplayDialog IdFrontUrlDialog;
-    private PhotoDisplayDialog IdBackUrlDialog;
-    private PhotoDisplayDialog bizLicUrlDialog;
-
-    private PhotoDialog mPhotoDialog;
 
     public static AlertDialog.Builder getConfirmDialog(Context context, String message, DialogInterface.OnClickListener onClickListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -180,8 +172,6 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
         builder.setNegativeButton("否", null);
         return builder;
     }
-
-
 
     @Override
     protected int setLayoutId() {
@@ -192,6 +182,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getTakePhoto().onCreate(savedInstanceState);
+        initPhotoDialog();
     }
 
     @SuppressLint("NewApi")
@@ -223,10 +214,6 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
         };
 
         ActivityType = getIntent().getIntExtra("ActivityType", 0);
-
-        IdFrontUrlDialog = new PhotoDisplayDialog(this, true);
-        IdBackUrlDialog = new PhotoDisplayDialog(this, true);
-        bizLicUrlDialog = new PhotoDisplayDialog(this, true);
 
         usernameDataIntoImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -273,6 +260,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
             showCompany();
             isCompany = true;
             userType = "2";
+            getuserInfo();
         }
 
         agreeLogin.setOnClickListener(new View.OnClickListener() {
@@ -291,36 +279,6 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
             }
         });
 
-
-        IdFrontUrlDialog.setCallback(new PhotoDisplayDialog.Callback() {
-            @Override
-            public void onShootAgainClicked() {
-                upLoadType = 0;
-                Intent intent = new Intent(UploadDataActivity.this, PhotoDialog.class);
-                intent.putExtra("photoType", 1);
-                startActivityForResult(intent, 1);
-            }
-        });
-
-        IdBackUrlDialog.setCallback(new PhotoDisplayDialog.Callback() {
-            @Override
-            public void onShootAgainClicked() {
-                upLoadType = 1;
-                Intent intent2 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-                intent2.putExtra("photoType", 2);
-                startActivityForResult(intent2, 1);
-            }
-        });
-
-        bizLicUrlDialog.setCallback(new PhotoDisplayDialog.Callback() {
-            @Override
-            public void onShootAgainClicked() {
-                upLoadType = 2;
-                Intent intent3 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-                intent3.putExtra("photoType", 3);
-                startActivityForResult(intent3, 1);
-            }
-        });
     }
 
     @SuppressLint("NewApi")
@@ -406,122 +364,41 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                             });
                 }
                 break;
+
             case R.id.paper_layout_upload_idcard:
+            case R.id.paper_img_upload_idcard_image:
                 //身份证照片上传（正面）
                 upLoadType = 0;
-                mPhotoDialog = new PhotoDialog(this, 1, new PhotoDialog.onPhotoListener() {
-                    @Override
-                    public void onClick(String photoType) {
-                        if (photoType.equals("1")){
-                            initPhotoData(true);
-                        } else {
-                            initPhotoData(false);
-                        }
-                    }
-                });
-                mPhotoDialog.show();
 
-                break;
-
-            case R.id.paper_img_upload_idcard_image:
-//                IdFrontUrlDialog.setImgUrl(Constants.BASE_URL + IdFrontUrl).show();
-                upLoadType = 0;
-//                Intent intent5 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-//                intent5.putExtra("photoType", 1);
-//                startActivityForResult(intent5, 200);
-//
-                mPhotoDialog = new PhotoDialog(this, 1, new PhotoDialog.onPhotoListener() {
-                    @Override
-                    public void onClick(String photoType) {
-                        if (photoType.equals("1")){
-                            initPhotoData(true);
-                        } else {
-                            initPhotoData(false);
-                        }
-                    }
-                });
-
-                mPhotoDialog.show();
-
-//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
+                if(TextUtils.isEmpty(IdFrontUrl)){
+                    ProjectUtil.showUploadFileDialog(this, this);
+                }else{
+                    photoDialog.setImgUrl(Constants.BASE_URL + IdFrontUrl).show();
+                }
                 break;
 
             case R.id.paper_layout_upload_idcard_back:
+            case R.id.paper_img_upload_idcard_back_image:
                 //身份证照片上传（反面）
                 upLoadType = 1;
-                mPhotoDialog = new PhotoDialog(this, 2, new PhotoDialog.onPhotoListener() {
-                    @Override
-                    public void onClick(String photoType) {
-                        if (photoType.equals("1")){
-                            initPhotoData(true);
-                        } else {
-                            initPhotoData(false);
-                        }
-                    }
-                });
 
-                mPhotoDialog.show();
-//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
+                if(TextUtils.isEmpty(IdBackUrl)){
+                    ProjectUtil.showUploadFileDialog(this, this);
+                }else{
+                    photoDialog.setImgUrl(Constants.BASE_URL + IdBackUrl).show();
+                }
 
-                break;
-
-            case R.id.paper_img_upload_idcard_back_image:
-                upLoadType = 1;
-
-                mPhotoDialog = new PhotoDialog(this, 2, new PhotoDialog.onPhotoListener() {
-                    @Override
-                    public void onClick(String photoType) {
-                        if (photoType.equals("1")){
-                            initPhotoData(true);
-                        } else {
-                            initPhotoData(false);
-                        }
-                    }
-                });
-                mPhotoDialog.show();
-
-//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
                 break;
 
             case R.id.paper_layout_upload_bizLicUrl:
+            case R.id.paper_img_upload_bizLicUrl_image:
                 //营业执照
                 upLoadType = 2;
-//                Intent intent3 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-//                intent3.putExtra("photoType", 3);
-//                startActivityForResult(intent3, 1);
-
-                mPhotoDialog = new PhotoDialog(this, 3, new PhotoDialog.onPhotoListener() {
-                    @Override
-                    public void onClick(String photoType) {
-                        if (photoType.equals("1")){
-                            initPhotoData(true);
-                        } else {
-                            initPhotoData(false);
-                        }
-                    }
-                });
-                mPhotoDialog.show();
-
-//                ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
-                break;
-
-            case R.id.paper_img_upload_bizLicUrl_image:
-//                bizLicUrlDialog.setImgUrl(Constants.BASE_URL + bizLicUrl).show();
-//                Intent intent4 = new Intent(UploadDataActivity.this, PhotoDialog.class);
-//                intent4.putExtra("photoType", 3);
-//                startActivityForResult(intent4, 200);
-
-                mPhotoDialog = new PhotoDialog(this, 3, new PhotoDialog.onPhotoListener() {
-                    @Override
-                    public void onClick(String photoType) {
-                        if (photoType.equals("1")){
-                            initPhotoData(true);
-                        } else {
-                            initPhotoData(false);
-                        }
-                    }
-                });
-                mPhotoDialog.show();
+                if(TextUtils.isEmpty(bizLicUrl)){
+                    ProjectUtil.showUploadFileDialog(this, this);
+                }else{
+                    photoDialog.setImgUrl(Constants.BASE_URL + bizLicUrl).show();
+                }
                 break;
 
             case R.id.register_btn: //注册
@@ -537,25 +414,32 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                         RxToast.warning("请输入姓名");
                     } else if (TextUtils.isEmpty(usersexEditName.getText().toString().trim())) {
                         RxToast.warning("请选择性别");
-                    } else if (TextUtils.isEmpty(paperTypeEditName.getText().toString().trim())) {
-                        RxToast.warning("请选择企业类型");
+//                    } else if (TextUtils.isEmpty(paperTypeEditName.getText().toString().trim())) {
+//                        RxToast.warning("请选择企业类型");
                     } else if (TextUtils.isEmpty(companyNameEditName.getText().toString().trim())) {
                         RxToast.warning("请输入企业名称");
                     } else if (TextUtils.isEmpty(paperEditIdcard.getText().toString().trim())) {
                         RxToast.warning("请输入机构代码");
                     } else if (TextUtils.isEmpty(bizLicUrl)) {
                         RxToast.warning("请上传营业执照");
-
                     } else {
                         //企业传入参数UserClass,UserId, OrgName,OrgType,OrgCode,LicUrl,Remark
 
                         JSONObject obj = new JSONObject();
+                        obj.put("Name", paperTypeEditUsername.getText().toString().trim());
                         obj.put("UserClass", userType);
                         obj.put("UserId", GlobalParams.sUserId);
                         obj.put("OrgName", companyNameEditName.getText().toString().trim());
                         obj.put("OrgType", companyType);
                         obj.put("OrgCode", paperEditIdcard.getText().toString().trim());
                         obj.put("LicUrl", bizLicUrl);
+
+                        if (usersexEditName.getText().toString().trim().equals("男")) {
+                            obj.put("Sex", 1);
+                        } else {
+                            obj.put("Sex", 0);
+                        }
+
                         obj.put("Remark", "");
                         String user = obj.toString();
                         RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
@@ -568,7 +452,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                                     public void onNext(String s) {
                                         RxToast.success("企业资料完善成功");
                                         GlobalParams.setuserName(companyNameEditName.getText().toString().trim());
-
+                                        GlobalParams.setUserClass(Integer.valueOf(userType));
                                         if (ActivityType == 1) {
                                             startActivity(new Intent(UploadDataActivity.this, MainActivity.class));
                                             stepfinishAll();
@@ -590,9 +474,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                         userTypeEditName.setText("个人用户");
                     }
 
-                    if (TextUtils.isEmpty(userTypeEditName.getText().toString().trim())) {
-                        RxToast.warning("请选择用户类型");
-                    } else if (TextUtils.isEmpty(paperTypeEditUsername.getText().toString().trim())) {
+                    if (TextUtils.isEmpty(paperTypeEditUsername.getText().toString().trim())) {
                         RxToast.warning("请输入姓名");
                     } else if (TextUtils.isEmpty(usersexEditName.getText().toString().trim())) {
                         RxToast.warning("请选择性别");
@@ -638,6 +520,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                                     public void onNext(String s) {
                                         RxToast.success("个人资料完善成功");
                                         GlobalParams.setuserName(paperTypeEditUsername.getText().toString().trim());
+                                        GlobalParams.setUserClass(Integer.valueOf(userType));
 
                                         if (ActivityType == 1) {
                                             startActivity(new Intent(UploadDataActivity.this, MainActivity.class));
@@ -659,9 +542,27 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
         }
     }
 
+    private PhotoDisplayDialog photoDialog;//显示完成照片的dialog
+
+    private void initPhotoDialog(){
+        photoDialog = new PhotoDisplayDialog(this, true);
+        photoDialog.setCallback(photoDialogCallback);
+    }
+
+    /**
+     * 图片展示dialog的回调
+     */
+    private PhotoDisplayDialog.Callback photoDialogCallback=new PhotoDisplayDialog.Callback() {
+        @Override
+        public void onShootAgainClicked() {//点击了重新选择/拍摄 按钮
+            ProjectUtil.showUploadFileDialog(UploadDataActivity.this, UploadDataActivity.this);
+        }
+    };
+
+
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
         getTakePhoto().onSaveInstanceState(outState);
     }
 
@@ -675,30 +576,32 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //以下代码为处理Android6.0、7.0动态权限所需
-        PermissionManager.TPermissionType type=PermissionManager.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        PermissionManager.handlePermissionsResult(this,type,invokeParam,this);
+        PermissionManager.TPermissionType type = PermissionManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionManager.handlePermissionsResult(this, type, invokeParam, this);
     }
 
     @Override
     public PermissionManager.TPermissionType invoke(InvokeParam invokeParam) {
-        PermissionManager.TPermissionType type=PermissionManager.checkPermission(TContextWrap.of(this),invokeParam.getMethod());
-        if(PermissionManager.TPermissionType.WAIT.equals(type)){
-            this.invokeParam=invokeParam;
+        PermissionManager.TPermissionType type = PermissionManager.checkPermission(TContextWrap.of(this), invokeParam.getMethod());
+        if (PermissionManager.TPermissionType.WAIT.equals(type)) {
+            this.invokeParam = invokeParam;
         }
         return type;
     }
 
-    private void initPhotoData(boolean isTake) {
+    private void initPhotoData(boolean isGoToCamera) {
         ////获取TakePhoto实例
         takePhoto = getTakePhoto();
         //设置裁剪参数
-        CropOptions cropOptions = new CropOptions.Builder().setAspectX(800).setAspectY(800).create();
+        CropOptions cropOptions = new CropOptions.Builder().setWithOwnCrop(true).create();
         //设置压缩参数
         CompressConfig compressConfig = new CompressConfig.Builder().setMaxSize(50 * 1024).setMaxPixel(800).create();
         takePhoto.onEnableCompress(compressConfig, true);  //设置为需要压缩
-        if (isTake) {
+        if (isGoToCamera) {
             takePhoto.onPickFromCaptureWithCrop(getImageCropUri(), cropOptions);
+//            takePhoto.onPickFromCapture(getImageCropUri());
         } else {
+//            takePhoto.onPickFromGalleryWithCrop(getImageCropUri(), cropOptions);
             takePhoto.onPickFromGallery();
         }
     }
@@ -706,23 +609,34 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
     //获得照片的输出保存Uri
     private Uri getImageCropUri() {
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/temp/" + System.currentTimeMillis() + ".jpg");
+//        ProjectUtil.show(this,file.getPath());
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         return Uri.fromFile(file);
     }
 
     /**
      * 获取TakePhoto实例
+     *
+     * @return
      */
-    public TakePhoto getTakePhoto(){
-        if (takePhoto==null){
-            takePhoto= (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this,this));
+    public TakePhoto getTakePhoto() {
+        if (takePhoto == null) {
+            takePhoto = (TakePhoto) TakePhotoInvocationHandler.of(this).bind(new TakePhotoImpl(this, this));
         }
         return takePhoto;
     }
 
+
+    private void requestWritePermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
+
     @Override
     public void takeSuccess(TResult result) {
-        iconPath = result.getImages().get(0).getOriginalPath();
+        iconPath = result.getImage().getOriginalPath();
+        final String realPath = "file://" + iconPath;
 
         String fileType = "";
         File imgFile = new File(iconPath);
@@ -756,13 +670,13 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                             IdFrontUrl = jsonObject.getString("Path");
                             paperImgUploadIdcardImage.setVisibility(View.VISIBLE);
                             paperImgUploadIdcard.setVisibility(View.GONE);
-                            Glide.with(UploadDataActivity.this).load(Constants.BASE_URL + IdFrontUrl).into(paperImgUploadIdcardImage);
+                            Glide.with(UploadDataActivity.this).load(realPath).into(paperImgUploadIdcardImage);
                         } else if (upLoadType == 1) {
 
                             IdBackUrl = jsonObject.getString("Path");
                             paperImgUploadIdcardBackImage.setVisibility(View.VISIBLE);
                             paperImgUploadIdcardBack.setVisibility(View.GONE);
-                            Glide.with(UploadDataActivity.this).load(Constants.BASE_URL + IdBackUrl).into(paperImgUploadIdcardBackImage);
+                            Glide.with(UploadDataActivity.this).load(realPath).into(paperImgUploadIdcardBackImage);
 
                         } else if (upLoadType == 2) {
 
@@ -770,7 +684,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                             paperImgUploadBizLicUrlImage.setVisibility(View.VISIBLE);
                             paperImgUploadBizLicUrl.setVisibility(View.GONE);
 
-                            Glide.with(UploadDataActivity.this).load(Constants.BASE_URL + bizLicUrl).into(paperImgUploadBizLicUrlImage);
+                            Glide.with(UploadDataActivity.this).load(realPath).into(paperImgUploadBizLicUrlImage);
                         }
                     }
                 });
@@ -778,6 +692,7 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
 
     @Override
     public void takeFail(TResult result, String msg) {
+        Log.e("Error:  ", msg);
     }
 
     @Override
@@ -795,13 +710,8 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                     @Override
                     public void onNext(String s) {
                         if (s != null) {
-                            paperTypeEditUsername.setText(JSONObject.parseObject(s).getString("Name"));
-                            paperEditIdcard.setText(JSONObject.parseObject(s).getString("IdCard"));
 
-                            IdFrontUrl = JSONObject.parseObject(s).getString("IdFrontUrl");
-                            IdBackUrl = JSONObject.parseObject(s).getString("IdBackUrl");
-
-                            if (TextUtils.isEmpty(JSONObject.parseObject(s).getString("Sex"))){
+                            if (TextUtils.isEmpty(JSONObject.parseObject(s).getString("Sex"))) {
                                 usersexEditName.setText(" ");
                             } else {
                                 if (JSONObject.parseObject(s).getInteger("Sex") == 1) {
@@ -810,15 +720,31 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
                                     usersexEditName.setText("女");
                                 }
                             }
-                            paperImgUploadIdcardImage.setVisibility(View.VISIBLE);
-                            paperImgUploadIdcard.setVisibility(View.GONE);
-                            paperTypeEditName.setText("身份证");
-                            paperImgUploadIdcardBackImage.setVisibility(View.VISIBLE);
-                            paperImgUploadIdcardBack.setVisibility(View.GONE);
+                            IdFrontUrl = JSONObject.parseObject(s).getString("IdFrontUrl");
+                            IdBackUrl = JSONObject.parseObject(s).getString("IdBackUrl");
+                            bizLicUrl = JSONObject.parseObject(s).getString("LicUrl");
 
+                            paperTypeEditUsername.setText(JSONObject.parseObject(s).getString("Name"));
                             Glide.with(UploadDataActivity.this).load(Constants.BASE_URL + IdFrontUrl).into(paperImgUploadIdcardImage);
 
                             Glide.with(UploadDataActivity.this).load(Constants.BASE_URL + IdBackUrl).into(paperImgUploadIdcardBackImage);
+
+                            Glide.with(UploadDataActivity.this).load(Constants.BASE_URL + bizLicUrl).into(paperImgUploadBizLicUrlImage);
+
+                            if (!isCompany) {
+                                paperEditIdcard.setText(JSONObject.parseObject(s).getString("IdCard"));
+                                paperImgUploadIdcardImage.setVisibility(View.VISIBLE);
+                                paperImgUploadIdcard.setVisibility(View.GONE);
+                                paperTypeEditName.setText("身份证");
+                                paperImgUploadIdcardBackImage.setVisibility(View.VISIBLE);
+                                paperImgUploadIdcardBack.setVisibility(View.GONE);
+                            } else {
+                                paperImgUploadBizLicUrlImage.setVisibility(View.VISIBLE);
+                                paperImgUploadBizLicUrl.setVisibility(View.GONE);
+                                companyNameEditName.setText(JSONObject.parseObject(s).getString("OrgName"));
+                                paperEditIdcard.setText(JSONObject.parseObject(s).getString("OrgCode"));
+                                paperTypeEditName.setText(JSONObject.parseObject(s).getString("OrgType"));
+                            }
 
                             registerBtn.setText("修改资料");
                         } else {
@@ -857,5 +783,17 @@ public class UploadDataActivity extends BaseActivity implements TakePhoto.TakeRe
         photoTypeText.setText("证件照片");
         paperUploadIdcard.setVisibility(View.VISIBLE);
         paperUploadBizLicUrl.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        switch (position) {
+            case 0:
+                initPhotoData(true);
+                break;
+            case 1:
+                initPhotoData(false);
+                break;
+        }
     }
 }

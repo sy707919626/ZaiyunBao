@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.BuyDetailBean;
@@ -27,6 +28,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import java.util.List;
@@ -220,14 +222,16 @@ public class BuyMyEquipmentActivity extends BaseActivity {
         buyMyNorm.setText(Norm);
         buyMyPValue.setText(Price + "");
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(buyDetailBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            buyImageviewPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(buyDetailBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            buyImageviewPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" +  buyDetailBean.getPicture()).into(buyImageviewPhoto);
 
         if (TypeName.equals("保温箱")) {
             mBuyMyPValueDanwei.setText("元/个(不含税)");

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 import com.lulian.Zaiyunbao.Bean.IssueListBean;
@@ -27,6 +28,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.ClearEditText;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import java.text.DecimalFormat;
@@ -196,14 +198,16 @@ public class ListingIssueActivity extends BaseActivity {
     private void initView() {
         listingIssueCount.setText(issueListBean.getQuantity()+"");
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(issueListBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            listingIssueImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(issueListBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            listingIssueImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + issueListBean.getPicture()).into(listingIssueImgPhoto);
 
         listingIssueName.setText(issueListBean.getEquipmentName());
         listingIssueSpec.setText(issueListBean.getNorm());

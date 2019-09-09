@@ -187,6 +187,7 @@
 
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/user_zj_layout"
                     style="@style/cancel_editg_style"
                     android:layout_width="match_parent"

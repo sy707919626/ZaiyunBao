@@ -36,17 +36,7 @@ public class SeekRentOrderViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-
-//        try {
-//            return (Fragment) mFragment.get(position).getFragment().newInstance();
-//        } catch (InstantiationException e) {
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e) {
-//            e.printStackTrace();
-//        }
-
         return mFragment.get(position).getFragment();
-
     }
 
     @Override

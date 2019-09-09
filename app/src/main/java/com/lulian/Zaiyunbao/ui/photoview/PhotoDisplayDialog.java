@@ -26,6 +26,8 @@ public class PhotoDisplayDialog extends Dialog {
     PhotoView photoView;
     @BindView(R.id.btn_shoot_again)
     Button btnShootAgain;
+    @BindView(R.id.btn_shoot_back)
+    Button mBtnShootBack;
 
     private String imgUrl;
     private Context mContext;
@@ -64,8 +66,10 @@ public class PhotoDisplayDialog extends Dialog {
 
         if (mShowBtn) {
             btnShootAgain.setText("重新拍摄/选择照片");
+            mBtnShootBack.setVisibility(View.VISIBLE);
         } else {
             btnShootAgain.setText("返回");
+            mBtnShootBack.setVisibility(View.GONE);
         }
 
         if (shootAgainBtnVisible) {
@@ -81,11 +85,18 @@ public class PhotoDisplayDialog extends Dialog {
         Glide.with(mContext).load(imgUrl).into(photoView);
     }
 
-    @OnClick(R.id.btn_shoot_again)
+    @OnClick({R.id.btn_shoot_again, R.id.btn_shoot_back})
     public void onViewClicked(View v) {
-        dismiss();
-        if (mCallback != null) {
-            mCallback.onShootAgainClicked();
+        switch (v.getId()){
+            case R.id.btn_shoot_again:
+                dismiss();
+                if (mCallback != null) {
+                    mCallback.onShootAgainClicked();
+                }
+                break;
+            case R.id.btn_shoot_back:
+                dismiss();
+                break;
         }
     }
 

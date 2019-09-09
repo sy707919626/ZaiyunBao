@@ -134,7 +134,6 @@ public class RetireServiceMapActivity extends BaseActivity {
         mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-
                 String name = String.valueOf(marker.getExtraInfo().get("deviceSN"));
                 String address = String.valueOf(marker.getExtraInfo().get("address"));
                 String phone = String.valueOf(marker.getExtraInfo().get("phone"));

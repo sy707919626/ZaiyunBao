@@ -49,11 +49,6 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-/**
- * @description：
- * @author：bux on 2018/4/3 11:11
- * @email: 471025316@qq.com
- */
 
 public abstract class BaseFragment extends RxFragment {
     /**

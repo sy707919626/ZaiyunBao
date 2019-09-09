@@ -58,7 +58,7 @@ public class RetireServiceSiteAdapter extends RecyclerView.Adapter<RetireService
         }
 
 //        holder.retireServiceSiteJuli.setText(mRetireServiceSite.getTouch() + "KM");
-        Glide.with(mContext).load(Constants.BASE_URL + mRetireServiceSite.getUrl()).into(holder.retireServiceSiteImgPhoto);
+        Glide.with(mContext).load(Constants.BASE_URL +"/" +mRetireServiceSite.getUrl()).into(holder.retireServiceSiteImgPhoto);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

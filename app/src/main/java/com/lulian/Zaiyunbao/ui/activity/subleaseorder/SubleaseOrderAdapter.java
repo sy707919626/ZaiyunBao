@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -21,6 +22,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.leaseorder.ReceiveLeaseInfoActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
@@ -65,14 +67,16 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
         final MyOrderLisetBean.RowsBean mOrderList = mOrderListBean.get(position);
 
         holder.myOrderId.setText(mOrderList.getOrderNo());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.leaseImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mOrderList.getPicture()).into(holder.leaseImgPhoto);
+
 
         if (mOrderList.getStatus() == 2) {
             holder.orderState.setBackgroundResource(R.drawable.order_background);
@@ -161,14 +165,6 @@ public class SubleaseOrderAdapter extends RecyclerView.Adapter<SubleaseOrderAdap
 
         holder.subleaseLeasePrice.setText(mOrderList.getPrice() + "元(不含税)");
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
 
         holder.subleaseShebeiName.setText(mOrderList.getEquipmentName());
         holder.subleaseShebeiSpec.setText(mOrderList.getNorm());

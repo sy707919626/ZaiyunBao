@@ -16,6 +16,7 @@ public class GlobalParams {
     public static String sUserId;
     public static String sUserName;
     public static String sUserType;
+    public static int sUserClass;
     public static boolean isPayPwd; //验证是否有支付密码
 
 
@@ -61,6 +62,8 @@ public class GlobalParams {
         GlobalParams.district = district;
     }
 
+
+
     public static void setUserTypeList(List<String> userTypeList) {
         GlobalParams.userTypeList = userTypeList;
     }
@@ -99,6 +102,10 @@ public class GlobalParams {
 
     public static void setuserId(String userId) {
         sUserId = userId;
+    }
+
+    public static void setUserClass(int userClass) {
+        sUserClass = userClass;
     }
 
     public static void setuserType(String userType) {

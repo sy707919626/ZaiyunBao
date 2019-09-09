@@ -12,8 +12,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.IssueListBean;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.di.component.Constants;
 
 import java.util.ArrayList;
 
@@ -47,14 +49,16 @@ public class IssueSubleaseListAdapter extends RecyclerView.Adapter<IssueSublease
 
     @Override
     public void onBindViewHolder(IssueViewHolder holder, final int position) {
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mIssueListBean.get(position).getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.issueSubleaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mIssueListBean.get(position).getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.issueSubleaseImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mIssueListBean.get(position).getPicture()).into(holder.issueSubleaseImgPhoto);
 
         holder.issueSubleaseName.setText(mIssueListBean.get(position).getEquipmentName());
         holder.issueSubleaseSpec.setText(mIssueListBean.get(position).getNorm());

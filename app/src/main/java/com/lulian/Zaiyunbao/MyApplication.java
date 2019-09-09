@@ -20,7 +20,6 @@ import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.di.component.DaggerAppComponent;
 import com.lulian.Zaiyunbao.di.module.AppModule;
 import com.lulian.Zaiyunbao.di.module.HttpModule;
-import com.lulian.Zaiyunbao.ui.activity.CrashHandler;
 import com.lulian.Zaiyunbao.ui.base.BaiduMapBase;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.DefaultRefreshFooterCreater;
@@ -30,6 +29,7 @@ import com.scwang.smartrefresh.layout.api.RefreshHeader;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -77,6 +77,11 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mMyApplication = this;
+
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return;
+//        }
+//        LeakCanary.install(this);
 
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))

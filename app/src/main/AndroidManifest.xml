@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.lulian.Zaiyunbao">
 
     <!-- Required -->
@@ -29,6 +30,7 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
@@ -162,15 +164,14 @@
         <activity android:name=".ui.activity.App_Statistic_Activity" />
 
         <!--<provider-->
-        <!--android:authorities="com.lulian.Zaiyunbao.fileProvider"-->
-        <!--tools:replace="android:authorities"-->
-        <!--android:name="android.support.v4.content.FileProvider"-->
-        <!--android:grantUriPermissions="true"-->
-        <!--android:exported="false">-->
-        <!--<meta-data-->
-            <!--android:name="android.support.FILE_PROVIDER_PATHS"-->
-            <!--android:resource="@file_path1aths"></meta-data>-->
-    <!--</provider>-->
+            <!--android:authorities="com.lulian.Zaiyunbao.fileProvider"-->
+            <!--tools:replace="android:authorities"-->
+            <!--android:name="android.support.v4.content.FileProvider"-->
+            <!--android:grantUriPermissions="true"-->
+            <!--android:exported="false">-->
+
+        <!--</provider>-->
+
         <provider
             android:name=".ui.photoview.CustomFileProvider"
             android:authorities="com.lulian.Zaiyunbao.fileProvider"
@@ -180,7 +181,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_path1" />
         </provider>
-
 
         <service
             android:name="com.baidu.location.f"

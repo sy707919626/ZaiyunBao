@@ -145,7 +145,11 @@ public class ServiceFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.seekRent_time_layout)
     RelativeLayout mSeekRentTimeLayout;
-    Unbinder unbinder1;
+    @BindView(R.id.seekRent_shebei_model_text)
+    TextView mSeekRentShebeiModelText;
+    @BindView(R.id.seekRent_shebei_model)
+    TextView mSeekRentShebeiModel;
+    Unbinder unbinder2;
     private int Datasums;//租赁天数
     private int leaseModle;//租赁模式
     private boolean isListNull = false;
@@ -157,6 +161,7 @@ public class ServiceFragment extends BaseFragment {
     private List<EquipmentListForTypeBean> EquipmentList = new ArrayList<>();
     //设备名称
     private List<String> ShebeiList = new ArrayList<>();
+    private List<String> ModelList = new ArrayList<>();
 
     private Handler mHandler;
 
@@ -263,6 +268,53 @@ public class ServiceFragment extends BaseFragment {
             }
         });
 
+        seekRentShebeiName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                ModelList.clear();
+                mSeekRentShebeiModel.setText("");
+
+                for (int i = 0; i < EquipmentList.size(); i++) {
+                    if (EquipmentList.get(i).getEquipmentName().equals(seekRentShebeiName.getText().toString().trim())){
+                        ModelList.add(EquipmentList.get(i).getModel());
+                    }
+                }
+            }
+        });
+
+
+        mSeekRentShebeiModel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TextUtils.isEmpty(seekRentShebeiName.getText().toString().trim())) {
+                    showView();
+                    handleBlur(serviceDialogBg, mHandler);
+
+                    String[] list = ModelList.toArray(new String[ModelList.size()]);
+
+                    BaseDialog(getContext(), serviceDialogBg, list,
+                            mSeekRentShebeiModel.getText().toString(), "设备规格", mHandler, new BaseActivity.OnItemClickListener() {
+                                @Override
+                                public void onItemClickListener(int position, List<SaleEntity> data) {
+                                    mSeekRentShebeiModel.setText(data.get(position).getTitle());
+                                }
+                            });
+                } else {
+                    RxToast.warning("请先选择设备");
+                }
+            }
+        });
+
         seekRentQuhuoModel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -309,6 +361,31 @@ public class ServiceFragment extends BaseFragment {
         });
 
         seekRentModleSpinner.setText("分时租赁");
+
+        seekRentModleSpinner.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
+                        && !TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
+                        && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
+//                    seekRentMoneyBtn.setEnabled(true);
+                    getMoney();
+                } else {
+                    seekRentMoneyBtn.setEnabled(false);
+                }
+            }
+        });
+
         seekRentEndTime.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -326,7 +403,8 @@ public class ServiceFragment extends BaseFragment {
                 if (!TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
                         && !TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
                         && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-                    seekRentMoneyBtn.setEnabled(true);
+//                    seekRentMoneyBtn.setEnabled(true);
+                    getMoney();
                 } else {
                     seekRentMoneyBtn.setEnabled(false);
                 }
@@ -350,7 +428,8 @@ public class ServiceFragment extends BaseFragment {
                 if (!TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
                         && !TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
                         && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-                    seekRentMoneyBtn.setEnabled(true);
+//                    seekRentMoneyBtn.setEnabled(true);
+                    getMoney();
                 } else {
                     seekRentMoneyBtn.setEnabled(false);
                 }
@@ -374,13 +453,15 @@ public class ServiceFragment extends BaseFragment {
                     if (!TextUtils.isEmpty(seekRentStartTime.getText().toString().trim())
                             && !TextUtils.isEmpty(seekRentEndTime.getText().toString().trim())
                             && !TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-                        seekRentMoneyBtn.setEnabled(true);
+//                        seekRentMoneyBtn.setEnabled(true);
+                        getMoney();
                     } else {
                         seekRentMoneyBtn.setEnabled(false);
                     }
                 } else {
                     if (!TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
-                        seekRentMoneyBtn.setEnabled(true);
+//                        seekRentMoneyBtn.setEnabled(true);
+                        getMoney();
                     } else {
                         seekRentMoneyBtn.setEnabled(false);
                     }
@@ -411,6 +492,53 @@ public class ServiceFragment extends BaseFragment {
     private void showView() {
         seekRentDepositPrice.setText("");
         seekRentDeposit.setText("");
+    }
+
+    private void getMoney() {
+        if (isFenci) {
+            Datasums = 1;
+        } else {
+            if (seekRentStartTime.getText().toString().trim().equals(seekRentEndTime.getText().toString().trim())) {
+                Datasums = 1;
+            } else {
+                Datasums = Datasum();
+            }
+        }
+
+        if (seekRentModleSpinner.getText().toString().trim().equals("分时租赁")) {
+            leaseModle = 1;
+        } else {
+            leaseModle = 2;
+        }
+
+        for (int i = 0; i < EquipmentList.size(); i++) {
+            if (EquipmentList.get(i).getEquipmentName().equals(seekRentShebeiName.getText().toString().trim())) {
+                EtypeId = EquipmentList.get(i).getId();
+
+            }
+        }
+
+        mApi.rentPriceList(GlobalParams.sToken, EtypeId, "", leaseModle,
+                Integer.valueOf(seekRentShebeiSum.getText().toString().trim()), Datasums)
+                .compose(RxHttpResponseCompat.<String>compatResult())
+                .compose(this.<String>bindUntilEvent(FragmentEvent.DESTROY))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.STOP))
+                .compose(this.<String>bindUntilEvent(FragmentEvent.PAUSE))
+                .subscribe(new ErrorHandlerSubscriber<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        List<LeasePriceFromBean> list = JSONObject.parseArray(s, LeasePriceFromBean.class);
+                        if (list.size() > 0) {
+                            DecimalFormat decimalFormat = new DecimalFormat("0.00");
+                            YongJin = list.get(0).getCommisionValue();
+                            mDeposit = list.get(0).getDepositAmount();
+                        } else {
+                            mDeposit = 0;
+                            YongJin = 0f;
+                        }
+                    }
+                });
+
     }
 
     @OnClick({R.id.seekRent_quhuo_time, R.id.seekRent_startTime, R.id.seekRent_endTime,
@@ -457,7 +585,7 @@ public class ServiceFragment extends BaseFragment {
                     return;
                 }
 
-                if (isFenci){
+                if (isFenci) {
                     Datasums = 1;
                 } else {
                     if (seekRentStartTime.getText().toString().trim().equals(seekRentEndTime.getText().toString().trim())) {
@@ -493,14 +621,12 @@ public class ServiceFragment extends BaseFragment {
                                 if (list.size() > 0) {
                                     DecimalFormat decimalFormat = new DecimalFormat("0.00");
                                     YongJin = list.get(0).getCommisionValue();
-                                    seekRentDepositPrice.setEnabled(false);
                                     mDeposit = list.get(0).getDepositAmount();
-                                    seekRentDepositPrice.setText(mDeposit + "");
-                                    seekRentDeposit.setText(mDeposit * Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
                                 } else {
                                     seekRentDepositPrice.setEnabled(true);
                                     seekRentDeposit.setText(Float.valueOf(seekRentDepositPrice.getText().toString().trim()) *
                                             Integer.valueOf(seekRentShebeiSum.getText().toString().trim()) + "");
+
                                     YongJin = 0f;
                                 }
                             }
@@ -540,9 +666,9 @@ public class ServiceFragment extends BaseFragment {
         } else if (TextUtils.isEmpty(seekRentShebeiSum.getText().toString().trim())) {
             RxToast.warning("请输入求租数量");
             return;
-        } else if (TextUtils.isEmpty(seekRentDeposit.getText().toString().trim())) {
-            RxToast.warning("请先计算费用后，再进行发布求租订单");
-            return;
+//        } else if (TextUtils.isEmpty(seekRentDeposit.getText().toString().trim())) {
+//            RxToast.warning("请先计算费用后，再进行发布求租订单");
+//            return;
         } else if (TextUtils.isEmpty(seekRentLianxiPhone.getText().toString().trim())) {
             RxToast.warning("请输入联系电话");
             return;
@@ -629,7 +755,7 @@ public class ServiceFragment extends BaseFragment {
         obj.put("StoreName", ""); //仓库名
         obj.put("StoreId", ""); //仓库Id
         obj.put("ReceiveUserId", ""); //供应商ID
-        obj.put("Deposit", Integer.valueOf(seekRentDeposit.getText().toString().trim())); //押金
+        obj.put("Deposit", mDeposit * Integer.valueOf(seekRentShebeiSum.getText().toString().trim())); //押金
         obj.put("Commision", YongJin); //佣金
         String lease = obj.toString();
         RequestBody body = RequestBody.create(MediaType.parse("text/json; charset=utf-8"),
@@ -657,6 +783,7 @@ public class ServiceFragment extends BaseFragment {
                             seekRentDepositPrice.setText("");
                             seekRentDeposit.setText("");
                             seekRentShebeiName.setText("");
+                            mSeekRentShebeiModel.setText("");
 
                         }
                     });
@@ -818,5 +945,19 @@ public class ServiceFragment extends BaseFragment {
 
             }
         });
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // TODO: inflate a fragment view
+        View rootView = super.onCreateView(inflater, container, savedInstanceState);
+        unbinder2 = ButterKnife.bind(this, rootView);
+        return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder2.unbind();
     }
 }

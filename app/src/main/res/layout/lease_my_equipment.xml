@@ -270,6 +270,44 @@
                         android:textSize="14dp" />
                 </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="租赁天数"
+                        android:textColor="@color/text_black"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                    <TextView
+                        android:id="@+id/lease_my_sum_day"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:background="@null"
+                        android:drawablePadding="10dp"
+                        android:gravity="right"
+                        android:inputType="number"
+                        android:textColor="@color/text_color_black"
+                        android:textColorHint="@color/color_99"
+                        android:textSize="@dimen/text_size_trhee" />
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -311,6 +349,38 @@
                         android:textColorHint="@color/color_99"
                         android:textSize="@dimen/text_size_trhee" />
 
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/color_9c" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <Button
+                            android:id="@+id/lease_money_btn"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_width="80dp"
+                            android:layout_height="30dp"
+                            android:layout_centerInParent="true"
+                            android:layout_marginRight="10dp"
+                            android:background="@drawable/button_shixin_shape"
+                            android:gravity="center"
+                            android:text="计算费用"
+                            android:textColor="@color/white"
+                            android:textSize="14dp" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <View
@@ -710,33 +780,7 @@
                     android:layout_height="0.1dp"
                     android:background="@color/color_9c" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="5dp"
-                    android:orientation="horizontal">
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <Button
-                            android:id="@+id/lease_money_btn"
-                            style="?android:attr/borderlessButtonStyle"
-                            android:layout_width="80dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/button_shixin_shape"
-                            android:gravity="center"
-                            android:text="计算费用"
-                            android:textColor="@color/white"
-                            android:textSize="14dp" />
-                    </RelativeLayout>
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.RentBackBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -21,6 +22,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.di.component.Constants;
 
 import java.util.ArrayList;
 
@@ -59,14 +61,17 @@ public class RentBackAdapter extends RecyclerView.Adapter<RentBackAdapter.LeaseV
         final RentBackBean.RowsBean mOrderList = mOrderListBean.get(position);
 
         holder.mRentBackOrderId.setText(mOrderList.getOrderNo());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.mRentBackImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.mRentBackImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mOrderList.getPicture()).into(holder.mRentBackImgPhoto);
+
 
         // 新建 = 0,已接单 = 1,已发货 = 3,已收货 = 4, 已完成 = 5
 

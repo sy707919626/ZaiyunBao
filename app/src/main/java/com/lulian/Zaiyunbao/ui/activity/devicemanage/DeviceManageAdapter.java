@@ -13,8 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.DeviceManageBean;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.di.component.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,14 +63,16 @@ public class DeviceManageAdapter extends RecyclerView.Adapter<DeviceManageAdapte
         final DeviceManageBean.RowsBean mDeviceManage = mDeviceManageListBean.get(position);
 
         holder.deviceManageNo.setText(mDeviceManage.getECode());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mDeviceManage.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.deviceManageImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mDeviceManage.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.deviceManageImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mDeviceManage.getPicture()).into(holder.deviceManageImgPhoto);
 
         holder.deviceManageSpec.setText(mDeviceManage.getNorm());
         holder.deviceManageName.setText(mDeviceManage.getEquipmentName());

@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.service.autofill.Dataset;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -136,6 +137,8 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     LinearLayout mLeaseMyFreeDayAmountReLayout;
     @BindView(R.id.lease_my_mianzu_reLayout)
     LinearLayout mLeaseMyMianzuReLayout;
+    @BindView(R.id.lease_my_sum_day)
+    TextView mLeaseMySumDay;
 
     private TimePickerView pvTime;
     private int leaseSum = 0;
@@ -195,8 +198,11 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
             return timeDistance + (day2 - day1);
         } else  //同年
         {
-            return day2 - day1;
-
+            if (day2 == day1){
+                return 1;
+            } else {
+                return day2 - day1;
+            }
         }
     }
 
@@ -265,7 +271,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
     //获取押金
     private void getYajin() {
         int RentWay = 0;
-        if (leaseMyModleSpinner.getText().toString().trim().equals("分时租赁")){
+        if (leaseMyModleSpinner.getText().toString().trim().equals("分时租赁")) {
             RentWay = 1;
         } else {
             RentWay = 2;
@@ -283,8 +289,8 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                             float freeDayMoney = list.get(0).getPrice() * Float.valueOf(list.get(0).getFreeDay());
                             MianZuQi = list.get(0).getFreeDays();
 
-                            if (isFenci){
-                                ZuJin = list.get(0).getAllAmount()  - list.get(0).getDiscountAmount();
+                            if (isFenci) {
+                                ZuJin = list.get(0).getAllAmount() - list.get(0).getDiscountAmount();
                             } else {
                                 ZuJin = list.get(0).getAllAmount() - freeDayMoney - list.get(0).getDiscountAmount();
                             }
@@ -380,6 +386,11 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                         RxToast.warning("请选择退租时间");
                         return;
                     }
+
+                    if (Datasum() < 90){
+                        RxToast.warning("当前选择天数小于90天，请选择分次租赁模式");
+                        return;
+                    }
                 }
 
                 if (TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
@@ -388,6 +399,8 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                 } else {
                     if (Integer.valueOf(leaseMySum.getText().toString().trim()) > Quantity) {
                         RxToast.warning("租赁数量不能大于可租数量");
+                    } else if(Integer.valueOf(leaseMySum.getText().toString().trim()) < 200){
+                        RxToast.warning("租赁数量不能小于200个");
                     } else {
 
                         if (leaseMyStartTime.getText().toString().trim().equals(leaseMyEndTime.getText().toString().trim())) {
@@ -419,10 +432,28 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
-                    leaseMoneyBtn.setEnabled(true);
+                    mLeaseMySumDay.setText(Datasum()+"天");
+                    if (Datasum() < 90){
+                        RxToast.warning("当前选择天数小于90天，请选择分次租赁模式");
+                        leaseMoneyBtn.setEnabled(false);
+                    } else {
+                        leaseMoneyBtn.setEnabled(true);
+                    }
+
+                } else if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
+                        && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
+
+                    if (Datasum() < 90){
+                        RxToast.warning("当前选择天数小于90天，请选择分次租赁模式");
+                    }
+
+                    mLeaseMySumDay.setText(Datasum()+"天");
+                    leaseMoneyBtn.setEnabled(false);
                 } else {
                     leaseMoneyBtn.setEnabled(false);
                 }
+
+
             }
         });
 
@@ -442,8 +473,23 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                 if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())
                         && !TextUtils.isEmpty(leaseMySum.getText().toString().trim())) {
-                    leaseMoneyBtn.setEnabled(true);
-                } else {
+                    mLeaseMySumDay.setText(Datasum()+"天");
+                    if (Datasum() < 90){
+                        RxToast.warning("当前选择天数小于90天，请选择分次租赁模式");
+                        leaseMoneyBtn.setEnabled(false);
+                    } else {
+                        leaseMoneyBtn.setEnabled(true);
+                    }
+
+                } else if (!TextUtils.isEmpty(leaseMyStartTime.getText().toString().trim())
+                        && !TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
+
+                    if (Datasum() < 90){
+                        RxToast.warning("当前选择天数小于90天，请选择分次租赁模式");
+                    }
+                    mLeaseMySumDay.setText(Datasum()+"天");
+                    leaseMoneyBtn.setEnabled(false);
+                }  else {
                     leaseMoneyBtn.setEnabled(false);
                 }
 
@@ -480,7 +526,9 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                     }
                 }
             }
+
         });
+
 
         getDeposit();
     }
@@ -507,6 +555,11 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                         return;
                     } else if (TextUtils.isEmpty(leaseMyEndTime.getText().toString().trim())) {
                         RxToast.warning("请选择退租时间");
+                        return;
+                    }
+
+                    if (Datasum() < 90){
+                        RxToast.warning("当前选择天数小于90天，请选择分次租赁模式");
                         return;
                     }
                 }
@@ -665,7 +718,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
 
             Window dialogWindow = mDialog.getWindow();
             if (dialogWindow != null) {
-                dialogWindow.setWindowAnimations(com.bigkoo.pickerview.R.style.picker_view_slide_anim);//修改动画样式
+                dialogWindow.setWindowAnimations(R.style.picker_view_slide_anim);//修改动画样式
                 dialogWindow.setGravity(Gravity.BOTTOM);//改成Bottom,底部显示
             }
         }
@@ -704,6 +757,7 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
         leaseMyRent.setText("");
         leaseMyDeposit.setText("");
         leaseMyMianzu.setText("");
+
     }
 
 
@@ -726,12 +780,17 @@ public class LeaseMyEquipmentActivity extends BaseActivity {
                     mLeaseMyFreeDayAmountReLayout.setVisibility(View.GONE);
                     mLeaseMyMianzuReLayout.setVisibility(View.GONE);
                     mLeaseMyFreeDayAmountView.setVisibility(View.GONE);
+                    mLeaseMySumDay.setText("90");
+
                 } else {
                     isFenci = false;
+                    mLeaseMySumDay.setText("");
                     mTimeReLayout.setVisibility(View.VISIBLE);
                     mLeaseMyFreeDayAmountReLayout.setVisibility(View.VISIBLE);
                     mLeaseMyMianzuReLayout.setVisibility(View.VISIBLE);
                     mLeaseMyFreeDayAmountView.setVisibility(View.VISIBLE);
+                    leaseMyStartTime.setText("");
+                    leaseMyEndTime.setText("");
                 }
                 clearPriceView();
             }

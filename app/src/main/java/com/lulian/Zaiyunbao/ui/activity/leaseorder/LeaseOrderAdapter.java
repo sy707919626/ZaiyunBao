@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -21,6 +22,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -67,14 +69,16 @@ public class LeaseOrderAdapter extends RecyclerView.Adapter<LeaseOrderAdapter.Le
         final MyOrderLisetBean.RowsBean mOrderList = mOrderListBean.get(position);
         holder.leaseRentSumText.setText("租赁数量：");
         holder.myOrderId.setText(mOrderList.getOrderNo());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.leaseImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mOrderList.getPicture()).into(holder.leaseImgPhoto);
 
         if (mOrderList.getStatus() == 2) {
             holder.orderState.setBackgroundResource(R.drawable.order_background);
@@ -131,15 +135,6 @@ public class LeaseOrderAdapter extends RecyclerView.Adapter<LeaseOrderAdapter.Le
 
         holder.orderState.setText(state);
         holder.orderStateBtn.setText(stateBtn);
-
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
 
         holder.leaseShebeiName.setText(mOrderList.getEquipmentName());
         holder.leaseShebeiSpec.setText(mOrderList.getNorm());

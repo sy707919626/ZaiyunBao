@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.BuyOrderListBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 
 import java.util.ArrayList;
@@ -53,14 +55,16 @@ public class BuyOrderAdapter extends RecyclerView.Adapter<BuyOrderAdapter.BuyVie
         final BuyOrderListBean.RowsBean mOrderList = mOrderListBean.get(position);
 
         holder.buyOrderId.setText(mOrderList.getOrderNo());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.buyImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.buyImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" +  mOrderList.getPicture()).into(holder.buyImgPhoto);
 
         if (mOrderList.getOrderStatus() == 2) {
             holder.buyOrderState.setBackgroundResource(R.drawable.order_background);

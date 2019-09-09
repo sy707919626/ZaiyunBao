@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lulian.Zaiyunbao.Bean.MyOrderLisetBean;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
@@ -21,6 +22,7 @@ import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
 import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.data.http.ApiService;
+import com.lulian.Zaiyunbao.di.component.Constants;
 import com.lulian.Zaiyunbao.ui.activity.ReserveRetireDetailsActivity;
 import com.lulian.Zaiyunbao.ui.activity.pay.PayActivity;
 
@@ -64,14 +66,17 @@ public class SeekRentOrderAdapter extends RecyclerView.Adapter<SeekRentOrderAdap
         final MyOrderLisetBean.RowsBean mOrderList = mOrderListBean.get(position);
         holder.leaseRentSumText.setText("求租数量：");
         holder.myOrderId.setText(mOrderList.getOrderNo());
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            holder.leaseImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + mOrderList.getPicture()).into(holder.leaseImgPhoto);
+
 
         //未接单 = 0, 已接单 = 1,订单确认待支付 = 2,
         // 已支付待发货 = 3,已发货 = 5,已收货 = 6,退租中 = 7,已退租 = 8,已结算 = 9,已撤销 = 10
@@ -131,14 +136,7 @@ public class SeekRentOrderAdapter extends RecyclerView.Adapter<SeekRentOrderAdap
         holder.orderState.setText(state);
         holder.orderStateBtn.setText(stateBtn);
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(mOrderList.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            holder.leaseImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+
 
         holder.leaseShebeiName.setText(mOrderList.getEquipmentName());
         holder.leaseShebeiSpec.setText(mOrderList.getNorm());

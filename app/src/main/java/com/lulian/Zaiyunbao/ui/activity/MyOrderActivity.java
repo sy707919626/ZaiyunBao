@@ -2,7 +2,6 @@ package com.lulian.Zaiyunbao.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -12,20 +11,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.ui.activity.buyorder.BuyOrderActivity;
-import com.lulian.Zaiyunbao.ui.activity.leaseorder.LeaseOrderActivity;
 import com.lulian.Zaiyunbao.ui.activity.myorder.OrderViewPagerAdapter;
 import com.lulian.Zaiyunbao.ui.activity.rentback.RentBackActivity;
 import com.lulian.Zaiyunbao.ui.activity.seekrentorder.SeekRentOrderActivity;
 import com.lulian.Zaiyunbao.ui.activity.subleaseorder.SubleaseOrderActivity;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**

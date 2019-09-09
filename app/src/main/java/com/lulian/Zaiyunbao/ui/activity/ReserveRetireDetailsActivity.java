@@ -25,6 +25,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.bumptech.glide.Glide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.MyOrderDetailsBean;
 import com.lulian.Zaiyunbao.Bean.SaleEntity;
@@ -210,14 +211,16 @@ public class ReserveRetireDetailsActivity extends BaseActivity {
         }
         reserveRetireOrderNo.setText(OrderNo);
 
-        try {
-            byte[] bitmapArray;
-            bitmapArray = Base64.decode(myOrderDetailsBean.getPicture(), Base64.DEFAULT);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
-                    bitmapArray.length);
-            myOrderImgPhoto.setImageBitmap(bitmap);
-        } catch (Exception e) {
-        }
+//        try {
+//            byte[] bitmapArray;
+//            bitmapArray = Base64.decode(myOrderDetailsBean.getPicture(), Base64.DEFAULT);
+//            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapArray, 0,
+//                    bitmapArray.length);
+//            myOrderImgPhoto.setImageBitmap(bitmap);
+//        } catch (Exception e) {
+//        }
+
+        Glide.with(mContext).load(Constants.BASE_URL +"/" + myOrderDetailsBean.getPicture()).into(myOrderImgPhoto);
 
         reserveRetireStatusText.setText("已收货");
         reserveRetireShebeiName.setText(myOrderDetailsBean.getEquipmentName());

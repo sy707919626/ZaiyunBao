@@ -1,54 +1,29 @@
 package com.lulian.Zaiyunbao.ui.activity;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.Dialog;
+
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.gyf.barlibrary.BarHide;
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.Bean.DicItemBean;
 import com.lulian.Zaiyunbao.Bean.EquipmentTypeBean;
-import com.lulian.Zaiyunbao.Bean.TaskInfo;
-import com.lulian.Zaiyunbao.MyApplication;
 import com.lulian.Zaiyunbao.R;
 import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
-import com.lulian.Zaiyunbao.common.widget.RxToast;
-import com.lulian.Zaiyunbao.ui.DownloadRunnable;
-import com.lulian.Zaiyunbao.ui.LevelDialog;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.io.File;
-import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import butterknife.BindView;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 import static com.alibaba.fastjson.JSON.parseArray;
 
@@ -68,7 +43,7 @@ public class WeclcomeActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        ImmersionBar.with(this)
+        ImmersionBar.with(WeclcomeActivity.this)
                 .hideBar(BarHide.FLAG_HIDE_BAR)
                 .init();
 

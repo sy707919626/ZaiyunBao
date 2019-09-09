@@ -28,6 +28,7 @@ import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.common.event.LeaseEvent;
 import com.lulian.Zaiyunbao.common.rx.RxHttpResponseCompat;
 import com.lulian.Zaiyunbao.common.rx.subscriber.ErrorHandlerSubscriber;
+import com.lulian.Zaiyunbao.common.widget.RxToast;
 import com.lulian.Zaiyunbao.common.widget.SelectPopupWindow;
 import com.lulian.Zaiyunbao.ui.activity.LeaseDetailActivity;
 import com.lulian.Zaiyunbao.ui.activity.PermissionsActivity;
@@ -220,17 +221,21 @@ public class LeaseFragment extends BaseLazyFragment {
         mAdapter.setOnItemClickListener(new EquipmentListAdapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(int position, EquipmentListBean.RowsBean equipmentList) {
-                Intent intent = new Intent(getContext(), LeaseDetailActivity.class);
-                intent.putExtra("ShebeiId", equipmentList.getId());
-                intent.putExtra("OperatorId", equipmentList.getOperator()); //供应商ID
-                intent.putExtra("StorehouseId", equipmentList.getStorehouseId());
+                if(!TextUtils.isEmpty(equipmentList.getOperator())&& equipmentList.getQuantity()!= 0) {
+                    Intent intent = new Intent(getContext(), LeaseDetailActivity.class);
+                    intent.putExtra("ShebeiId", equipmentList.getId());
+                    intent.putExtra("OperatorId", equipmentList.getOperator()); //供应商ID
+                    intent.putExtra("StorehouseId", equipmentList.getStorehouseId());
 
-                if (TextUtils.isEmpty(equipmentList.getUID())){
-                    intent.putExtra("UID",""); //使用者ID
-                }else {
-                    intent.putExtra("UID", equipmentList.getUID()); //使用者ID
+                    if (TextUtils.isEmpty(equipmentList.getUID())) {
+                        intent.putExtra("UID", ""); //使用者ID
+                    } else {
+                        intent.putExtra("UID", equipmentList.getUID()); //使用者ID
+                    }
+                    getContext().startActivity(intent);
+                } else {
+                    RxToast.warning("当前设备缺货，无法查看详情");
                 }
-                getContext().startActivity(intent);
             }
         });
     }

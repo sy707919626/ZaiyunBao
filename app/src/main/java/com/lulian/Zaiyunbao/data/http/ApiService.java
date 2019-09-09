@@ -230,10 +230,14 @@ public interface ApiService {
     @POST("/api/AppMy/MyEquipmentBackRentOrderList")
     Observable<String> MyEquipmentBackRentOrderList(@Header("Authorization") String authorization, @Body RequestBody Body);
 
+//    //退租发货
+//    @POST("/api/AppMy/SendGood_BackRent")
+//    Observable<String> SendGood_BackRent(@Header("Authorization") String authorization, @Query("OrderId") String OrderId, @Query("EquipmentBaseNo") String[] EquipmentBaseNo,
+//                                         @Query("Count") int Count);
+
     //退租发货
     @POST("/api/AppMy/SendGood_BackRent")
-    Observable<String> SendGood_BackRent(@Header("Authorization") String authorization, @Query("OrderId") String OrderId, @Query("EquipmentBaseNo") String[] EquipmentBaseNo,
-                                         @Query("Count") int Count);
+    Observable<String> SendGood_BackRent(@Header("Authorization") String authorization, @Body RequestBody Body);
 
     //发货无码设备台账获取
     @POST("/api/AppMy/GetECodeForSend")

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.lulian.Zaiyunbao.R;
+import com.lulian.Zaiyunbao.common.GlobalParams;
 import com.lulian.Zaiyunbao.ui.base.BaseActivity;
 
 import butterknife.BindView;
@@ -50,6 +51,17 @@ public class DataUserTypeActivity extends BaseActivity {
 
         textDetailContent.setText("我的资料");
         textDetailRight.setVisibility(View.GONE);
+
+        if (GlobalParams.sUserClass == 1){
+            dataUserRelative.setVisibility(View.VISIBLE);
+            dataCompanyRelative.setVisibility(View.GONE);
+        } else if (GlobalParams.sUserClass == 2){
+            dataUserRelative.setVisibility(View.GONE);
+            dataCompanyRelative.setVisibility(View.VISIBLE);
+        } else if (GlobalParams.sUserClass == 0){
+            dataUserRelative.setVisibility(View.VISIBLE);
+            dataCompanyRelative.setVisibility(View.VISIBLE);
+        }
     }
 
     @OnClick({R.id.data_user_relative, R.id.data_company_relative})
